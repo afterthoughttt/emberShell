@@ -1,0 +1,492 @@
+$clibManifest = @{
+	esx = $true
+    fork = $false
+	dev_name = "cereal"
+	ver_name = "oats"
+	version = "1.2"
+	lib_name = "clib Compat"
+}
+
+function random($min, $max) {
+	return Get-Random -minimum $min -maximum ($max + 1)
+}
+
+function idx($array, $num) {
+	$array[($num-1)]
+}
+
+function cnr($files, $output, $names, [switch]$pname, [switch]$log) {
+$iterator = 0
+$findex = $files.count
+$nmindex = $names.count
+$allowed = -1
+	if ($findex -gt $nmindex) {
+		$allowed = 0
+	} elseif ($findex -le $nmindex) {
+		$allowed = 1
+	}
+	if ($allowed -eq 1) {
+		if ($pname) {
+			foreach ($file in $files) {
+				$iterator += 1
+				$iname = idx $names $iterator
+				$dest = $output + $iname
+				Copy-Item $file -Destination $dest
+				if ($log) {
+					write-output "copied $file to $dest"
+				}
+			}
+		} else {
+			foreach ($name in $names) {
+				$iterator += 1
+				$ifile = idx $files $iterator
+				$dest = $output + $name
+				Copy-Item $ifile -Destination $dest
+				if ($log) {
+					write-output "copied $ifile to $dest"
+				}
+			}
+		}
+	} elseif ($allowed -eq 0) {
+		throw "forbidden action, more files than filenames.`n$findex files`n$nmindex filenames`nusing the -pname flag could fix this."
+	} else {
+		throw "unexpected error. `$allowed = $allowed,`nbinary expected."
+	}
+}
+
+$time = @{
+    clock = {get-date -format "HH:mm"}
+	wclock = {get-date -format "HH:mm:ss"}
+	msprecise = {get-date -format "HH:mm:ss.fff"}
+	tickprecise = {get-date -format "HH:mm:ss.fffffff"}
+	clock12 = {get-date -format "hh:mm tt"}
+	wclock12 = {get-date -format "hh:mm:ss tt"}
+	msprecise12 = {get-date -format "hh:mm:ss.fff tt"}
+	tickprecise12 = {get-date -format "hh:mm:ss.fffffff tt"}
+	date = {get-date -format "dd.MM.yyyy"}
+	usdate = {get-date -format "MM/dd/yyyy"}
+	isodate = {get-date -format "yyyy-MM-dd"}
+	era = {get-date -format "gg"}
+	shortera = {get-date -format "g"}
+}
+
+function get-logtime($fmt) {
+    if($fmt) {
+		return &$time[$fmt]
+	}
+    return &$time.wclock
+}
+
+function write-log($text, $fmt, $type) {
+	$logtime = get-logtime $fmt
+	if ($type -eq "throw") {
+		throw "[$logtime]: $text"
+	}elseif ($type -eq "error") {
+		write-error "[$logtime]: $text"
+	} else {
+		write-output "[$logtime]: $text"
+	}
+}
+
+function confirm($content, $y, $n) {
+	do {
+		write-output "$content`n$y/$n"
+		$answer = read-host
+		if ($answer -eq $y) {
+			$answer = "parsed"
+			return $true
+		} elseif ($answer -eq $n) {
+			$answer = "parsed"
+			return $false
+		}
+	} while ($answer -ne "parsed")
+}
+
+function uac {
+	if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+		Start-Process powershell -Verb RunAs -ArgumentList "-File `"$PSCommandPath`""
+		exit
+	}
+}
+
+function timed($func) {
+    $start = Get-Date
+    &$func
+    $end = Get-Date
+    return ($end - $start)
+}
+
+function force($func, $expect, $att, [switch]$silent) {
+	$iterator = 0
+	if ($att) {
+		do {
+			$result = &$func
+			$iterator += 1
+		} while ($iterator -lt $att -and $expect -ne $result)
+		if(-not $silent){
+			if ($expect -eq $result) {
+				write-output "$func succeeded after $iterator attempts."
+			} else {
+				throw "$func failed to force."
+			}
+		}
+	} else {
+		do {
+			$result = &$func
+			$iterator += 1
+		} while ($expect -ne $result)
+		if(-not $silent){
+			write-output "$func succeeded after $iterator attempts."
+		}
+	}
+}
+
+function clamp($value, $min, $max) {
+	if ($value -gt $max) {
+		$value = $max
+	} elseif ($value -lt $min) {
+		$value = $min
+	}
+	return $value
+}
+
+function repstring($string, $reps, $fmt) {
+	$iterator = 0
+	if ($fmt) {
+		if ($fmt -eq "count") {
+			while ($iterator -lt $reps) {
+				$output = $output + "$($iterator + 1). $string`n"
+				$iterator += 1
+			}
+		} elseif ($fmt -eq "append") {
+			$output = $string * $reps
+		} elseif ($fmt -eq "list") {
+			while ($iterator -lt $reps) {
+				$output = $output + "- $string`n"
+				$iterator += 1
+			}
+		}
+	} else {
+		while ($iterator -lt $reps) {
+				$output = $output + "$string`n"
+				$iterator += 1
+			}
+	}
+	return $output
+}
+
+function fuck($reps, [switch]$log) {
+	$iterator = 0
+	if (-not $reps) {
+		if ($log) {
+			write-log "fuck" -type "error"
+		} else {
+			write-error "fuck"
+		}
+	}
+	if ($log) {
+		while ($iterator -lt $reps) {
+			write-log "fuck" -type "error"
+			$iterator += 1
+		}
+	} else {
+		while ($iterator -lt $reps) {
+			write-error "fuck"
+			$iterator += 1
+		}
+	}
+}
+$esc = [char]0x1b
+function softthrow($string) {
+    write-host "${esc}[38;2;231;72;86m${string}${esc}[0m"
+}
+
+$color = @{
+    reset = "${esc}[0m"
+    # rainbow
+    red     = "${esc}[38;2;255;0;0m"
+    orange  = "${esc}[38;2;255;127;0m"
+    yellow  = "${esc}[38;2;255;255;0m"
+    green   = "${esc}[38;2;0;255;0m"
+    cyan    = "${esc}[38;2;0;255;255m"
+    blue    = "${esc}[38;2;0;0;255m"
+    indigo  = "${esc}[38;2;75;0;130m"
+    violet  = "${esc}[38;2;148;0;211m"
+	pink    = "${esc}[38;2;255;0;255m"
+    # grayscale
+    white     = "${esc}[38;2;255;255;255m"
+    lightgray = "${esc}[38;2;192;192;192m"
+    gray      = "${esc}[38;2;128;128;128m"
+    darkgray  = "${esc}[38;2;64;64;64m"
+    black     = "${esc}[38;2;0;0;0m"
+	# special
+	efas = "${esc}[38;2;51;77;196m"
+	cereal = "${esc}[38;2;231;136;214m"
+	afterthought = "${esc}[38;2;179;0;0m"
+	aletheia = "${esc}[38;2;0;139;255m"
+	lunar = "${esc}[38;2;221;204;255m"
+	invert = "${esc}[48;2;255;255;255m${esc}[38;2;0;0;0m"
+	win11 = "${esc}[38;2;59;195;255m"
+	mint = "${esc}[38;2;111;183;69m"
+	pop = "${esc}[38;2;78;187;201m"
+	debian = "${esc}[38;2;216;15;86m"
+	win10 = "${esc}[38;2;0;116;207m"
+}
+
+function watermark($type, [switch]$fwd){
+	if ($type -eq "afterthought") {
+		write-output "$($color.afterthought)afterthought_watermark$($color.reset)"
+	} elseif ($type -eq "lunar") {
+		write-output "$($color.lunar)lunar_watermark$($color.reset)"
+	} elseif ($type -eq "esh" -or $type -eq "efasShell" -or $type -eq "efasshell" -or $type -eq "eSh" -or $type -eq "emberShell") {
+write-output "$($color.aletheia)embershell_watermark$($color.reset)"
+	} elseif($type -eq "clib") { 
+write-output "`n                                                    @@@@@@@`n                                      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@`n                                      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@`n                                      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@`n                                      @@@@@@@@@       @@       @@@@@@@@@`n                      @@@@            @@@@@@@@@                @@@@@@@@@      @@@`n                @@@@@@@@@@@@@@@@      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@  @@@@@@@@@@@`n              @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@`n             @@@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@`n            @@@@@@@@@      @@@@       @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@    @@@@@@@@@@`n            @@@@@@@@                  @@@@@@@@@    @@@@@@@@@   @@@@@@@@@       @@@@@@@@@`n            @@@@@@@@                  @@@@@@@@@    @@@@@@@@@   @@@@@@@@@        @@@@@@@@`n            @@@@@@@@                  @@@@@@@@@    @@@@@@@@@   @@@@@@@@@       @@@@@@@@@`n            @@@@@@@@@@@   @@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@   @@@@@@@@@@@`n             @@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@`n              @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@  @@@@@@@@@@@@@`n                 @@@@@@@@@@@@@@       @@@@@@@@@    @@@@@@@@@   @@@@@@@@    @@@@@@@@@"
+	} <# elseif($type -eq "clib_invert") { 
+write-output "$($color.invert)
+                                                    @@@@@@@                                         
+                                      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@                            
+                                      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@                            
+                                      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@                            
+                                      @@@@@@@@@       @@       @@@@@@@@@                            
+                      @@@@            @@@@@@@@@                @@@@@@@@@      @@@                   
+                @@@@@@@@@@@@@@@@      @@@@@@@@@    @@@@@@@@@   @@@@@@@@@  @@@@@@@@@@@               
+              @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@              
+             @@@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@             
+            @@@@@@@@@      @@@@       @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@    @@@@@@@@@@            
+            @@@@@@@@                  @@@@@@@@@    @@@@@@@@@   @@@@@@@@@       @@@@@@@@@            
+            @@@@@@@@                  @@@@@@@@@    @@@@@@@@@   @@@@@@@@@        @@@@@@@@            
+            @@@@@@@@                  @@@@@@@@@    @@@@@@@@@   @@@@@@@@@       @@@@@@@@@            
+            @@@@@@@@@@@   @@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@   @@@@@@@@@@@            
+             @@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@             
+              @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@  @@@@@@@@@@@@@              
+                 @@@@@@@@@@@@@@       @@@@@@@@@    @@@@@@@@@   @@@@@@@@    @@@@@@@@@    $($color.reset)"
+	} <-redundant #>
+	else {
+		softthrow "no watermark of that name found"
+		if(-not $fwd) {
+			render $type -fwd
+		}
+	}
+}
+
+function htaTool {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Hex
+    )
+
+    $Hex = $Hex.TrimStart("#")
+
+    if ($Hex.Length -ne 6) {
+        throw "Invalid hex color: $Hex (expected #RRGGBB)"
+    }
+
+    $r = [Convert]::ToInt32($Hex.Substring(0,2),16)
+    $g = [Convert]::ToInt32($Hex.Substring(2,2),16)
+    $b = [Convert]::ToInt32($Hex.Substring(4,2),16)
+
+    write-output "${esc}[38;2;$r;$g;${b}m`${esc}[38;2;$r;$g;${b}m"
+}
+
+function render($type, [switch]$fwd) {
+	 if ($type -eq "efas") {
+		write-output "$($color.efas)efas_ascii$($color.reset)"
+	} elseif ($type -eq "windows") {
+		write-output "$($color.blue)win_generic_ascii$($color.reset)"
+	}elseif($type -eq "windows_11") {
+		write-output "$($color.win11)win11_ascii$($color.reset)"
+	}elseif($type -eq "windows_10") {
+		write-output "$($color.win10)win10_ascii$($color.reset)"
+	}elseif($type -eq "win11_fetch") {
+		write-output "$($color.win11)`n	██████ ██████`n	██████ ██████`n	██████ ██████`n	▄▄▄▄▄▄ ▄▄▄▄▄▄`n	██████ ██████`n	██████ ██████`n	▀▀▀▀▀▀ ▀▀▀▀▀▀`n$($color.reset)" # handmade by cereal <3 (FUCK windows 11)
+	}elseif($type -eq "arch") {
+		write-output "$($color.win11)btw_cfetch_ascii$($color.reset)"
+	}elseif($type -eq "mint" -or $type -eq "linux mint") {
+		write-output "$($color.mint)linux_mint_cfetch_ascii$($color.reset)"
+	}elseif($type -eq "ubuntu") {
+		write-output "$($color.orange)ubuntu_cfetch_ascii$($color.reset)"
+	}elseif($type -eq "pop!_os" -or $type -eq "pop") {
+		write-output "$($color.pop)pop!_os_cfetch_ascii$($color.reset)"
+# write-output "`n$($color.pop)             /////////////`n         /////////////////////`n      ///////$($color.white)*%@%$($color.pop)////////////////`n    //////$($color.white)%@%@%@%@%@*$($color.pop)//////////////`n   /////$($color.white)%@%@%$($color.pop)//$($color.white)%@%@%@%$($color.pop)//////////////`n  /////$($color.white)%@%@%@$($color.pop)///$($color.white)*%@%@%$($color.pop)///////////////`n ///////$($color.white)%@%@%@$($color.pop)///$($color.white)%@%@%$($color.pop).///$($color.white)%@%@*$($color.pop)///////`n/////////$($color.white)%@%@%@$($color.pop)//$($color.white)%@%@%$($color.pop)///$($color.white)%@%@%@$($color.pop)////////`n//////////$($color.white)%@%@%@%@%@%$($color.pop)////$($color.white)%@%@%$($color.pop)/////////`n///////////$($color.white)%@%@%@%@$($color.pop)//////$($color.white)%@%@$($color.pop)//////////`n////////////,$($color.white)%@%@$($color.pop),///////$($color.white)%@%$($color.pop)///////////`n/////////////*$($color.white)%@%@$($color.pop)///////$($color.white)%@$($color.pop)////////////`n///////////////$($color.white)%@%@$($color.pop)////////////////////`n ///////////////$($color.white)%@%@$($color.pop)///$($color.white)%@%$($color.pop)////////////`n  //////////////////////$($color.white)'$($color.pop)////////////`n   //////$($color.white).%@%@%@%@%@%@%@%@%@%,$($color.pop)//////`n    /////$($color.white)%@%@%@%@%@%@%@%@%@%@%$($color.pop)/////`n      ///////////////////////////`n         /////////////////////`n             /////////////`n$($color.reset)" # why was this made up of 67
+	}elseif($type -eq "debian") {
+write-output "`n$($color.debian)       _,met`$`$`$`$`$gg.`n    ,g`$`$`$`$`$`$`$`$`$`$`$`$`$`$`$P.`n  ,g`$`$P`"        `"`"`"Y`$`$.`".`n ,`$`$P'              '`$`$`$.`n',`$`$P       ,ggs.     '`$`$b:`n`d`$`$'     ,`$P`"'   $($color.debian).$($color.debian)    `$`$`$`n `$`$P      d`$'     $($color.debian),$($color.debian)    `$`$P`n `$`$:      `$`$.   $($color.debian)-$($color.debian)    ,d`$`$'`n `$`$;      Y`$b._   _,d`$P'`n Y`$`$.    $($color.debian)`.$($color.debian)'`"Y`$`$`$`$P`"'`n$($color.debian) '`$`$b      $($color.debian)`"-.__`n$($color.debian)  'Y`$`$`n   'Y`$`$.`n     '`$`$b.`n       'Y`$`$b.`n          `"Y`$b._`n              '`"`"`"`n$($color.reset)" # dear neofetch pls stop using quotes and backticks <3
+	}elseif($type -eq "win10_fetch") {
+		write-output "$($color.win11)`n                                    ███████`n                       ████████████████████`n          ███████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n`n`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n█████████████████   ███████████████████████`n          ███████   ███████████████████████`n                        ███████████████████`n                                     ██████`n$($color.reset)"
+	}elseif($type -eq "win_fetch") {
+		write-output "`n`n$($color.afterthought)          ██████████████▄`n$($color.afterthought)         ████████████████▄`n$($color.afterthought)         █████████████████ $($color.mint)███▄          ▄██`n$($color.afterthought)        ██████████████████ $($color.mint)██████████████████`n$($color.afterthought)        █████████████████  $($color.mint)█████████████████`n$($color.afterthought)       █████████████████  $($color.mint)██████████████████`n$($color.afterthought)       █████████████████ $($color.mint)██████████████████`n$($color.afterthought)      █████████████████  $($color.mint)██████████████████`n$($color.afterthought)                   ▀▀█  $($color.mint)██████████████████`n$($color.win10)     ███████████████   $($color.mint)██████████████████`n$($color.win10)     ████████████████    $($color.mint)▀██████████████▀`n$($color.win10)    ████████████████  $($color.yellow)███▄`n$($color.win10)   ████████████████  $($color.yellow)███████████████████`n$($color.win10)   █████████████████ $($color.yellow)██████████████████`n$($color.win10)  █████████████████  $($color.yellow)█████████████████`n$($color.win10)  █████████████████ $($color.yellow)██████████████████`n$($color.win10) █████████████████  $($color.yellow)██████████████████`n$($color.win10)  █▀           ██▀ $($color.yellow)██████████████████`n$($color.yellow)                   ██████████████████`n$($color.yellow)                     ███████████████▀`n					$($color.reset)" # handmade by cereal <3
+<#
+          ██████████████▄                     
+         ████████████████▄                    
+         █████████████████ ███▄          ▄██  
+        ██████████████████ ██████████████████ 
+        █████████████████  █████████████████  
+       █████████████████  ██████████████████  
+       █████████████████ ██████████████████   
+      █████████████████  ██████████████████   
+                   ▀▀█  ██████████████████    
+     ███████████████   ██████████████████     
+     ████████████████    ▀██████████████▀     
+    ████████████████  ███▄         
+   ████████████████  ███████████████████      
+   █████████████████ ██████████████████       
+  █████████████████  █████████████████       
+  █████████████████ ██████████████████        
+ █████████████████  ██████████████████        
+  █▀           ██▀ ██████████████████         
+                   ██████████████████         
+                     ███████████████▀
+handmade by cereal <3
+#>
+	} elseif($type -eq "fetch_unknown_os"){
+		write-output "$($color.violet)`n		▄████▄`n		█▀  ▀█`n		    ▄█`n		 ▄███▀`n		 █▀`n`n		 ▀`n$($color.reset)"
+	} elseif($type -eq "cerealos"){
+		write-output "$($color.pink)cereal_os_easteregg_fetch$($color.reset)"
+	} else {
+		softthrow "no asset of that name found"
+		if(-not $fwd) {
+			watermark $type -fwd
+		}
+	}
+}
+
+function clib([switch]$version, [switch]$fork, [switch]$dev, [switch]$vername, [switch]$libname, [switch]$esx, [switch]$wm) {
+	if($wm){
+		watermark clib
+	}
+	if($libname){
+		if($clibManifest.fork -eq $false) {
+			watermark clib
+		} else {
+			write-output $($clibManifest).lib_name
+		}
+	}
+	if($version){
+		write-output $($clibManifest).version
+	}
+	if($vername){
+		write-output $($clibManifest).ver_name
+	}
+	if($dev){
+		write-output "by" $($clibManifest).dev_name
+	}
+	if($fork){
+		if($clibManifest.fork -eq $true){
+			write-output "is a fork"
+		}else{
+			write-output "not a fork"
+		}
+	}
+	if($esx){
+		if($clibManifest.esx -eq $true){
+			write-output "esx build"
+		}else{
+			write-output "psm1 build"
+		}
+	}
+}
+
+function Get-OSKey {
+    $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
+    if ($os -match "Windows") {
+        $caption = (Get-CimInstance Win32_OperatingSystem).Caption
+        if ($caption -match "Windows 11") { return "win11_fetch" }
+        elseif ($caption -match "Windows 10") { return "win10_fetch" }
+        else { return "win_fetch" }
+    }
+    elseif ($os -match "Linux") {
+        if (-not (Test-Path /etc/os-release)) {
+            return "tux"
+        }
+        $osInfo = Get-Content /etc/os-release | ConvertFrom-StringData
+        $id = $osInfo.ID.ToLower()
+        switch ($id) {
+            "arch"      { return "arch" } # btw
+            "linuxmint" { return "mint" }
+            "debian"    { return "debian" }
+            "ubuntu"    { return "ubuntu" }
+            "pop"       { return "pop" }
+            default      { return "tux" }
+        }
+    }
+    elseif ($os -match "Darwin") {
+        return "mac"
+    }
+    return "fetch_unknown_os"
+}
+$validOSes = @("win_fetch", "win10_fetch", "win11_fetch", "arch", "mint", "pop", "tux", "ubuntu", "debian", "mac", "cerealos")
+function cfetch($larp) {
+	if ($larp) {
+		if ($larp -notin $validOSes) {
+		render "fetch_unknown_os"
+		} else {
+			render $larp
+		}
+		if ($larp -eq "win_fetch") {
+			write-output "$($color.win10)Windows"
+		} elseif ($larp -eq "win10_fetch") {
+			write-output "$($color.win10)Windows 10"
+		} elseif ($larp -eq "win11_fetch") {
+			write-output "$($color.win11)Windows 11"
+		} elseif ($larp -eq "arch") {
+			write-output "$($color.win11)Arch" # btw
+		} elseif ($larp -eq "mint") {
+			write-output "$($color.mint)Linux Mint"
+		} elseif ($larp -eq "debian") {
+			write-output "$($color.debian)Debian"
+		} elseif ($larp -eq "pop") {
+		write-output "$($color.pop)Pop!_OS"
+		} elseif ($larp -eq "tux") {
+			write-output "$($color.orange)Linux"
+		} elseif ($larp -eq "ubuntu") {
+			write-output "$($color.orange)Ubuntu"
+		} elseif ($larp -eq "mac") {
+			write-output "$($color.indigo)MacOS"
+		} elseif ($larp -eq "cerealos") {
+			write-output "$($color.pink)CerealOS"
+		} else {
+			write-output "$($color.violet)$larp"
+		}
+	} else {
+		$logo = Get-OSKey
+		if ($logo -notin $validOSes) {
+			render "fetch_unknown_os"
+		} else {
+			render $logo
+		}
+		if ($logo -eq "win_fetch") {
+			write-output "$($color.win10)Windows"
+		} elseif ($logo -eq "win10_fetch") {
+			write-output "$($color.win10)Windows 10"
+		} elseif ($logo -eq "win11_fetch") {
+			write-output "$($color.win11)Windows 11"
+		} elseif ($logo -eq "arch") {
+			write-output "$($color.win11)Arch" # btw
+		} elseif ($logo -eq "mint") {
+			write-output "$($color.mint)Linux Mint"
+		} elseif ($logo -eq "debian") {
+			write-output "$($color.debian)Debian"
+		} elseif ($logo -eq "pop") {
+		write-output "$($color.pop)Pop!_OS"
+		} elseif ($logo -eq "tux") {
+			write-output "$($color.orange)Linux"
+		} elseif ($logo -eq "ubuntu") {
+			write-output "$($color.orange)Ubuntu"
+		} elseif ($logo -eq "mac") {
+			write-output "$($color.indigo)MacOS"
+		} else {
+			if($(Get-CimInstance Win32_OperatingSystem)) {
+				render win_fetch
+				write-host "$(Get-CimInstance Win32_OperatingSystem)" # fallback
+			} else {
+				write-output "$($color.violet)Unknown OS" # TempleOS or some shit right here
+			}
+		}
+	}
+}
+Export-ModuleMember -Variable color
+Export-ModuleMember -Variable time
+Export-ModuleMember -Variable esc
+Export-ModuleMember -Function *
+
+write-host "you are running $($color.win11)clib$($color.reset) $($color.yellow)$($clibManifest.version)$($color.reset) in $($color.win10)compatibility mode.$($color.reset)`n$($color.win11)clib$($color.reset) $($color.win10)compatibility mode$($color.reset) may not have the most recent features.`n$($color.win11)clib$($color.reset) $($color.win10)compatibility mode$($color.reset) only has necessary render assets.`nas of $($color.yellow)1.2.0$($color.reset), it only includes $($color.debian)cfetch$($color.reset) assets`nupgrade to $($color.green)pwsh 7.x$($color.reset) or $($color.win11)windows 11$($color.reset) to be able to run $($color.win11)clib core.$($color.reset)"

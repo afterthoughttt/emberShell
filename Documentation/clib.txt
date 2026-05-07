@@ -1,0 +1,225 @@
+== clib versions ==
+
+clib Core is the base build of clib.
+it includes all features.
+
+clib Compat is a build of clib that removes certain features.
+it does NOT include most render assets, and is only recommended if you are on windows 10 or below
+
+clibPS is the powershell version of clib. it is mostly the same as clib Core
+
+== $clibManifest ==
+------------
+-- syntax --
+------------
+$($clibManifest.key)
+----------
+-- keys --
+----------
+esx
+fork
+dev_name
+ver_name
+version
+lib_name
+
+== Random ==
+------------
+-- syntax --
+------------
+random $min $max
+^ inclusive random, simpler syntax than get-random
+
+== idx ==
+idx $array $num
+^ inclusive index function
+
+== cnr ==
+cnr $files $output $names (optional -pname) (optional -log)
+
+== $time ==
+------------
+-- syntax --
+------------
+$($time.key)
+----------
+-- keys --
+----------
+clock -> HH:mm
+wclock -> HH:mm:ss
+msprecise -> HH:mm:ss.fff
+tickprecise -> HH:mm:ss.fffffff
+clock12 -> hh:mm tt
+wclock12 -> hh:mm:ss tt
+msprecise12 -> hh:mm:ss.fff tt
+tickprecise12 -> hh:mm:ss.fffffff tt
+date -> dd.MM.yyyy
+usdate -> MM/dd/yyyy
+isodate -> yyyy-MM-dd
+era -> gg
+shortera -> g
+
+== get-logtime ==
+------------
+-- syntax --
+------------
+get-logtime $fmt 
+^ time keys
+
+== write-log ==
+------------
+-- syntax --
+------------
+write-log $text (optional: $fmt) (optional: $type)
+-----------
+-- types --
+-----------
+throw
+error
+softthrow
+(none)
+
+== confirm ==
+------------
+-- syntax --
+------------
+confirm $content $y $n
+
+== uac ==
+------------
+-- syntax --
+------------
+uac
+
+== timed ==
+------------
+-- syntax --
+------------
+timed $func
+
+== force ==
+------------
+-- syntax --
+------------
+force $func $expect (optional: $att) (optional: -silent)
+
+== clamp ==
+------------
+-- syntax --
+------------
+clamp $value $min $max
+
+== repstring ==
+------------
+-- syntax --
+------------
+repstring $string $reps (optional: $fmt)
+
+-------------
+-- formats --
+-------------
+count
+append
+list
+(none)
+
+== fuck ==
+------------
+-- syntax --
+------------
+fuck (optional: $reps) (optional: -log)
+
+== softthrow ==
+------------
+-- syntax --
+------------
+softthrow $string
+
+== $color ==
+------------
+-- syntax --
+------------
+$($color.key)
+
+----------
+-- keys --
+----------
+
+-- rainbow --
+red
+orange
+yellow
+green
+cyan
+blue
+indigo
+violet
+
+-- grayscale --
+white
+lightgray
+gray
+darkgray
+black
+
+-- special --
+efas
+cereal
+afterthought
+aletheia
+lunar
+invert
+win11
+mint
+pop
+debian
+win10
+
+== watermark & render ==
+------------
+-- syntax --
+------------
+watermark $type
+render $type
+
+-----------
+-- types --
+-----------
+-- watermarks --
+afterthought
+lunar
+esh/efasShell/emberShell
+clib
+
+-- render assets --
+efas
+windows
+windows_11
+windows_10
+win11_fetch
+arch
+mint/linux mint
+ubuntu
+pop!_os/pop
+debian
+win10_fetch
+win_fetch
+fetch_unknown_os
+
+== clib ==
+------------
+-- syntax --
+------------
+clib -version -fork -dev -vername -libname -esx (all optional flags)
+
+== Get-OSKey ==
+------------
+-- syntax --
+------------
+Get-OSKey
+
+== cfetch ==
+------------
+-- syntax --
+------------
+cfetch

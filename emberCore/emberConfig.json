@@ -1,0 +1,10 @@
+{
+  "show_pwsh_Version": true,
+  "show_esh_Version": true,
+  "show_clib_Version": true,
+  "start_dir": "%USERPROFILE%",
+  "auto_esx_clib": true,
+  "clib_compat": false,
+  "aliaspack": true,
+  "lids": true
+}

@@ -1,0 +1,45 @@
+== basics ==
+
+.esh behaves similar to a .ps1 file, however it allows for emberShell exclusive cmdlets.
+.esx behaves similar to a .psm1 file, however it also allows for emberShell exclusive cmdlets.
+
+== config ==
+------------
+-- Syntax --
+------------
+set-config "key" value
+
+----------------
+-- valid keys --
+----------------
+
+as of clib 1.2, the default values for valid keys are:
+------------------------------------------------------
+"show_pwsh_Version": true,
+"show_esh_Version": true,
+"show_clib_Version": true,
+"start_dir": "%USERPROFILE%",
+"auto_esx_clib": true,
+"clib_compat": false
+
+you can view the source list in emberShell\emberCore\emberConfig.json
+
+== esh & esx ==
+------------
+-- Syntax --
+------------
+
+esh "filepath"
+OR
+esh "filename" # (if in same path)
+OR
+esh "filename.esh" # (if in same path)
+
+esx "modulename" # all modules are stored in emberShell\Modules
+
+== fun facts ==
+
+eSh stands for emberShell
+esx stands for emberShell eXtension
+
+emberShell's original name, efasShell is based on a tag & album by the artist "plaxz". efas is safe reversed.

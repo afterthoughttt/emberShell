@@ -1,0 +1,8 @@
+{
+	"shell_name": "emberShell",
+	"shell_version": "1.1.0",
+	"sv_name": "spark",
+	"dev_name": "cereal",
+	"fork": false,
+	"clib_version": "1.2.0"
+}
