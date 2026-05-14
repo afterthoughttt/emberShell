@@ -40,16 +40,24 @@ function Convert-ToLinuxPath {
 }
 
 function prompt {
-    $realPath = (Get-Location).Path
-    $linuxPath = Convert-ToLinuxPath $realPath
-    "$($color.win11)eSh $linuxPath$($color.reset)" + "> "
+	$realPath = (Get-Location).Path
+	if (-not $IsLinux) {
+		$linuxPath = Convert-ToLinuxPath $realPath
+		"$($color.win11)eSh $linuxPath$($color.reset)" + "> "
+	} else {
+		"$($color.win11)eSh $realPath$($color.reset)" + "> "
+	}
 }
 
 # remove-alias -name cd -force -scope global # why is this isolated??
-function cd {
-    param($path)
-	$path = $path -replace "home", "Users"
-    set-location $path
+if (-not $IsLinux) {
+	function cd {
+		param($path)
+		if ($path -eq "home" -or $path -eq "/home") {
+			$path = $path -replace "home", "Users"
+		}
+		set-location $path
+	}
 }
 
 function delid {
@@ -61,8 +69,12 @@ function delid {
 function relid {
 	function global:prompt {
 		$realPath = (Get-Location).Path
-		$linuxPath = Convert-ToLinuxPath $realPath
-		"$($color.win11)eSh $linuxPath$($color.reset)" + "> "
+		if (-not $IsLinux) {
+			$linuxPath = Convert-ToLinuxPath $realPath
+			"$($color.win11)eSh $linuxPath$($color.reset)" + "> "
+		} else {
+			"$($color.win11)eSh $realPath$($color.reset)" + "> "
+		}
 	}
 }
 # LIDS // Copyright (c) cerealdev 2026

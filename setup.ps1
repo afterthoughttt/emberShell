@@ -1,9 +1,58 @@
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 
+param(
+    [switch]$o
+)
+
 $terminalIcon = Join-Path $root "emberRes\eshIcon\icon.png"
 $fileIcon     = Join-Path $root "emberRes\eshIcon\esh.ico"
 $corePath     = Join-Path $root "emberCore\emberCore.psm1"
 $profilePath  = Join-Path $root "emberCore\emberProfile.ps1"
+
+function confirm($content, $y, $n, $default) {
+	write-host "$content`n[$y/$n]"
+	$answer = read-host
+	if ($answer -eq $y) {
+		return $true
+	} elseif ($answer -eq $n) {
+		return $false
+	} else {
+		return $default
+	}
+}
+
+if ($o) {
+	if(-not (get-command "pwsh" -ErrorAction SilentlyContinue)) {
+		$instpwsh = $(confirm "Update PowerShell?" "Y" "n" $true)
+	}
+	if(-not (get-command "wt" -ErrorAction SilentlyContinue)) {
+		$instwt = $(confirm "Install Windows Terminal?" "Y" "n" $true)
+	}
+	if(test-path (join-path $root "setup.sh")) {
+		$plf = $(confirm "Delete Linux specific Files?" "y" "N" $false)
+	}
+}
+
+if(-not (get-command "pwsh" -ErrorAction SilentlyContinue) -and ("--update-pwsh" -or "--update-powershell") -in $args) {
+	winget install Microsoft.PowerShell
+} elseif($instpwsh) {
+	if(-not (get-command "pwsh" -ErrorAction SilentlyContinue)) {
+		winget install Microsoft.PowerShell
+	} else {
+		write-host "PowerShell is already on the Latest Version." -ForegroundColor Red
+	}
+}
+
+
+if(-not (get-command "wt" -ErrorAction SilentlyContinue) -and "--install-wt" -in $args) {
+	winget install Microsoft.WindowsTerminal
+} elseif($instwt) {
+	if(-not (get-command "wt" -ErrorAction SilentlyContinue)) {
+		winget install Microsoft.WindowsTerminal
+	} else {
+		write-host "Windows Terminal is already Installed." -ForegroundColor Red
+	}
+}
 
 $psExe = $null
 if (Get-Command "pwsh" -ErrorAction SilentlyContinue) {
@@ -121,6 +170,12 @@ public static extern void SHChangeNotify(int eventId, int flags, IntPtr item1, I
 '@
 $shell = Add-Type -MemberDefinition $code -Name WinShell -Namespace Win32 -PassThru
 $shell::SHChangeNotify(0x08000000, 0x0000, [IntPtr]::Zero, [IntPtr]::Zero)
+
+if(test-path (join-path $root "lnxsetup.ps1")) {
+	if("--preserve-linux-files" -notin $args -and (-not $plf)) {
+		rm (join-path $root "lnxsetup.ps1")
+	}
+}
 
 $termLabel = if ($hasWT) { "Windows Terminal" } else { "standalone window (no wt)" }
 Write-Host "emberShell setup complete." -ForegroundColor Green

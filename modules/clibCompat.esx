@@ -1,10 +1,10 @@
 $clibManifest = @{
 	esx = $true
     fork = $false
-	dev_name = "cereal"
+	dev_name = "cereal" # Copyright (c) cerealdev 2026
 	ver_name = "oats"
 	version = "1.2"
-	lib_name = "clib Compat"
+	lib_name = "clib"
 }
 
 function random($min, $max) {
@@ -83,6 +83,8 @@ function write-log($text, $fmt, $type) {
 		throw "[$logtime]: $text"
 	}elseif ($type -eq "error") {
 		write-error "[$logtime]: $text"
+	}elseif ($type -eq "softthrow") {
+	softthrow "[$logtime]: $text"
 	} else {
 		write-output "[$logtime]: $text"
 	}
@@ -342,7 +344,19 @@ handmade by cereal <3
 		write-output "$($color.violet)`n		▄████▄`n		█▀  ▀█`n		    ▄█`n		 ▄███▀`n		 █▀`n`n		 ▀`n$($color.reset)"
 	} elseif($type -eq "cerealos"){
 		write-output "$($color.pink)cereal_os_easteregg_fetch$($color.reset)"
-	} else {
+	} elseif($type -eq "mac") {
+		write-output "$($color.cyan)mac_os_cfetch_ascii$($color.reset)"
+	} elseif($type -eq "tux") {
+		write-output "$($color.orange)linux_cfetch_ascii$($color.reset)"
+	} elseif($type -eq "fedora") {
+		write-output "$($color.win11)fedora_cfetch_ascii$($color.reset)"
+	} elseif($type -eq "artix") {
+		write-output "$($color.win11)artix_cfetch_ascii$($color.reset)"
+	} elseif($type -eq "android") {
+		write-output "$($color.mint)android_cfetch_ascii$($color.reset)"
+	} elseif($type -eq "amogos") {
+		write-output "$($color.red)amog$($color.reset)$($color.cyan)os$($color.reset)$($color.red)_cfetch_ascii$($color.reset)"
+				} else {
 		softthrow "no asset of that name found"
 		if(-not $fwd) {
 			watermark $type -fwd
@@ -350,10 +364,7 @@ handmade by cereal <3
 	}
 }
 
-function clib([switch]$version, [switch]$fork, [switch]$dev, [switch]$vername, [switch]$libname, [switch]$esx, [switch]$wm) {
-	if($wm){
-		watermark clib
-	}
+function clib([switch]$version, [switch]$fork, [switch]$dev, [switch]$vername, [switch]$libname, [switch]$esx) {
 	if($libname){
 		if($clibManifest.fork -eq $false) {
 			watermark clib
@@ -386,6 +397,23 @@ function clib([switch]$version, [switch]$fork, [switch]$dev, [switch]$vername, [
 	}
 }
 
+function cdump {
+$order = @('black','darkgray','gray','lightgray','white','afterthought','debian','red','orange','yellow','mint','green','cyan','pop','win11','aletheia','win10','efas','blue','indigo','violet','pink','cereal','lunar')
+$line = ""
+$i = 0
+foreach ($name in $order) {
+    $c = $color[$name]
+    if (-not $c) { continue }
+    $bg = $c -replace '\[38;', '[48;'
+    $line += "$bg  $($color.reset)"
+    $i++
+    if ($i % 16 -eq 0) {
+        $line += "`n"
+    }
+}
+Write-Host $line
+}
+
 function Get-OSKey {
     $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     if ($os -match "Windows") {
@@ -401,11 +429,15 @@ function Get-OSKey {
         $osInfo = Get-Content /etc/os-release | ConvertFrom-StringData
         $id = $osInfo.ID.ToLower()
         switch ($id) {
+			"fedora"    {return "fedora"}
             "arch"      { return "arch" } # btw
+			"artix"      { return "artix" } # btw
             "linuxmint" { return "mint" }
             "debian"    { return "debian" }
             "ubuntu"    { return "ubuntu" }
             "pop"       { return "pop" }
+			"android" { return "android" }
+			"amogos" { return "amogos" }
             default      { return "tux" }
         }
     }
@@ -414,79 +446,267 @@ function Get-OSKey {
     }
     return "fetch_unknown_os"
 }
-$validOSes = @("win_fetch", "win10_fetch", "win11_fetch", "arch", "mint", "pop", "tux", "ubuntu", "debian", "mac", "cerealos")
+
+function resolveOSC($OSin) {
+	if($OSin -eq "arch" -or $OSin -eq "win11_fetch" -or $OSin -eq "artix" -or $OSin -eq "fedora") {
+		return $($color.win11)
+	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch") {
+		return $($color.win10)
+	} elseif ($OSin -eq "mint" -or $OSin -eq "android") {
+		return $($color.mint)
+	} elseif ($OSin -eq "pop") {
+		return $($color.pop)
+	} elseif ($OSin -eq "tux" -or $OSin -eq "ubuntu") {
+		return $($color.orange)
+	} elseif ($OSin -eq "debian") {
+		return $($color.debian)
+	} elseif ($OSin -eq "mac") {
+		return ($($color.cyan)) 
+	} elseif ($OSin -eq "cerealos") {
+		return ($($color.pink))
+	} elseif ($OSin -eq "amogos") {
+		return ($($color.red))
+	}else {
+		return ($($color.violet))
+	}
+}
+
+$validOSes = @(
+"win_fetch",
+"win10_fetch",
+"win11_fetch",
+"arch",
+"mint",
+"pop",
+"tux",
+"ubuntu",
+"debian",
+"mac",
+"cerealos",
+"fedora",
+"artix",
+"android",
+"amogos"
+)
 function cfetch($larp) {
 	if ($larp) {
+		$resolvedosc = resolveOSC($larp)
 		if ($larp -notin $validOSes) {
-		render "fetch_unknown_os"
+			render "fetch_unknown_os"
 		} else {
 			render $larp
 		}
 		if ($larp -eq "win_fetch") {
-			write-output "$($color.win10)Windows"
+			write-output "$($resolvedosc)OS:          Windows"
 		} elseif ($larp -eq "win10_fetch") {
-			write-output "$($color.win10)Windows 10"
+			write-output "$($resolvedosc)OS:          Windows 10"
 		} elseif ($larp -eq "win11_fetch") {
-			write-output "$($color.win11)Windows 11"
+			write-output "$($resolvedosc)OS:          Windows 11"
 		} elseif ($larp -eq "arch") {
-			write-output "$($color.win11)Arch" # btw
+			write-output "$($resolvedosc)OS:          Arch" # btw
 		} elseif ($larp -eq "mint") {
-			write-output "$($color.mint)Linux Mint"
+			write-output "$($resolvedosc)OS:          Linux Mint"
 		} elseif ($larp -eq "debian") {
-			write-output "$($color.debian)Debian"
+			write-output "$($resolvedosc)OS:          Debian"
 		} elseif ($larp -eq "pop") {
-		write-output "$($color.pop)Pop!_OS"
+			write-output "$($resolvedosc)OS:          Pop!_OS"
 		} elseif ($larp -eq "tux") {
-			write-output "$($color.orange)Linux"
+			write-output "$($resolvedosc)OS:          Linux"
 		} elseif ($larp -eq "ubuntu") {
-			write-output "$($color.orange)Ubuntu"
+			write-output "$($resolvedosc)OS:          Ubuntu"
 		} elseif ($larp -eq "mac") {
-			write-output "$($color.indigo)MacOS"
+			write-output "$($resolvedosc)OS:          MacOS"
 		} elseif ($larp -eq "cerealos") {
-			write-output "$($color.pink)CerealOS"
-		} else {
-			write-output "$($color.violet)$larp"
+			write-output "$($resolvedosc)OS:          CerealOS"
+		} elseif ($larp -eq "artix") {
+			write-output "$($resolvedosc)OS:          Artix"
+		} elseif ($larp -eq "fedora") {
+			write-output "$($resolvedosc)OS:          Fedora"
+		} elseif ($larp -eq "android") {
+			write-output "$($resolvedosc)OS:          Android"
+		} elseif ($larp -eq "amogos") {
+			write-output "$($resolvedosc)OS:          AmogOS"
+		} else { 
+			write-output "$($resolvedosc)OS:          $larp"
 		}
 	} else {
 		$logo = Get-OSKey
+		$resolvedosc = resolveOSC($logo)
 		if ($logo -notin $validOSes) {
 			render "fetch_unknown_os"
 		} else {
 			render $logo
 		}
 		if ($logo -eq "win_fetch") {
-			write-output "$($color.win10)Windows"
+			write-output "$($resolvedosc)OS:          Windows"
 		} elseif ($logo -eq "win10_fetch") {
-			write-output "$($color.win10)Windows 10"
+			write-output "$($resolvedosc)OS:          Windows 10"
 		} elseif ($logo -eq "win11_fetch") {
-			write-output "$($color.win11)Windows 11"
+			write-output "$($resolvedosc)OS:          Windows 11"
 		} elseif ($logo -eq "arch") {
-			write-output "$($color.win11)Arch" # btw
+			write-output "$($resolvedosc)OS:          Arch" # btw
 		} elseif ($logo -eq "mint") {
-			write-output "$($color.mint)Linux Mint"
+			write-output "$($resolvedosc)OS:          Linux Mint"
 		} elseif ($logo -eq "debian") {
-			write-output "$($color.debian)Debian"
+			write-output "$($resolvedosc)OS:          Debian"
 		} elseif ($logo -eq "pop") {
-		write-output "$($color.pop)Pop!_OS"
+			write-output "$($resolvedosc)OS:          Pop!_OS"
 		} elseif ($logo -eq "tux") {
-			write-output "$($color.orange)Linux"
+			write-output "$($resolvedosc)OS:          Linux"
 		} elseif ($logo -eq "ubuntu") {
-			write-output "$($color.orange)Ubuntu"
+			write-output "$($resolvedosc)OS:          Ubuntu"
 		} elseif ($logo -eq "mac") {
-			write-output "$($color.indigo)MacOS"
+			write-output "$($resolvedosc)OS:          MacOS"
+		} elseif ($logo -eq "artix") {
+			write-output "$($resolvedosc)OS:          Artix"
+		} elseif ($logo -eq "fedora") {
+			write-output "$($resolvedosc)OS:          Fedora"
+		} elseif ($logo -eq "android") {
+			write-output "$($resolvedosc)OS:          Android"
+		} elseif ($logo -eq "amogos") {
+			write-output "$($resolvedosc)OS:          AmogOS"
 		} else {
-			if($(Get-CimInstance Win32_OperatingSystem)) {
+			if ($IsWindows -or (get-ciminstance win32_operatingsystem)) {
 				render win_fetch
-				write-host "$(Get-CimInstance Win32_OperatingSystem)" # fallback
+				write-host "$(Get-CimInstance Win32_OperatingSystem)"
 			} else {
-				write-output "$($color.violet)Unknown OS" # TempleOS or some shit right here
+				write-output "$($resolvedosc)OS:          Unknown" # TempleOS or some shit right here
 			}
 		}
 	}
+	if ($IsWindows -or (get-ciminstance win32_operatingsystem)) {
+		$cpu = get-ciminstance Win32_Processor
+		Write-Output "$($resolvedosc)CPU:         $($cpu.Name)"
+		Write-Output "$($resolvedosc)CPU Base:    $($cpu.MaxClockSpeed)MHz"
+		Write-Output "$($resolvedosc)CPU Cores:   $($cpu.NumberOfCores)"
+		Write-Output "$($resolvedosc)CPU Threads: $($cpu.NumberOfLogicalProcessors)"
+		Write-Output "$($resolvedosc)GPU:         $((get-ciminstance Win32_VideoController).Name)"
+		$ram = get-ciminstance Win32_PhysicalMemory
+		$total = ($ram | Measure-Object -Property Capacity -Sum).Sum / 1GB
+		$speed = $ram[0].Speed
+		$gen = switch ($ram[0].SMBIOSMemoryType) {
+			18 { "DDR" }
+			19 { "DDR2" }
+			20 { "DDR2 FB-DIMM" }
+			24 { "DDR3" }
+			25 { "FBD2" }
+			26 { "DDR4" }
+			27 { "LPDDR" }
+			28 { "LPDDR2" }
+			29 { "LPDDR3" }
+			30 { "LPDDR4" }
+			31 { "LPDDR4X" }
+			32 { "DDR5" }
+			33 { "LPDDR5" }
+			34 { "DDR5" }
+			35 { "LPDDR5X" }
+			default { "DDR?" }
+		}
+		Write-Output "$($resolvedosc)RAM:         $($total)GB $($gen) $($speed)MT/s"
+		$disks = Get-PhysicalDisk | Sort-Object DeviceId
+		$prefix = "$($resolvedosc)Storage:     "
+		$indent = " " * $prefix.Length
+		Write-Host -NoNewline $prefix
+		$first = $true
+		foreach ($disk in $disks) {
+			$size = $disk.Size
+			$sizeStr = if ($size -ge 1000000000000) { "$([math]::Round($size / 1000000000000, 1))TB" }
+        else { "$([math]::Round($size / 1000000000))GB" }
+			$bus = $disk.BusType
+			$type = $disk.MediaType
+			$label = if ($bus -eq "NVMe") { "NVMe SSD" }
+					 elseif ($bus -eq "USB") { "USB Drive" }
+					 elseif ($type -eq "SSD") { "SATA SSD" }
+					 elseif ($type -eq "HDD") { "HDD" }
+					 elseif ($bus -eq "ATAPI") { "Disc Drive" }
+					 else { "$bus $type".Trim() }
+			if ($first) {
+				Write-Output "$($resolvedosc)$sizeStr $label"
+				$first = $false
+			} else {
+				Write-Output "$($resolvedosc)$indent$sizeStr $label"
+			}
+		}
+		$mobo = get-ciminstance Win32_BaseBoard
+		$moboStr = "$($mobo.Manufacturer) $($mobo.Product)".Trim()
+		Write-Output "$($resolvedosc)Motherboard: $($mobo.Manufacturer) $($mobo.Product)"
+		$uptime = (Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime
+		Write-Output "$($resolvedosc)Uptime:      $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m$($color.reset)"
+	} elseif ($IsLinux) {
+		$cpu = (lscpu | Select-String "Model name").ToString().Split(":")[1].Trim()
+		$cores = (nproc)
+		$threads = (lscpu | Select-String "^CPU\(s\):").ToString().Split(":")[1].Trim()
+		Write-Output "$($resolvedosc)CPU:         $cpu"
+		Write-Output "$($resolvedosc)CPU Cores:   $cores"
+		Write-Output "$($resolvedosc)CPU Threads: $threads"
+		$mhzLine = lscpu | Select-String "CPU MHz"
+		if ($mhzLine) {
+			$base = $mhzLine.ToString().Split(":")[1].Trim()
+			Write-Output "$($resolvedosc)CPU Base:    ${base}MHz"
+		} else {
+			Write-Output "$($resolvedosc)CPU Base:    unsupported on linux"
+		}
+		$memKb = (Select-String MemTotal /proc/meminfo).ToString().Split()[1]
+		$ram = $memKb / 1MB
+		Write-Output "$($resolvedosc)RAM:         $([math]::Round($ram,1))GB"
+		Write-Output "$($resolvedosc)RAM Detail:  unsupported on linux"
+		$gpuLine = lspci | Select-String -Pattern "VGA|3D" | Select-Object -First 1
+		if ($gpuLine) {
+			$gpu = $gpuLine.ToString().Split(":")[2].Trim()
+			Write-Output "$($resolvedosc)GPU:         $gpu"
+		} else {
+			Write-Output "$($resolvedosc)GPU:         unsupported on linux"
+		}
+		$disks = lsblk -dn -o SIZE,ROTA
+		foreach ($d in $disks) {
+			$parts = $d -split "\s+"
+			$type = if ($parts[1] -eq "0") { "SSD" } else { "HDD" }
+			Write-Output "$($resolvedosc)Storage:     $($parts[0]) $type"
+		}
+		if (Test-Path "/sys/class/dmi/id/board_vendor") {
+			$vendor = Get-Content /sys/class/dmi/id/board_vendor
+			$name = Get-Content /sys/class/dmi/id/board_name
+			Write-Output "$($resolvedosc)Motherboard: $vendor $name"
+		} else {
+			Write-Output "$($resolvedosc)Motherboard: unsupported on linux"
+		}
+		$uptime = (uptime -p).Replace("up ","")
+		Write-Output "$($resolvedosc)Uptime:      $uptime"
+		write-output "cfetch is untested on Linux.`nvalues may be innacurate."
+	} elseif($IsMacOS) {
+		$cpu = sysctl -n machdep.cpu.brand_string
+		$cores = sysctl -n hw.physicalcpu
+		$threads = sysctl -n hw.logicalcpu
+		Write-Output "$($resolvedosc)CPU:         $cpu"
+		Write-Output "$($resolvedosc)CPU Cores:   $cores"
+		Write-Output "$($resolvedosc)CPU Threads: $threads"
+		Write-Output "$($resolvedosc)CPU Base:    unsupported on macos"
+		$ram = (sysctl -n hw.memsize) / 1GB
+		Write-Output "$($resolvedosc)RAM:         $([math]::Round($ram,1))GB"
+		Write-Output "$($resolvedosc)RAM Detail:  unsupported on macos"
+		$gpuLine = system_profiler SPDisplaysDataType | Select-String "Chipset Model" | Select-Object -First 1
+		if ($gpuLine) {
+			$gpu = $gpuLine.ToString().Split(":")[1].Trim()
+			Write-Output "$($resolvedosc)GPU:         $gpu"
+		} else {
+			Write-Output "$($resolvedosc)GPU:         unsupported on macos"
+		}
+		$disk = (df -h / | Select-Object -Last 1).Split()[1]
+		Write-Output "$($resolvedosc)Storage:     $disk"
+		Write-Output "$($resolvedosc)Storage Type: unsupported on macos"
+		Write-Output "$($resolvedosc)Motherboard: unsupported on macos"
+		$uptimeRaw = uptime
+		$uptime = (($uptimeRaw -split "up ")[1] -split ",")[0]
+		Write-Output "$($resolvedosc)Uptime:      $uptime"
+		write-output "cfetch is untested on MacOS.`nvalues may be innacurate."
+	}
+	cdump
 }
+
 Export-ModuleMember -Variable color
 Export-ModuleMember -Variable time
 Export-ModuleMember -Variable esc
 Export-ModuleMember -Function *
 
-write-host "you are running $($color.win11)clib$($color.reset) $($color.yellow)$($clibManifest.version)$($color.reset) in $($color.win10)compatibility mode.$($color.reset)`n$($color.win11)clib$($color.reset) $($color.win10)compatibility mode$($color.reset) may not have the most recent features.`n$($color.win11)clib$($color.reset) $($color.win10)compatibility mode$($color.reset) only has necessary render assets.`nas of $($color.yellow)1.2.0$($color.reset), it only includes $($color.debian)cfetch$($color.reset) assets`nupgrade to $($color.green)pwsh 7.x$($color.reset) or $($color.win11)windows 11$($color.reset) to be able to run $($color.win11)clib core.$($color.reset)"
+# clib // Copyright (c) cerealdev 2026
+# Licensed with eSh & LIDS under the GPL V3.0 license.

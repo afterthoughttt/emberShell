@@ -31,8 +31,180 @@ if ($config.start_dir) {
 }
 
 if ($config.aliaspack) { # opt-in aliaspack
-	set-alias cpkg winget
+	# set-alias cpkg winget # replaced by cpkg native
+	set-alias alias set-alias
+	set-alias gcmd get-command
+	<# :3
+	set-alias pwease sudo
+	set-alias dewete rm
+	#>
 }
+
+<#
+valid args:
+install; inst
+remove;  rm
+update;  upd
+search;  s
+info;    i
+source;  src
+refresh; r
+#>
+$pmngr = $null
+if(get-command apt -ErrorAction SilentlyContinue) {
+	$pmngr = "apt"
+} elseif (get-command pacman -ErrorAction SilentlyContinue) {
+	$pmngr = "pacman"
+} elseif (get-command apk -ErrorAction SilentlyContinue) {
+	$pmngr = "apk"
+} elseif (get-command dnf -ErrorAction SilentlyContinue) {
+	$pmngr = "dnf"
+} elseif (get-command zypper -ErrorAction SilentlyContinue) {
+	$pmngr = "zypper"
+} elseif (get-command yay -ErrorAction SilentlyContinue) {
+	$pmngr = "yay"
+} elseif (get-command winget -ErrorAction SilentlyContinue) {
+	$pmngr = "winget"
+} else {
+	$pmngr = "n/a"
+}
+
+function cpkg($action, $package) {
+	if ($package) {
+		if ($pmngr -eq "apt") {
+			if($action -in @("install","inst")) {
+				apt install $package
+			} elseif($action -in @("remove","rm")) {
+				apt remove $package
+			} elseif($action -in @("update","upd")) {
+				apt upgrade $package
+			} elseif($action -in @("search","s")) {
+				apt search $package
+			} elseif($action -in @("info","i")) {
+				apt show $package
+			} elseif($action -in @("source","src")) {
+				apt source $package
+			}
+		} elseif ($pmngr -eq "pacman") {
+			if($action -in @("install","inst")) {
+				pacman -S $package
+			} elseif($action -in @("remove","rm")) {
+				pacman -R $package
+			} elseif($action -in @("update","upd")) {
+				pacman -S $package
+			} elseif($action -in @("search","s")) {
+				pacman -Ss $package
+			} elseif($action -in @("info","i")) {
+				pacman -Si $package
+			} elseif($action -in @("source","src")) {
+				pacman -Si $package
+			}
+		} elseif ($pmngr -eq "apk") {
+			if($action -in @("install","inst")) {
+				apk add $package
+			} elseif($action -in @("remove","rm")) {
+				apk del $package
+			} elseif($action -in @("search","s")) {
+				apk search $package
+			} elseif($action -in @("info","i")) {
+				apk info $package
+			} elseif($action -in @("source","src")) {
+				apk fetch $package
+			}
+		} elseif ($pmngr -eq "dnf") {
+			if($action -in @("install","inst")) {
+				dnf install $package
+			} elseif($action -in @("remove","rm")) {
+				dnf remove $package
+			} elseif($action -in @("update","upd")) {
+				dnf update $package
+			} elseif($action -in @("search","s")) {
+				dnf search $package
+			} elseif($action -in @("info","i")) {
+				dnf info $package
+			} elseif($action -in @("source","src")) {
+				dnf download --source $package
+			}
+		} elseif ($pmngr -eq "zypper") {
+			if($action -in @("install","inst")) {
+				zypper install $package
+			} elseif($action -in @("remove","rm")) {
+				zypper remove $package
+			} elseif($action -in @("update","upd")) {
+				zypper update $package
+			} elseif($action -in @("search","s")) {
+				zypper search $package
+			} elseif($action -in @("info","i")) {
+				zypper info $package
+			} elseif($action -in @("source","src")) {
+				zypper source-install $package
+			}
+		} elseif ($pmngr -eq "yay") {
+			if($action -in @("install","inst")) {
+				yay -S $package
+			} elseif($action -in @("remove","rm")) {
+				yay -R $package
+			} elseif($action -in @("update","upd")) {
+				yay -S $package
+			} elseif($action -in @("search","s")) {
+				yay -Ss $package
+			} elseif($action -in @("info","i")) {
+				yay -Si $package
+			} elseif($action -in @("source","src")) {
+				yay -G $package
+			}
+		} elseif ($pmngr -eq "winget") {
+			if($action -in @("install","inst")) {
+				winget install $package
+			} elseif($action -in @("remove","rm")) {
+				winget uninstall $package
+			} elseif($action -in @("update","upd")) {
+				winget upgrade $package
+			} elseif($action -in @("search","s")) {
+				winget search $package
+			} elseif($action -in @("info","i")) {
+				winget show $package
+			}
+		}
+	} else {
+		if($pmngr -eq "apt") {
+			if($action -in @("refresh","r")) {
+				apt update
+			}
+		} elseif($pmngr -eq "apk") {
+			if($action -in @("update","upd")) {
+				apk upgrade
+			} elseif($action -in @("refresh","r")) {
+				apk update
+			}
+		} elseif($pmngr -eq "pacman") {
+			if($action -in @("update","upd")) {
+				pacman -Syu
+			}
+		} elseif($pmngr -eq "dnf") {
+			if($action -in @("refresh","r")) {
+				dnf makecache
+			} elseif($action -in @("update","upd")) {
+				dnf update
+			}
+		} elseif($pmngr -eq "zypper") {
+			if($action -in @("refresh","r")) {
+				zypper refresh
+			}
+		} elseif($pmngr -eq "yay") {
+			if($action -in @("update","upd")) {
+				yay -Syu
+			}
+		} elseif($pmngr -eq "winget") {
+			if($action -in @("source","src")) {
+				winget source list
+			} elseif($action -in @("refresh","r")) {
+				winget source update
+			}
+		}
+	}
+}
+
 
 function esh {
     param([string]$file)
@@ -71,7 +243,7 @@ if ($config.auto_esx_clib) {
 	}
 }
 
-if($config.lids) { # not recommended on linux or macos // "Linux Identity Spoof"
+if($config.lids) { # not recommended on macos     // "Linux Identity Spoof"
 	# Remove-Alias -Name cd -Force -Scope Global // works without spam forcing
     esx lids
 	Remove-Alias -Name cd -Force -Scope Global
