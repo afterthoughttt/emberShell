@@ -1,0 +1,91 @@
+[ CFETCH BENCHMARK ]
+-----------------------------WINDOWS TERMINAL 1.24
+(    emberShell    ) 
+--   First Boot   --
+~2.2 Secs
+--   Warmed up    --
+~380 ms
+----------------------------------------------
+(  PowerShell 7.6.1 )
+--   First Boot   --
+~2 Secs
+--   Warmed up    --
+~355 ms
+----------------------------------------------
+(  PowerShell 5.1.2 )
+--   First Boot   --
+~1.8 Secs
+--   Warmed up    --
+~312 ms
+-----------------------------CONHOST
+(    emberShell    )
+--   First Boot   --
+~1.8 Secs
+--   Warmed up    --
+~350 ms
+----------------------------------------------
+(  PowerShell 7.6.1 )
+--   First Boot   --
+~1.9 Secs
+--   Warmed up    --
+~360 ms
+----------------------------------------------
+(  PowerShell 5.1.2 )
+--   First Boot   --
+~1.7 Secs
+--   Warmed up    --
+~307 ms
+-----------------------------PowerShell ISE
+(  PowerShell 5.1.2 )
+--   First Boot   --
+~1.9 Secs
+--   Warmed up    --
+~210 ms
+-----------------------------PowerShell ISE (x86)
+(  PowerShell 5.1.2 )
+--   First Boot   --
+~2.4 Secs
+--   Warmed up    --
+~360 ms
+-----------------------------MINTTY 3.8.2 (Git Bash)
+(  PowerShell 7.6.1 )
+--   First Boot   --
+~2.2 Secs
+--   Warmed up    --
+~354 ms
+----------------------------------------------
+(  PowerShell 5.1.2 )
+--   First Boot   --
+~1.9 Secs
+--   Warmed up    --
+~388 ms
+-----------------------------Konsole 250402 (Debian)
+(  PowerShell 7.6.1 )
+--   First Boot   --
+~1.1 Secs
+--   Warmed up    --
+~500 ms
+-----------------------------Linux TTY (Debian)
+(  PowerShell 7.6.1 )
+--   First Boot   --
+~750 ms
+--   Warmed up    --
+~600 ms
+-----------------------------SSH (Debian)
+(Debian: 7.6.1, Windows: 5.1.2)
+--   First Boot   --
+~1.5 Secs
+--   Warmed up    --
+~800 ms
+----------------------------------------------
+(Debian: 7.6.1, Windows: 7.6.1)
+--   First Boot   --
+~1.2 Secs
+--   Warmed up    --
+~677 ms
+----------------------------------------------
+(Debian: 7.6.1, Windows: emberShell)
+--   First Boot   --
+~924 ms
+--   Warmed up    --
+~667 ms

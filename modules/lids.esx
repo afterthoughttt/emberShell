@@ -48,6 +48,7 @@ function prompt {
 		"$($color.win11)eSh $realPath$($color.reset)" + "> "
 	}
 }
+$global:LIDS = $true
 
 # remove-alias -name cd -force -scope global # why is this isolated??
 if (-not $IsLinux) {
@@ -61,12 +62,14 @@ if (-not $IsLinux) {
 }
 
 function delid {
+	$global:LIDS = $false
 	function global:prompt {
 		"eSh $($PWD.Path)> "
 	}
 }
 
 function relid {
+	$global:LIDS = $true
 	function global:prompt {
 		$realPath = (Get-Location).Path
 		if (-not $IsLinux) {

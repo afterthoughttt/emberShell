@@ -1,8 +1,12 @@
 $emberRoot = Split-Path -Parent $PSScriptRoot
-
+$Host.UI.RawUI.WindowTitle = "emberShell"
 $config = Get-Content (Join-Path $emberRoot "emberCore\emberConfig.json") -Raw | ConvertFrom-Json
 $shell  = Get-Content (Join-Path $emberRoot "emberCore\emberShell.json")  -Raw | ConvertFrom-Json
-
+$ESVersionTable = @{
+	ESVersion = "$($shell.shell_version)"
+	ESEdition = "$($shell.sv_name)"
+	clibVersion = "$($shell.clib_version)"
+}
 if ($config.show_esh_Version) {
 	$esc = [char]0x1b
 	# this redacts the shell lol /// write-output "${esc}[38;2;231;136;214m${esc}[48;2;231;136;214m"
@@ -219,20 +223,93 @@ function esh {
     Remove-Item $temp
 }
 
+function Read-EsxPaths {
+    $pathsFile = Join-Path $emberRoot "emberCore\path.ls"
+    $paths = [ordered]@{}
+
+    if (Test-Path $pathsFile) {
+        Get-Content $pathsFile | ForEach-Object {
+            if ($_ -match '^"([^"]+)"\s+(.+)$') {
+                $name = $matches[1]
+                $raw  = $matches[2].Trim()
+
+                if ($raw -match '^[A-Za-z]:[/\\]' -or $raw -match '^[/\\]{2}' -or $raw -match '^/') {
+                    $paths[$name] = $raw
+                } else {
+                    $paths[$name] = Join-Path $emberRoot $raw
+                }
+            }
+        }
+    }
+
+    if (-not $paths.Contains("main")) {
+        Add-Content $pathsFile "`"main`" modules"
+        $paths["main"] = Join-Path $emberRoot "modules"
+    }
+
+    return $paths
+}
+
 function esx {
-    param([string]$file)
-    if (!(Test-Path $file) -and !(Test-Path "$file.esx")) {
-        $file = Join-Path $emberRoot "modules\$file"
+    param(
+        [string]$file,
+        [string]$fromPath = "main"
+    )
+    $paths = Read-EsxPaths
+
+    if (-not $paths.Contains($fromPath)) {
+        Write-Host "esx: unknown path '$fromPath'"
+        return
     }
-    if (!(Test-Path $file) -and (Test-Path "$file.esx")) {
-        $file = "$file.esx"
+
+    $base      = $paths[$fromPath]
+    $candidate = Join-Path $base $file
+
+    $resolved = $null
+    if (Test-Path $candidate) {
+        $resolved = $candidate
+    } elseif (Test-Path "$candidate.esx") {
+        $resolved = "$candidate.esx"
     }
-    $path = Resolve-Path $file -ErrorAction Stop
+
+    if (-not $resolved) {
+        Write-Host "esx: module '$file' not found in path '$fromPath' ($base)"
+        return
+    }
+
+    $path = Resolve-Path $resolved -ErrorAction Stop
     $global:eShScriptRoot = Split-Path -Parent $path
     $temp = [System.IO.Path]::ChangeExtension([System.IO.Path]::GetTempFileName(), ".psm1")
     Copy-Item $path $temp
     Import-Module $temp -Force -Global
     Remove-Item $temp
+}
+
+function set-xtpath {
+    param([string]$name, [string]$path)
+
+    if ($name -eq "main") {
+        Write-Host "set-xtpath: 'main' is reserved"
+        return
+    }
+
+    $pathsFile = Join-Path $emberRoot "emberCore\path.ls"
+    $paths = Read-EsxPaths
+
+    if ($paths.Contains($name)) {
+        Write-Host "set-xtpath: '$name' already exists, overwriting"
+        $lines = Get-Content $pathsFile | Where-Object {
+            $_ -notmatch "^`"$name`""
+        }
+        Set-Content $pathsFile $lines
+    }
+
+    $content = Get-Content $pathsFile -Raw
+    if ($content -and -not $content.EndsWith("`n")) {
+        Add-Content $pathsFile ""
+    }
+    Add-Content $pathsFile "`"$name`" $path"
+    Write-Host "set-xtpath: added '$name' -> $path"
 }
 
 if ($config.auto_esx_clib) {
@@ -246,5 +323,35 @@ if ($config.auto_esx_clib) {
 if($config.lids) { # not recommended on macos     // "Linux Identity Spoof"
 	# Remove-Alias -Name cd -Force -Scope Global // works without spam forcing
     esx lids
-	Remove-Alias -Name cd -Force -Scope Global
+	if($IsWindows) {
+		Remove-Alias -Name cd -Force -Scope Global
+	}
+}
+if (-not $global:clib_panic_addon) {
+	function Invoke-Panic {
+		param([string]$Message = "A fatal error has occurred.")
+		[Console]::BackgroundColor = "DarkBlue"
+		[Console]::ForegroundColor = "White"
+		[Console]::Clear()
+		Write-Host ""
+		Write-Host ""
+		Write-Host "  emberShell encountered a fatal error:"
+		Write-Host ""
+		Write-Host "  $Message"
+		Write-Host ""
+		Write-Host "  Press Enter to exit"
+		[Console]::CursorVisible = $false
+		function global:prompt {
+			"PS $pwd>"
+		}
+		read-host
+		clear
+		exit
+	}
+	esx paper panic -erroraction silentlycontinue
+}
+
+$emberRice = Get-Content (Join-Path $global:emberRoot "emberCore\ember.rice") -Raw | ConvertFrom-Json
+$emberRice.PSObject.Properties | ForEach-Object {
+    esx $_.Name $_.Value -ErrorAction SilentlyContinue
 }

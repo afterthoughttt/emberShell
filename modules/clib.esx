@@ -2,8 +2,8 @@ $clibManifest = @{
 	esx = $true
     fork = $false
 	dev_name = "cereal" # Copyright (c) cerealdev 2026
-	ver_name = "cinnamon"
-	version = "1.3"
+	ver_name = "sugar"
+	version = "1.4"
 	lib_name = "clib"
 }
 
@@ -67,7 +67,7 @@ $time = @{
 	usdate = {get-date -format "MM/dd/yyyy"}
 	isodate = {get-date -format "yyyy-MM-dd"}
 	era = {get-date -format "gg"}
-	shortera = {get-date -format "g"}
+	# shortera = {get-date -format "g"} # this does not work
 }
 
 function get-logtime($fmt) {
@@ -200,42 +200,85 @@ $esc = [char]0x1b
 function softthrow($string) {
     write-host "${esc}[38;2;231;72;86m${string}${esc}[0m"
 }
+if (-not ($host.Name -eq "Windows PowerShell ISE Host")) {
+	$color = @{
+		reset = "${esc}[0m"
+		# rainbow
+		red     = "${esc}[38;2;255;0;0m"
+		orange  = "${esc}[38;2;255;127;0m"
+		yellow  = "${esc}[38;2;255;255;0m"
+		green   = "${esc}[38;2;0;255;0m"
+		cyan    = "${esc}[38;2;0;255;255m"
+		blue    = "${esc}[38;2;0;0;255m"
+		indigo  = "${esc}[38;2;75;0;130m"
+		violet  = "${esc}[38;2;148;0;211m"
+		pink    = "${esc}[38;2;255;0;255m"
+		# grayscale
+		white     = "${esc}[38;2;255;255;255m"
+		lightgray = "${esc}[38;2;192;192;192m"
+		gray      = "${esc}[38;2;128;128;128m"
+		darkgray  = "${esc}[38;2;64;64;64m"
+		black     = "${esc}[38;2;0;0;0m"
+		# special
+		cobalt = "${esc}[38;2;51;77;196m"
+		cereal = "${esc}[38;2;231;136;214m"
+		afterthought = "${esc}[38;2;179;0;0m"
+		azure = "${esc}[38;2;0;139;255m"
+		lunar = "${esc}[38;2;221;204;255m"
+		# invert = "${esc}[48;2;255;255;255m${esc}[38;2;0;0;0m" # sorry invert fans
+		win11 = "${esc}[38;2;59;195;255m"
+		mint = "${esc}[38;2;111;183;69m"
+		pop = "${esc}[38;2;78;187;201m"
+		debian = "${esc}[38;2;216;15;86m"
+		win10 = "${esc}[38;2;0;116;207m"
+		butter = "${esc}[38;2;252;255;166m"
+		lesbian1 = "${esc}[38;2;214;41;0m"
+		lesbian2 = "${esc}[38;2;255;155;85m"
+		lesbian3 = "${esc}[38;2;210;98;165m"
+		lesbian4 = "${esc}[38;2;165;0;98m"
+		gold = "${esc}[38;2;255;206;0m"
+	}
+} else { # PS ISE doesnt have truecolor ANSI lol.. i doubt they even HAVE ANSI
+	$color = @{
+		reset = ""
+		# rainbow
+		red     = ""
+		orange  = ""
+		yellow  = ""
+		green   = ""
+		cyan    = ""
+		blue    = ""
+		indigo  = ""
+		violet  = ""
+		pink    = ""
+		# grayscale
+		white     = ""
+		lightgray = ""
+		gray      = ""
+		darkgray  = ""
+		black     = ""
+		# special
+		cobalt = ""
+		cereal = ""
+		afterthought = ""
+		azure = ""
+		lunar = ""
+		win11 = ""
+		mint = ""
+		pop = ""
+		debian = ""
+		win10 = ""
+		butter = ""
+		lesbian1 = ""
+		lesbian2 = ""
+		lesbian3 = ""
+		lesbian4 = ""
+		gold = ""
+	}
+}
 
-$color = @{
-    reset = "${esc}[0m"
-    # rainbow
-    red     = "${esc}[38;2;255;0;0m"
-    orange  = "${esc}[38;2;255;127;0m"
-    yellow  = "${esc}[38;2;255;255;0m"
-    green   = "${esc}[38;2;0;255;0m"
-    cyan    = "${esc}[38;2;0;255;255m"
-    blue    = "${esc}[38;2;0;0;255m"
-    indigo  = "${esc}[38;2;75;0;130m"
-    violet  = "${esc}[38;2;148;0;211m"
-	pink    = "${esc}[38;2;255;0;255m"
-    # grayscale
-    white     = "${esc}[38;2;255;255;255m"
-    lightgray = "${esc}[38;2;192;192;192m"
-    gray      = "${esc}[38;2;128;128;128m"
-    darkgray  = "${esc}[38;2;64;64;64m"
-    black     = "${esc}[38;2;0;0;0m"
-	# special
-	efas = "${esc}[38;2;51;77;196m"
-	cereal = "${esc}[38;2;231;136;214m"
-	afterthought = "${esc}[38;2;179;0;0m"
-	aletheia = "${esc}[38;2;0;139;255m"
-	lunar = "${esc}[38;2;221;204;255m"
-	invert = "${esc}[48;2;255;255;255m${esc}[38;2;0;0;0m"
-	win11 = "${esc}[38;2;59;195;255m"
-	mint = "${esc}[38;2;111;183;69m"
-	pop = "${esc}[38;2;78;187;201m"
-	debian = "${esc}[38;2;216;15;86m"
-	win10 = "${esc}[38;2;0;116;207m"
-	butter = "${esc}[38;2;252;255;166m"
-	lesbian1 = "${esc}[38;2;214;41;0m"
-	lesbian2 = "${esc}[38;2;255;155;85m"
-	lesbian3 = "${esc}[38;2;210;98;165m"
-	lesbian4 = "${esc}[38;2;165;0;98m"
+function CTBTool($name) {
+    return $color[$name] -replace "\[38;", "[48;"
 }
 
 function watermark($type, [switch]$fwd){
@@ -306,8 +349,8 @@ function watermark($type, [switch]$fwd){
                                  %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=                                
                                      @@@@@@@@@@@@@@@@@@@@@@@@@@*                                    
                                            %+##@@@@@@@#@= `n$($color.reset)"
-	} elseif ($type -eq "esh" -or $type -eq "efasShell" -or $type -eq "efasshell" -or $type -eq "eSh" -or $type -eq "emberShell") {
-write-output "$($color.aletheia)
+	} elseif ($type -eq "esh" -or $type -eq "eSh" -or $type -eq "emberShell") {
+write-output "$($color.azure)
                                                                           ******                    
                                                                         ******                      
                                                                       ********                      
@@ -418,35 +461,41 @@ function htaTool {
     $g = [Convert]::ToInt32($Hex.Substring(2,2),16)
     $b = [Convert]::ToInt32($Hex.Substring(4,2),16)
 
-    write-output "${esc}[38;2;$r;$g;${b}m`${esc}[38;2;$r;$g;${b}m"
+	if (-not ($host.Name -eq "Windows PowerShell ISE Host" -or $psise)) {
+		write-output "${esc}[38;2;$r;$g;${b}m`${esc}[38;2;$r;$g;${b}m"
+	} else {
+		write-output "`${esc}[38;2;$r;$g;${b}m"
+	}
 }
 
+function htaToolPure {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Hex
+    )
+
+    $Hex = $Hex.TrimStart("#")
+
+    if ($Hex.Length -ne 6) {
+        throw "Invalid hex color: $Hex (expected #RRGGBB)"
+    }
+
+    $r = [Convert]::ToInt32($Hex.Substring(0,2),16)
+    $g = [Convert]::ToInt32($Hex.Substring(2,2),16)
+    $b = [Convert]::ToInt32($Hex.Substring(4,2),16)
+	if (-not ($host.Name -eq "Windows PowerShell ISE Host" -or $psise)) {
+		return "${esc}[38;2;$r;$g;${b}m"
+	}
+}
+
+
 function render($type, [switch]$fwd) {
-	 if ($type -eq "efas") {
-<#		write-output "$($color.efas)   
-                                            *****                                            
-                                         *** ***                                            
-                                       *****                                                     
-                                        ****         -                                           
-                                **:     ****    :    **           :**     :                      
-                             ********   ********  ********      **********                       
-                         *****=  ************* =***   ***** *****   ****                         
-                           ***    ***   ****      *    ***:  ****     *                         
-                           ***   **     ****        :******  *******:                           
-                           *** **       ****   *****   ***     =************                    
-                     *=    ***-       - ****    ***    ***          -******                   
-                     *    ****       ** ****   ****    ****   *        ****                 
-                     **   :****     **  ****   -***    ****  ****      ****               
-                      **********#+***   ****   ************  *******  ***                   
-                        **:********     ****     ****   ***     *******                   
-                             :***       *****      *              ***:                
-                                *       ****                       **                            
-                                        ****                   
-                                        ***                                                      
-                                        **:                                                      
-                                       * *                                                       
-                                          *`n`n$($color.reset)" # FUCK PLAXZ #>
-										  softthrow "attempt to call archived asset"
+	 if ($type -eq ":3") {
+		 write-output "$($color.cereal)
+     ▀ ▀
+	▀▄▀▄▀$($color.reset)
+	"
+
 	} elseif ($type -eq "windows_old") {
 		write-output "$($color.red)                                                                                                    
                                   ++++=+++                                                          
@@ -600,26 +649,6 @@ $($color.mint)
      ▀█████████████████▀
 	`n$($color.reset)"
 	}elseif($type -eq "ubuntu") {
-		<# write-output "
-$($color.red)                         ./+o+-
-$($color.orange)                 yyyyy- $($color.red)-yyyyyy+
-$($color.orange)              $($color.orange)://+//////$($color.red)-yyyyyyo
-$($color.yellow)          .++ $($color.orange).:/++++++/-$($color.red).+sss/'
-$($color.yellow)        .:++o:  $($color.orange)/++++++++/:--:/-
-$($color.yellow)       o:+o+:++.$($color.orange)'..'''.-/oo+++++/
-$($color.yellow)      .:+o:+o/.$($color.orange)          '+sssoo+/
-$($color.orange) .++/+:$($color.yellow)+oo+o:'$($color.orange)             /sssooo.
-$($color.orange)/+++//+:$($color.yellow)'oo+o$($color.orange)               /::--:.
-$($color.orange)+/+o+++$($color.yellow)'o++o$($color.red)               ++////.
-$($color.orange) .++.o+$($color.yellow)++oo+:'$($color.red)             /dddhhh.
-$($color.yellow)      .+.o+oo:.$($color.red)          'oddhhhh+
-$($color.yellow)       +.++o+o'$($color.red)'-''''.:ohdhhhhh+
-$($color.yellow)        ':o+++ $($color.red)'ohhhhhhhhyo++os:
-$($color.yellow)          .o:$($color.red)'.syhhhhhhh/$($color.yellow).oo++o'
-$($color.red)              /osyyyyyyo$($color.yellow)++ooo+++/
-$($color.red)                  ''''' $($color.yellow)+oo+++o:
-$($color.yellow)                         'oo++.`n$($color.reset)" # good enough colors ig #>
-# idk if this is permanent
 write-output "
 $($color.red)                         ██████
 $($color.orange)                 ██████ $($color.red)████████
@@ -815,20 +844,36 @@ handmade by cereal <3
         ███████████████████████████                            
          ████████████████████████                              
            █████         █████
-		$($color.reset)"
+		$($color.reset)" # ▀▌█▐▄
 	} elseif($type -eq "tux" -or $type -eq "linux") {
-		write-output "$($color.orange)
-			   oopsie..
-			 no  tux  yet
-			    ▀  ▀
-			   ▄▀▀▀▀▄
+		write-output "
+        $($color.darkgray)█████
+       $($color.darkgray)███████
+       $($color.darkgray)██$($color.white)▀$($color.darkgray)█$($color.white)▀$($color.darkgray)██
+       $($color.darkgray)█$($color.yellow)█████$($color.darkgray)█
+     $($color.darkgray)██$($color.white)██$($color.yellow)███$($color.white)██$($color.darkgray)██
+    $($color.darkgray)█$($color.white)██████████$($color.darkgray)██
+   $($color.darkgray)█$($color.white)████████████$($color.darkgray)██
+   $($color.darkgray)█$($color.white)████████████$($color.darkgray)███
+  $($color.yellow)██$($color.darkgray)█$($color.white)███████████$($color.darkgray)██$($color.yellow)█
+$($color.yellow)██████$($color.darkgray)█$($color.white)███████$($color.darkgray)█$($color.yellow)██████
+$($color.yellow)███████$($color.darkgray)█$($color.white)█████$($color.darkgray)█$($color.yellow)███████
+  $($color.yellow)█████$($color.darkgray)███████$($color.yellow)█████
 		$($color.reset)"
 	} elseif($type -eq "fedora") {
 		write-output "$($color.win11)
-			   oopsie..
-			 no fedora yet
-			    ▀  ▀
-			   ▄▀▀▀▀▄
+                  ▄▄████▄▄
+                ▄██████████▄
+               ▐████▀  ▀████▄
+               ▐███▀    ▀███▀
+                ███▄▄
+        ▄██████▌███████▄▄
+      ▄███████▀ ███████▀
+     ▐████▀     █████
+     ▐███▄     ▄█████
+     ▐████▄   ▄█████▀
+      ▀██████████▀
+         ▀▀███▀▀
 		$($color.reset)"
 	} elseif($type -eq "alpine") {
 		write-output "$($color.win11)
@@ -977,7 +1022,7 @@ handmade by cereal <3
  ██████                                 ███████ 
 ██                                           ███
 		$($color.reset)"
-	} elseif($type -eq "android") {
+	} elseif($type -eq "android") { # what are we doing here
 		write-output "$($color.mint)
                      ██                  ██                      
                       ██   ██████████   ██                       
@@ -1039,8 +1084,100 @@ handmade by cereal <3
            $($color.lesbian3)██████$($color.cereal)        █████████   █████████████
  $($color.lesbian3)██████     ████$($color.cereal)                     ████████
 $($color.lesbian3)███      ██████$($color.cereal)
-  $($color.lesbian3)████████████$($color.reset)`n"
-  } else {
+  $($color.lesbian3)████████████$($color.reset)`n" # what did they do to you
+  } elseif($type -eq "discord") {
+	write-output "$($color.win10)  
+                  ████               ████                  
+            ███████████             ███████████            
+        ███████████████████████████████████████████        
+       █████████████████████████████████████████████       
+      ███████████████████████████████████████████████      
+     █████████████████████████████████████████████████     
+    ███████████████████████████████████████████████████    
+    ████████████████████████████████████████████████████   
+   █████████████████████████████████████████████████████   
+  ███████████████████████████████████████████████████████  
+  █████████████████  ██████████████████ █████████████████  
+ ███████████████        ████████████       ███████████████ 
+ ██████████████         ███████████         ██████████████ 
+███████████████          █████████           ██████████████
+███████████████          █████████          ███████████████
+████████████████        ███████████        ████████████████
+██████████████████    ███████████████    ██████████████████
+███████████████████████████████████████████████████████████
+███████████████████████████████████████████████████████████
+███████████████████████████████████████████████████████████
+██████████████  ███████████████████████████  ██████████████
+   ████████████▄       █████████████       ▄████████████   
+      ██████████▄                         ▄██████████      
+         ████████                         ████████         
+              █                            ██              
+"  
+  } elseif($type -eq "manjaro") {
+		write-output "$($color.mint)
+ ██████████ █████
+ ██████████ █████
+ █████ ▄▄▄▄ █████
+ █████ ████ █████
+ █████ ████ █████
+ █████ ████ █████
+ █████ ████ █████
+"
+	} elseif($type -eq "kali") {
+		write-output "$($color.win11)
+██████████████
+            ██████████
+          ██████████████
+████████████████████████
+           ██████████████
+      ██████            ████████  ███
+  ████                █████████████████
+ █                   ███           ███
+                    ███               ████
+                    ███                 ████
+                    ███
+                     ████
+                       ███████████
+                           ███████████████
+                                    █████████
+                                       ███  ██
+                                         ██   ██
+                                          ██
+                                            █
+                                            ██
+                                             █
+		"
+	} elseif($type -eq "raspbian" -or $type -eq "pi" -or $type -eq "raspberry") {
+		write-output "$($color.mint)
+   ▄▄████████▄▄        ▄▄████████▄
+  ██████████████   ▄██████████████
+  ███████████████  ██████████████▀
+  ▀█████████████▀  ██████████████
+   ▀██████████▀     ▀██████████▀
+     ▀███████▀        ███████▀$($color.debian)
+        ▄▄▄   ▄▄████▄▄ ▄▄▄▄
+     ▄████▀  █████████  ▀███▄
+    ▄███▀    ▀███████▀    ▀███▄
+   ▄██▀  ▄▄██▄▄  ▀▀ ▄▄███▄▄ ▀██▄
+       ▄████████   ▄████████▄
+ ▄██▄ ▄█████████   ██████████  ▄██▄
+▄███▀ ██████████   ██████████  ████
+████  ▀████████▀    ▀████████  ████
+▀██▀    ▀███▀▀  ▄▄▄▄   ▀██▀▀   ▀██▀
+ ▀▀ ▄▄       ▄████████▄     ▄▄▄▄▄
+   ▄███▄▄   ▄██████████▄  ▄█████▀
+   ███████▄ ▀██████████▀ ███████
+   ▀███████  ▀████████▀ ████████
+     ▀█████    ▀▀▀▀▀▀   ██████▀
+       ▀▀▀    ▄▄▄▄▄▄▄▄   ▀▀▀▀
+            ▄██████████
+             ▀▀▀████▀▀$($color.reset)
+			 "
+	} elseif ($type -eq "Germany") {
+		$conswidth = $Host.UI.RawUI.WindowSize.Width
+		$bar = repstring "█" $conswidth append
+		write-output "`n$($color.black)$bar`n$bar`n$($color.red)$bar`n$bar`n$($color.gold)$bar`n$bar`n$($color.reset)`n"
+	} else {
 		if(-not $fwd) {
 			watermark $type -fwd
 		} else {
@@ -1082,8 +1219,8 @@ function clib([switch]$version, [switch]$fork, [switch]$dev, [switch]$vername, [
 	}
 }
 
-function cdump {
-$order = @('black','darkgray','gray','lightgray','white','afterthought','debian','lesbian1','red','orange','lesbian2','yellow','butter','mint','green','cyan','pop','win11','aletheia','win10','efas','blue','indigo','violet','lesbian4','pink','lesbian3','cereal','lunar')
+function cdump { # this function is uh.. not very useful.. unless youre just deciding to dump clib colors
+$order = @('black','darkgray','gray','lightgray','white','afterthought','debian','lesbian1','red','orange','lesbian2','yellow','butter','mint','green','cyan','pop','win11','azure','win10','cobalt','blue','indigo','violet','lesbian4','pink','lesbian3','cereal','lunar')
 $line = ""
 $i = 0
 foreach ($name in $order) {
@@ -1099,10 +1236,25 @@ foreach ($name in $order) {
 Write-Host $line
 }
 
+function Reset-CIMCache {
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+		$script:osInfo = Get-CimInstance Win32_OperatingSystem
+		$script:csystem = get-ciminstance Win32_ComputerSystem
+		$script:csysprod = get-ciminstance Win32_ComputerSystemProduct
+		$script:cpu = get-ciminstance Win32_Processor
+		$script:gpu = get-ciminstance Win32_VideoController
+		$script:ram = get-ciminstance Win32_PhysicalMemory
+		$script:mobo = get-ciminstance Win32_BaseBoard
+		$script:bios = get-ciminstance Win32_BIOS
+	}
+}
+Reset-CIMCache
+
 function Get-OSKey {
+	if($IsDiscord) { return "discord" } # wow discord os
     $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     if ($os -match "Windows") {
-        $caption = (Get-CimInstance Win32_OperatingSystem).Caption
+        $caption = $script:osInfo.Caption
         if ($caption -match "Windows 11") { return "win11_fetch" }
         elseif ($caption -match "Windows 10") { return "win10_fetch" }
         else { return "win_fetch" }
@@ -1113,29 +1265,83 @@ function Get-OSKey {
         }
         $osInfo = Get-Content /etc/os-release | ConvertFrom-StringData
         $id = $osInfo.ID.ToLower()
-        switch ($id) {
-			"fedora"    {return "fedora"}
-            "arch"        { return "arch" } # btw
-			"nyarch"    { return "nyarch" } # ntw
-			"artix"      { return "artix" } # btw
-            "linuxmint" { return "mint" }
-            "debian"    { return "debian" }
-            "lesbian"    { return "lesbian" }
-            "cerealos"    { return "cerealos" } # **my** operating system??
-            "ubuntu"    { return "ubuntu" }
-			"uwuntu"    { return "uwuntu" }
-            "pop"       { return "pop" }
-			"android" { return "android" }
-			"amogos" { return "amogos" }
-			"alpine" { return "alpine" }
-			"opensuse-leap" { return "opensuse" }
-			"opensuse-tumbleweed" { return "opensuse_butter" }
-			"gentoo" { return "gentoo" }
-			"neon" { return "kde_neon" }
-			"zorin" {return "zorin"}
-			"elementary" {return "elementary"}
-            default      { return "tux" }
+        $ResolvedOSK = switch ($id) {
+			"fedora"    {"fedora"}
+            "arch"        { "arch" } # btw
+			"nyarch"    { "nyarch" } # ntw
+			"artix"      { "artix" } # btw
+            "linuxmint" { "mint" }
+            "debian"    { "debian" }
+            "lesbian"    { "lesbian" }
+            "cerealos"    { "cerealos" } # **my** operating system??
+            "ubuntu"    { "ubuntu" }
+			"uwuntu"    { "uwuntu" }
+            "pop"       { "pop" }
+			"android" { "android" }
+			"amogos" { "amogos" }
+			"alpine" { "alpine" }
+			"opensuse-leap" { "opensuse" }
+			"opensuse-tumbleweed" { "opensuse_butter" }
+			"gentoo" { "gentoo" }
+			"neon" { "kde_neon" }
+			"zorin" {"zorin"}
+			"elementary" {"elementary"}
+			"manjaro" {"manjaro"}
+			"kali" {"kali"}
+			"raspbian" {"raspbian"}
+            default      { "tux" }
         }
+		if ($ResolvedOSK -ne "tux") {
+			return $ResolvedOSK
+		} else {
+			$pretty_name = $osInfo.PRETTY_NAME.ToLower()
+			$ResolvedOSK = switch ($true) {
+				($pretty_name -match "fedora")     {"fedora"}
+				($pretty_name -match "arch")       { "arch" } # btw
+				($pretty_name -match "nyarch")     { "nyarch" } # ntw
+				($pretty_name -match "artix")      { "artix" } # btw
+				($pretty_name -match "linux mint") { "mint" }
+				($pretty_name -match "debian")     { "debian" }
+				($pretty_name -match "lesbian")    { "lesbian" }
+				($pretty_name -match "cerealos")    { "cerealos" } # **my** operating system??
+				($pretty_name -match "ubuntu")    { "ubuntu" }
+				($pretty_name -match "uwuntu")    { "uwuntu" }
+				"pop"       { "pop" }
+				($pretty_name -match "android") { "android" }
+				($pretty_name -match "amogos") { "amogos" }
+				($pretty_name -match "alpine") { "alpine" }
+				($pretty_name -match "opensuse leap") { "opensuse" }
+				($pretty_name -match "opensuse tumbleweed") { "opensuse_butter" }
+				($pretty_name -match "gentoo") { "gentoo" }
+				($pretty_name -match "kde neon") { "kde_neon" }
+				($pretty_name -match "zorin") {"zorin"}
+				($pretty_name -match "elementary") {"elementary"}
+				($pretty_name -match "manjaro") {"manjaro"}
+				($pretty_name -match "kali") {"kali"}
+				($pretty_name -match "raspbian") {"raspbian"}
+				($pretty_name -match "rasperry pi") {"rasperry"}
+				default      { "tux" }
+			}
+		}
+		if ($ResolvedOSK -ne "tux") {
+			return $ResolvedOSK
+		} else {
+			$id_like = $osInfo.ID_LIKE.ToLower()
+			$ResolvedOSK = switch ($id_like) {
+				"fedora"    {"fedora"}
+				"arch"        { "arch" } # btw
+				"debian"    { "debian" }
+				"cerealos"    { "cerealos" } # **my** operating system??
+				"ubuntu"    { "ubuntu" }
+				"android" { "android" }
+				"alpine" { "alpine" }
+				"suse" { "opensuse" }
+				"gentoo" { "gentoo" }
+				"kali" {"kali"}
+				default      { "tux" }
+			}
+		}
+		return $ResolvedOSK
     }
     elseif ($os -match "Darwin") {
         return "mac"
@@ -1151,17 +1357,17 @@ function lesbian{
 }
 
 function resolveOSC($OSin) {
-	if($OSin -eq "arch" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin") {
+	if($OSin -eq "arch" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
 		return $($color.win11)
-	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10") {
+	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord") {
 		return $($color.win10)
-	} elseif ($OSin -eq "mint" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint") {
+	} elseif ($OSin -eq "mint" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint" -or $OSin -eq "manjaro") {
 		return $($color.mint)
 	} elseif ($OSin -eq "pop") {
 		return $($color.pop)
-	} elseif ($OSin -eq "tux" -or $OSin -eq "ubuntu" -or $OSin -eq "linux") {
+	} elseif ($OSin -eq "ubuntu") {
 		return $($color.orange)
-	} elseif ($OSin -eq "debian") {
+	} elseif ($OSin -eq "debian" -or $OSin -eq "raspbian" -or $OSin -eq "raspberry" -or $OSin -eq "pi") {
 		return $($color.debian)
 	} elseif ($OSin -eq "mac") {
 		return ($($color.cyan)) 
@@ -1179,6 +1385,8 @@ function resolveOSC($OSin) {
 		return ""
 	} elseif ($OSin -eq "uwuntu") {
 		return $($color.cereal)
+	} elseif($OSin -eq "linux" -or $OSin -eq "tux") {
+		return $($color.lightgray)
 	} else {
 		return ($($color.violet))
 	}
@@ -1209,9 +1417,326 @@ $validOSes = @(
 "kde_neon", "neon"
 "elementary",
 "zorin",
-"uwuntu"
+"uwuntu",
+"discord",
+"manjaro",
+"kali",
+"raspbian", "pi", "raspberry"
 )
-function cfetch($larp) {
+
+$annoyingOEM = @{
+	"Shenzhen DOKE electronic co.,LTD" = "Blackview"
+	"Acebook 12" = "TU140" # 556B REVO3"
+}
+
+function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage) { # now thats a LOT of flags.. i know....
+if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+	$script:osInfo = Get-CimInstance Win32_OperatingSystem
+	$swap = Get-CimInstance Win32_PageFileUsage
+	$battery = get-ciminstance Win32_Battery
+	$batteryValueFallback = Get-CimInstance -Namespace ROOT\WMI BatteryStatus
+	$logicalDisks = Get-CIMInstance Win32_LogicalDisk | Where-Object { $_.DriveType -ne 5 } | Sort-Object DeviceID
+}
+	if ($clean) {
+		clear
+	}
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+		$dwm = (Get-Item "$env:SystemRoot\System32\dwm.exe").VersionInfo.ProductVersion
+		$wm = "Desktop Window Manager"
+		$wm_version = $dwm
+		$de = ""
+		$de_version = ""
+		$theme = ""
+
+		$systemLight = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -ErrorAction SilentlyContinue
+		$wm_theme = if ($systemLight -eq 1) { "Light" } else { "Dark" }
+
+		$accentRaw = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent" -Name "AccentColorMenu" -ErrorAction SilentlyContinue
+		if ($accentRaw) {
+			$a = [System.BitConverter]::GetBytes([uint32]$accentRaw)
+			$accent_color = "#{0:X2}{1:X2}{2:X2}" -f $a[0], $a[1], $a[2]
+		} else {
+			$accent_color = ""
+		}
+	} else {
+		$de = ""
+		$wm = ""
+		$wm_version = ""
+		$de_version = ""
+		$theme = ""
+		$accent_color = ""
+
+		if ($env:XDG_CURRENT_DESKTOP) {
+			$de = $env:XDG_CURRENT_DESKTOP
+		} elseif ($env:DESKTOP_SESSION) {
+			$de = $env:DESKTOP_SESSION
+		} elseif ($env:XDG_SESSION_DESKTOP) {
+			$de = $env:XDG_SESSION_DESKTOP
+		}
+
+		if (-not $de) {
+			$uid = (& id -u 2>$null)
+			$userRun = "/run/user/$uid"
+			if (Test-Path "$userRun/KSMserver*" -ErrorAction SilentlyContinue) { $de = "KDE" } # y u have to be this way KDE?
+			elseif (Test-Path "$userRun/gnome-session*" -ErrorAction SilentlyContinue) { $de = "GNOME" }
+			elseif (Test-Path "$userRun/xfce*" -ErrorAction SilentlyContinue) { $de = "XFCE" }
+			elseif (Test-Path "$userRun/mate*" -ErrorAction SilentlyContinue) { $de = "MATE" }
+		}
+
+		if (-not $de) {
+			$procs = (& ps aux 2>$null)
+			if ($procs | Select-String "plasmashell") { $de = "KDE" }
+			elseif ($procs | Select-String "gnome-shell") { $de = "GNOME" }
+			elseif ($procs | Select-String "xfce4-session") { $de = "XFCE" }
+			elseif ($procs | Select-String "mate-session") { $de = "MATE" }
+			elseif ($procs | Select-String "cinnamon") { $de = "Cinnamon" }
+			elseif ($procs | Select-String "budgie-daemon") { $de = "Budgie" }
+		}
+
+		if (-not $de) {
+			$session2 = (& loginctl list-sessions --no-legend 2>$null) | Where-Object { $_ -match (& whoami) } | Select-Object -First 1 | ForEach-Object { ($_ -split "\s+")[0] }
+			if ($session2) {
+				$xdg = (& loginctl show-session $session2 -p Desktop --value 2>$null).Trim()
+				if ($xdg) { $de = $xdg }
+			}
+		}
+
+		if ($env:HYPRLAND_INSTANCE_SIGNATURE) {
+			$wm = "Hyprland"
+		} elseif ($env:SWAYSOCK) {
+			$wm = "Sway"
+		} elseif ($de) {
+			$wm = switch ($de) {
+				"KDE"        { "KWin" }
+				"GNOME"      { "Mutter" }
+				"XFCE"       { "Xfwm4" }
+				"MATE"       { "Marco" }
+				"Cinnamon"   { "Muffin" }
+				"Budgie"     { "Budgie WM" }
+				"LXQt"       { "Openbox" }
+				"LXDE"       { "Openbox" }
+				default      { "" }
+			}
+		}
+
+		# session type
+		$uid = (& id -u 2>$null)
+		$userRun = "/run/user/$uid"
+		$session_type = if ($env:WAYLAND_DISPLAY) { "Wayland" }
+			elseif (Test-Path "$userRun/wayland-0") { "Wayland" }
+			elseif ($env:DISPLAY) { "X11" }
+			else { "" }
+		$wm_theme = if ($session_type) { "$wm ($session_type)" } else { "" }
+
+		# DE version
+		if ($de) {
+			$de_version = switch ($de) {
+				"KDE"      { (& plasmashell --version 2>$null) -replace "plasmashell ", "" }
+				"GNOME"    { (& gnome-shell --version 2>$null) -replace "GNOME Shell ", "" }
+				"XFCE"     { (& xfce4-session --version 2>$null | Select-Object -First 1) -replace "xfce4-session ", "" }
+				"Cinnamon" { (& cinnamon --version 2>$null) -replace "Cinnamon ", "" }
+				"MATE"     { (& mate-session --version 2>$null | Select-Object -First 1) -replace "mate-session ", "" }
+				default    { "" }
+			}
+		}
+
+		# theme
+		if ($env:GTK_THEME) {
+			$theme = $env:GTK_THEME
+		} elseif ($de -eq "KDE") {
+			$theme = (& kreadconfig5 --group "General" --key "Name" --file kdeglobals 2>$null)
+			if (-not $theme) { $theme = (& kreadconfig6 --group "General" --key "Name" --file kdeglobals 2>$null) }
+		} elseif ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
+			$theme = (& gsettings get org.gnome.desktop.interface gtk-theme 2>$null) -replace "'", ""
+		}
+	}
+	if ($host.Name -eq "Windows PowerShell ISE Host" -or $psise) {
+		if ([Environment]::Is64BitProcess) {
+			$term = "Windows PowerShell ISE"
+		} else {
+			$term = "Windows PowerShell ISE(x86)"
+		}
+		$term_version = ""
+	} elseif ($env:WT_SESSION) {
+		$term = "Windows Terminal"
+		$term_version = (Get-AppxPackage -Name Microsoft.WindowsTerminal -ErrorAction SilentlyContinue).Version
+		if (-not $term_version) { $term_version = "" }
+	} elseif ($env:TERM_PROGRAM) {
+		switch ($env:TERM_PROGRAM) {
+			"mintty"     { $term = "MinTTY" }
+			"iTerm.app"  { $term = "iTerm2" }
+			"WezTerm"    { $term = "WezTerm" }
+			"vscode"     { $term = "VS Code" }
+			"Hyper"      { $term = "Hyper" }
+			"tabby"      { $term = "Tabby" }
+			"linux"      { $term = "Linux TTY"}
+			default      { $term = $env:TERM_PROGRAM }
+		}
+		$term_version = $env:TERM_PROGRAM_VERSION
+		if (-not $term_version) { $term_version = "" }
+	} elseif ($env:KITTY_WINDOW_ID) {
+		$term = "Kitty"
+		$term_version = ""
+	} elseif ($env:KONSOLE_VERSION) {
+		$term = "Konsole"
+		$term_version = $env:KONSOLE_VERSION
+	} elseif ($env:ALACRITTY_SOCKET -or $env:ALACRITTY_LOG) {
+		$term = "Alacritty"
+		$term_version = ""
+	} elseif ($env:GNOME_TERMINAL_SERVICE) {
+		$term = "GNOME Terminal"
+		$term_version = ""
+	} elseif ($env:TERM) {
+		switch ($env:TERM) {
+			"alacritty"      { $term = "Alacritty" }
+			"kitty"          { $term = "Kitty" }
+			"xterm-kitty"    { $term = "Kitty" }
+			"rxvt-unicode"   { $term = "URxvt" }
+			"linux"          { $term = "Linux TTY"}
+			default          { $term = $env:TERM }
+		}
+		$term_version = ""
+	} elseif ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+		$term = "conhost"
+		$term_version = ""
+	} else {
+		$term = "Unknown"
+		$term_version = ""
+	}
+	$cursor = $null
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+		$cursor = (Get-Item "HKCU:\Control Panel\Cursors" -ErrorAction SilentlyContinue).GetValue("")
+		if (-not $cursor) {
+			$path = Get-ItemPropertyValue "HKCU:\Control Panel\Cursors" -Name "Arrow" -ErrorAction SilentlyContinue
+			if ($path) { $cursor = [System.IO.Path]::GetFileNameWithoutExtension($path) }
+		}
+	}else {
+		if ($env:XCURSOR_THEME) {
+			$cursor = $env:XCURSOR_THEME
+		} elseif ($de -eq "KDE") {
+			$cursor = (& kreadconfig5 --group "Icons" --key "Cursor" --file kdeglobals 2>$null)
+			if (-not $cursor) { $cursor = (& kreadconfig6 --group "Icons" --key "Cursor" --file kdeglobals 2>$null) }
+		} elseif ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
+			$cursor = (& gsettings get org.gnome.desktop.interface cursor-theme 2>$null) -replace "'", ""
+		}
+		if (-not $cursor) {
+			if (Test-Path "$HOME/.config/gtk-3.0/settings.ini") {
+				$cursor = (Get-Content "$HOME/.config/gtk-3.0/settings.ini" | Select-String "gtk-cursor-theme-name") -replace "gtk-cursor-theme-name\s*=\s*", ""
+			}
+		}
+	}
+
+	$sys_font = $null
+if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+	$wh_font_active = Get-ChildItem "C:\ProgramData\Windhawk\Engine\ModsWritable\mod-status" -Filter "*_explorer-font-changer" -ErrorAction SilentlyContinue
+	$wh_font = if ($wh_font_active) {
+    Get-ItemPropertyValue "HKLM:\Software\Windhawk\Engine\Mods\explorer-font-changer\Settings" -Name "font.name" -ErrorAction SilentlyContinue
+	}
+	if ($wh_font) {
+		$sys_font = $wh_font
+	} else {
+		$raw = (Get-ItemPropertyValue -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "IconFont" -ErrorAction SilentlyContinue)
+		if ($raw) {
+			$sys_font = ($raw[20..60] | ForEach-Object { [char]$_ } | Where-Object { $_ -ne [char]0 }) -join ""
+		}
+		if (-not $sys_font) {
+			$sys_font = if (([System.Environment]::OSVersion.Version).Major -ge 10) { "Segoe UI" } else { "Tahoma" }
+		}
+	}
+} else {
+    if ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
+        $sys_font = (& gsettings get org.gnome.desktop.interface font-name 2>$null) -replace "'", ""
+    } elseif ($de -eq "KDE") {
+        $sys_font = (& kreadconfig5 --group "General" --key "font" --file kdeglobals 2>$null)
+        if (-not $sys_font) { $sys_font = (& kreadconfig6 --group "General" --key "font" --file kdeglobals 2>$null) }
+    }
+    if (-not $sys_font) {
+        if (Test-Path "$HOME/.config/gtk-3.0/settings.ini") {
+            $sys_font = (Get-Content "$HOME/.config/gtk-3.0/settings.ini" | Select-String "gtk-font-name") -replace "gtk-font-name\s*=\s*", ""
+        }
+    }
+}
+	$term_font = $null
+	if ($term -eq "Windows Terminal") {
+		$wtSettingsPath = $env:WT_SETTINGS_PATH
+		if (-not $wtSettingsPath) {
+			$wtSettingsPath = (Get-Item "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_*\LocalState\settings.json" -ErrorAction SilentlyContinue).FullName
+		}
+		if ($wtSettingsPath -and (Test-Path $wtSettingsPath)) {
+			try {
+				$wtSettings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
+				$profile = $wtSettings.profiles.list | Where-Object { $_.guid -eq $env:WT_PROFILE_ID } | Select-Object -First 1
+				if (-not $profile) { $profile = $wtSettings.profiles.defaults }
+				$term_font = $profile.font.face
+			} catch { $term_font = $null }
+		}
+		if (-not $term_font) { $term_font = "Cascadia Mono" }
+	} elseif ($term -eq "Kitty" -and (Test-Path "$HOME/.config/kitty/kitty.conf")) {
+		$term_font = (Get-Content "$HOME/.config/kitty/kitty.conf" | Select-String "^font_family") -replace "font_family\s+", ""
+	} elseif ($term -eq "Alacritty") {
+		$alacrittyToml = "$HOME/.config/alacritty/alacritty.toml"
+		$alacrittyYml  = "$HOME/.config/alacritty/alacritty.yml"
+		if (Test-Path $alacrittyToml) {
+			$term_font = (Get-Content $alacrittyToml | Select-String "^\s*family\s*=") -replace '.*=\s*"?([^"]+)"?.*', '$1'
+		} elseif (Test-Path $alacrittyYml) {
+			$term_font = (Get-Content $alacrittyYml | Select-String "^\s*family:") -replace '.*family:\s*', ''
+		}
+	} elseif ($term -eq "Konsole") {
+		$konsoleProfile = Get-ChildItem "$HOME/.local/share/konsole/*.profile" -ErrorAction SilentlyContinue | Select-Object -First 1
+		if ($konsoleProfile) {
+			$term_font = (Get-Content $konsoleProfile | Select-String "^Font=") -replace "Font=", "" -replace ",.*", ""
+		}
+	} elseif ($term -eq "conhost") {
+		$kern = [System.Environment]::OSVersion.Version
+		$term_font = if ($kern.Major -ge 10) { "Consolas" } else { "Lucida Console" }
+	} elseif ($term -eq "Windows PowerShell ISE" -or $term -eq "Windows PowerShell ISE(x86)") {
+		$term_font = $psise.options.fontname
+	} elseif ($term -eq "Tabby") {
+    $tabbyConfig = if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+        "$env:APPDATA\tabby\config.yaml"
+    } else {
+        "$HOME/.config/tabby/config.yaml"
+    }
+    if (Test-Path $tabbyConfig) {
+        try {
+            $term_font = (Get-Content $tabbyConfig | Select-String "^\s*font:") -replace '.*font:\s*', ''
+        } catch { $term_font = $null }
+    }
+}
+	if (-not $term_font -and $term -eq "Windows Terminal") {
+		$term_font = "Cascadia Mono"
+	}
+	<#if ($bloat) {
+		if ($term -eq "Windows Terminal") {
+			$wtSettingsPath = $env:WT_SETTINGS_PATH
+			if (-not $wtSettingsPath) {
+				$wtSettingsPath = (Get-Item "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_*\LocalState\settings.json" -ErrorAction SilentlyContinue).FullName
+			}
+			if ($wtSettingsPath -and (Test-Path $wtSettingsPath)) {
+				try {
+					$wtSettings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
+					$profile = $wtSettings.profiles.list | Where-Object { $_.guid -eq $env:WT_PROFILE_ID } | Select-Object -First 1
+					if (-not $profile) { $profile = $wtSettings.profiles.defaults }
+					$bloat_wtpname = $profile.name
+					$bloat_wtpscheme = $profile.colorScheme
+					$shaderPath   = $profile.psobject.Properties["experimental.pixelShaderPath"]?.Value
+					$retroEffect  = $profile.psobject.Properties["experimental.retroTerminalEffect"]?.Value
+
+					if ($shaderPath) {
+						$bloat_shader = ([System.IO.Path]::GetFileNameWithoutExtension($shaderPath)).Replace('_', ' ')
+					} elseif ($retroEffect) {
+						$bloat_shader = "Retro Terminal"
+					}
+					if ($null -ne $profile.opacity) {
+						$bloat_opacity = $profile.opacity
+					}
+				} catch {
+					$idk = "what am i even doing"
+				}
+			} 
+		}
+	}#> # why did i make this?
+		# preserved for the forks to use ig
 	if ($larp) {
 		$resolvedosc = resolveOSC($larp)
 		if ($larp -notin $validOSes) {
@@ -1220,57 +1745,67 @@ function cfetch($larp) {
 			render $larp
 		}
 		if ($larp -eq "win_fetch" -or $larp -eq "windows") {
-			write-output "$($resolvedosc)OS:          Windows"
+			write-output "$($resolvedosc)OS:            Windows"
 		} elseif ($larp -eq "win10_fetch" -or $larp -eq "windows_10") {
-			write-output "$($resolvedosc)OS:          Windows 10"
+			write-output "$($resolvedosc)OS:            Windows 10"
 		} elseif ($larp -eq "win11_fetch" -or $larp -eq "windows_11") {
-			write-output "$($resolvedosc)OS:          Windows 11"
+			write-output "$($resolvedosc)OS:            Windows 11"
 		} elseif ($larp -eq "arch") {
-			write-output "$($resolvedosc)OS:          Arch" # btw
+			write-output "$($resolvedosc)OS:            Arch" # btw
 		} elseif ($larp -eq "mint" -or $larp -eq "linux_mint") {
-			write-output "$($resolvedosc)OS:          Linux Mint"
+			write-output "$($resolvedosc)OS:            Linux Mint"
 		} elseif ($larp -eq "debian") {
-			write-output "$($resolvedosc)OS:          Debian"
+			write-output "$($resolvedosc)OS:            Debian"
 		} elseif ($larp -eq "pop") {
-			write-output "$($resolvedosc)OS:          Pop!_OS"
+			write-output "$($resolvedosc)OS:            Pop!_OS"
 		} elseif ($larp -eq "tux" -or $larp -eq "linux") {
-			write-output "$($resolvedosc)OS:          Linux"
+			write-output "$($resolvedosc)OS:            Linux"
 		} elseif ($larp -eq "ubuntu") {
-			write-output "$($resolvedosc)OS:          Ubuntu"
+			write-output "$($resolvedosc)OS:            Ubuntu"
 		} elseif ($larp -eq "mac") {
-			write-output "$($resolvedosc)OS:          MacOS"
+			write-output "$($resolvedosc)OS:            MacOS"
 		} elseif ($larp -eq "cerealos") {
-			write-output "$($resolvedosc)OS:          CerealOS"
+			write-output "$($resolvedosc)OS:            CerealOS"
 		} elseif ($larp -eq "artix") {
-			write-output "$($resolvedosc)OS:          Artix"
+			write-output "$($resolvedosc)OS:            Artix"
 		} elseif ($larp -eq "fedora") {
-			write-output "$($resolvedosc)OS:          Fedora"
+			write-output "$($resolvedosc)OS:            Fedora"
 		} elseif ($larp -eq "android") {
-			write-output "$($resolvedosc)OS:          Android"
+			write-output "$($resolvedosc)OS:            Android"
 		} elseif ($larp -eq "amogos") {
-			write-output "$($resolvedosc)OS:          AmogOS"
+			write-output "$($resolvedosc)OS:            AmogOS"
 		} elseif ($larp -eq "alpine") {
-			write-output "$($resolvedosc)OS:          Alpine"
+			write-output "$($resolvedosc)OS:            Alpine"
 		} elseif ($larp -eq "nyarch") {
-			write-output "$($resolvedosc)OS:          Nyarch"
+			write-output "$($resolvedosc)OS:            Nyarch"
 		} elseif ($larp -eq "gentoo") {
-			write-output "$($resolvedosc)OS:          Gentoo"
+			write-output "$($resolvedosc)OS:            Gentoo"
 		} elseif ($larp -eq "opensuse" -or $larp -eq "opensuse_leap") {
-			write-output "$($resolvedosc)OS:          openSUSE"
+			write-output "$($resolvedosc)OS:            openSUSE"
 		} elseif ($larp -eq "opensuse_butter" -or $larp -eq "opensuse_tumbleweed") {
-			write-output "$($resolvedosc)OS:          openSUSE"
+			write-output "$($resolvedosc)OS:            openSUSE"
 		} elseif ($larp -eq "lesbian") {
-			write-output "$($resolvedosc)OS:          Lesbian"
+			write-output "$($resolvedosc)OS:            Lesbian"
 		} elseif ($larp -eq "kde_neon" -or $larp -eq "neon") {
-			write-output "$($resolvedosc)OS:          KDE Neon"
+			write-output "$($resolvedosc)OS:            KDE Neon"
 		} elseif ($larp -eq "elementary") {
-			write-output "$($resolvedosc)OS:          ElementaryOS"
+			write-output "$($resolvedosc)OS:            ElementaryOS"
 		} elseif ($larp -eq "zorin") {
-			write-output "$($resolvedosc)OS:          Zorin OS"
+			write-output "$($resolvedosc)OS:            Zorin OS"
 		} elseif ($larp -eq "uwuntu") {
-			write-output "$($resolvedosc)OS:          UwUntu"
+			write-output "$($resolvedosc)OS:            UwUntu"
+		} elseif ($larp -eq "manjaro") {
+			write-output "$($resolvedosc)OS:            Manjaro"
+		} elseif ($larp -eq "kali") {
+			write-output "$($resolvedosc)OS:            Kali"
+		} elseif ($larp -eq "raspbian") {
+			write-output "$($resolvedosc)OS:            Raspbian"
+		} elseif ($larp -eq "raspberry" -or $larp -eq "pi") {
+			write-output "$($resolvedosc)OS:            Raspberry Pi OS"
+		} elseif ($larp -eq "discord") {
+			write-output "$($resolvedosc)OS:            Discord"
 		} else { 
-			write-output "$($resolvedosc)OS:          $larp"
+			write-output "$($resolvedosc)OS:            $larp"
 		}
 	} else {
 		$logo = Get-OSKey
@@ -1283,84 +1818,213 @@ function cfetch($larp) {
 		} else {
 			render $logo
 		}
+		$winedition = $script:osInfo.Caption -replace "Microsoft Windows \d+ ", ""
+		$winversion = $script:osInfo.Caption -replace "Microsoft Windows ", ""
 		if ($logo -eq "win_fetch") {
-			write-output "$($resolvedosc)OS:          Windows"
+			write-output "$($resolvedosc)OS:            Windows $winversion"
 		} elseif ($logo -eq "win10_fetch") {
-			write-output "$($resolvedosc)OS:          Windows 10"
+			write-output "$($resolvedosc)OS:            Windows 10 $winedition"
 		} elseif ($logo -eq "win11_fetch") {
-			write-output "$($resolvedosc)OS:          Windows 11"
+			write-output "$($resolvedosc)OS:            Windows 11 $winedition"
 		} elseif ($logo -eq "arch") {
-			write-output "$($resolvedosc)OS:          Arch" # btw
+			write-output "$($resolvedosc)OS:            Arch" # btw
 		} elseif ($logo -eq "mint") {
-			write-output "$($resolvedosc)OS:          Linux Mint"
+			write-output "$($resolvedosc)OS:            Linux Mint"
 		} elseif ($logo -eq "debian") {
-			write-output "$($resolvedosc)OS:          Debian"
+			write-output "$($resolvedosc)OS:            Debian"
 		} elseif ($logo -eq "pop") {
-			write-output "$($resolvedosc)OS:          Pop!_OS"
+			write-output "$($resolvedosc)OS:            Pop!_OS"
 		} elseif ($logo -eq "tux") {
-			write-output "$($resolvedosc)OS:          Linux"
+			write-output "$($resolvedosc)OS:            Linux"
 		} elseif ($logo -eq "ubuntu") {
-			write-output "$($resolvedosc)OS:          Ubuntu"
+			write-output "$($resolvedosc)OS:            Ubuntu"
 		} elseif ($logo -eq "mac") {
-			write-output "$($resolvedosc)OS:          MacOS"
+			write-output "$($resolvedosc)OS:            MacOS"
 		} elseif ($logo -eq "artix") {
-			write-output "$($resolvedosc)OS:          Artix"
+			write-output "$($resolvedosc)OS:            Artix"
 		} elseif ($logo -eq "fedora") {
-			write-output "$($resolvedosc)OS:          Fedora"
+			write-output "$($resolvedosc)OS:            Fedora"
 		} elseif ($logo -eq "android") {
-			write-output "$($resolvedosc)OS:          Android"
+			write-output "$($resolvedosc)OS:            Android"
 		} elseif ($logo -eq "amogos") {
-			write-output "$($resolvedosc)OS:          AmogOS"
+			write-output "$($resolvedosc)OS:            AmogOS"
 		} elseif ($logo -eq "alpine") {
-			write-output "$($resolvedosc)OS:          Alpine"
+			write-output "$($resolvedosc)OS:            Alpine"
 		} elseif ($logo -eq "nyarch") {
-			write-output "$($resolvedosc)OS:          Nyarch"
+			write-output "$($resolvedosc)OS:            Nyarch"
 		} elseif ($logo -eq "gentoo") {
-			write-output "$($resolvedosc)OS:          Gentoo"
+			write-output "$($resolvedosc)OS:            Gentoo"
 		} elseif ($logo -eq "opensuse") {
-			write-output "$($resolvedosc)OS:          openSUSE"
+			write-output "$($resolvedosc)OS:            openSUSE"
 		} elseif ($logo -eq "opensuse_butter") {
-			write-output "$($resolvedosc)OS:          openSUSE"
+			write-output "$($resolvedosc)OS:            openSUSE"
 		} elseif ($logo -eq "lesbian") {
-			write-output "$($resolvedosc)OS:          Lesbian"
+			write-output "$($resolvedosc)OS:            Lesbian"
 		} elseif ($logo -eq "cerealos") {
-			write-output "$($resolvedosc)OS:          CerealOS"
+			write-output "$($resolvedosc)OS:            CerealOS"
 		} elseif ($logo -eq "kde_neon" -or $logo -eq "neon") {
-			write-output "$($resolvedosc)OS:          KDE Neon"
+			write-output "$($resolvedosc)OS:            KDE Neon"
 		} elseif ($logo -eq "elementary") {
-			write-output "$($resolvedosc)OS:          ElementaryOS"
+			write-output "$($resolvedosc)OS:            ElementaryOS"
 		} elseif ($logo -eq "zorin") {
-			write-output "$($resolvedosc)OS:          Zorin OS"
+			write-output "$($resolvedosc)OS:            Zorin OS"
 		} elseif ($logo -eq "uwuntu") {
-			write-output "$($resolvedosc)OS:          UwUntu"
+			write-output "$($resolvedosc)OS:            UwUntu"
+		} elseif ($logo -eq "discord") {
+			write-output "$($resolvedosc)OS:            Discord"
+		} elseif ($logo -eq "manjaro") {
+			write-output "$($resolvedosc)OS:            Manjaro"
+		} elseif ($logo -eq "kali") {
+			write-output "$($resolvedosc)OS:            Kali"
+		} elseif ($logo -eq "raspbian") {
+			write-output "$($resolvedosc)OS:            Raspbian"
+		} elseif ($logo -eq "raspberry" -or $logo -eq "pi") {
+			write-output "$($resolvedosc)OS:            Raspberry Pi OS"
+		} elseif ($logo -eq "discord") {
+			write-output "$($resolvedosc)OS:            Discord"
 		} else {
-			if ($IsWindows -or (Get-CimInstance Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
+			if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop")) {
 				render win_fetch
-				write-host "$(Get-CimInstance Win32_OperatingSystem)"
+				$winfallback = $script:osInfo.Caption -replace "Microsoft ", ""
+				write-host "$($resolvedosc)OS:            $winfallback"
 			} elseif ($IsMac) {
 				render mac
 				resolveOSC("mac")
-				write-output "$($resolvedosc)OS:          MacOS"
+				write-output "$($resolvedosc)OS:            MacOS"
 			} elseif ($IsLinux) {
 				render tux
 				resolveOSC("tux")
-				write-output "$($resolvedosc)OS:          Linux"
+				write-output "$($resolvedosc)OS:            Linux"
 			} else {
-				write-output "$($resolvedosc)OS:          Unknown" # TempleOS or some shit right here
+				write-output "$($resolvedosc)OS:            Unknown" # ...? TempleOS is that you??
 			}
 		}
 	}
-	if ($IsWindows -or (Get-CimInstance Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
-		$cpu = get-ciminstance Win32_Processor
-		Write-Output "$($resolvedosc)CPU:         $($cpu.Name)"
-		Write-Output "$($resolvedosc)CPU Base:    $($cpu.MaxClockSpeed)MHz"
-		Write-Output "$($resolvedosc)CPU Cores:   $($cpu.NumberOfCores)"
-		Write-Output "$($resolvedosc)CPU Threads: $($cpu.NumberOfLogicalProcessors)"
-		Write-Output "$($resolvedosc)GPU:         $((get-ciminstance Win32_VideoController).Name)"
-		$ram = get-ciminstance Win32_PhysicalMemory
-		$total = ($ram | Measure-Object -Property Capacity -Sum).Sum / 1GB
-		$speed = $ram[0].Speed
-		$gen = switch ($ram[0].SMBIOSMemoryType) {
+	if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop")) {
+		if ($bloat) {
+			Write-output "$($resolvedosc)OS Class:      NT" # ... it says this in the kernel name ... why do you need to know?
+		}
+		$kern = [System.Environment]::OSVersion.Version
+		if ($precise) {
+			if ($PSVersionTable.Platform) {
+				$kerntype = $($PSVersionTable.Platform)
+			} else {
+				$kerntype = "Win32NT"
+			}
+		} else {
+			if ($($PSVersionTable.Platform) -eq "Win32NT") {
+				$kerntype = "Windows NT"
+			} else {
+				if ($PSVersionTable.Platform) {
+					$kerntype = $($PSVersionTable.Platform)
+				} else {
+					$kerntype = "Windows NT"
+				}
+			}
+		}
+		if (-not ($kern.Revision -ge 1)) {
+			Write-output "$($resolvedosc)Kernel:        $kerntype $($kern.Major).$($kern.Minor).$($kern.Build)"
+		} else {
+			write-output "$($resolvedosc)Kernel:        $kerntype $($kern.Major).$($kern.Minor).$($kern.Build).$($kern.Revision)"
+		}
+		if($extra) {
+			if (get-command hostname -erroraction silentlycontinue) {
+				$hostid = hostname
+			} elseif ($env:USERDOMAIN) {
+				$hostid = $env:USERDOMAIN
+			} elseif ($script:osInfo) {
+				$hostid = $script:osInfo.CSName # we already have this cached from win 11 caption
+			} elseif (whoami --erroraction silentlycontinue) {
+				$hostid = $((whoami).Split('\')[0]) # boring whoami fallback, slowest option
+			} else {
+				if ($script:csystem) {
+					$hostid = $script:csystem.Name
+				}
+			}
+			if ($env:USERNAME) {
+				$user = $env:USERNAME
+			} else {
+				$user = $((whoami).Split('\')[1]) # no huge fallback path.. strange..
+			}
+			write-output "$($resolvedosc)User:          $user@$hostid"
+		}
+		if ($ESVersionTable -and $Precise) {
+			write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)`)"
+		} elseif ($ESVersionTable) { # hey cool! someone using clib the intended way
+			write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion)"
+		} elseif ($Precise) {
+			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
+		} else {
+			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
+		}
+		if ($precise) {
+			write-output "$($resolvedosc)Terminal:      $term $term_version"
+		} else {
+			write-output "$($resolvedosc)Terminal:      $term"
+		}
+		write-output "$($resolvedosc)Terminal Font: $term_font"
+		<#if ($bloat) {
+			if ($bloat_wtpname) {
+				write-output "$($resolvedosc)Profile:       $bloat_wtpname"
+			}
+			if ($bloat_wtpscheme) {
+				write-output "$($resolvedosc)Color Scheme:  $bloat_wtpscheme"
+			}
+			if ($bloat_shader) {
+				write-output "$($resolvedosc)Shader:        $bloat_shader"
+			}
+			if ($bloat_opacity) {
+				write-output "$($resolvedosc)Opacity:       $bloat_opacity"
+			}
+		} #>
+		if ($precise) {
+			Write-Output "$($resolvedosc)WM:            $wm $wm_version"
+		} else {
+			Write-Output "$($resolvedosc)WM:            $wm"
+		}
+		Write-Output "$($resolvedosc)WM Theme:      $wm_theme"
+		Write-Output "$($resolvedosc)Accent Color:  $(htaToolPure $accent_color)$accent_color$($color.reset)"
+		Write-Output "$($resolvedosc)System Font:   $sys_font"
+		if($cursor) {
+			Write-Output "$($resolvedosc)Cursor:        $cursor"
+		}
+		Write-Output "$($resolvedosc)CPU:           $($script:cpu.Name)"
+		Write-Output "$($resolvedosc)CPU Base:      $($script:cpu.MaxClockSpeed)MHz"
+		Write-Output "$($resolvedosc)CPU Cores:     $($script:cpu.NumberOfCores)"
+		Write-Output "$($resolvedosc)CPU Threads:   $($script:cpu.NumberOfLogicalProcessors)"
+		if ($bloat) {
+			$architecture = $env:PROCESSOR_ARCHITECTURE
+			$bits = switch ($arch) {
+				"x86"    { "32-bit" }
+				"ARM"    { "32-bit" }
+				"armv7l" { "32-bit" }
+				"i386"   { "32-bit" }
+				"i486"   { "32-bit" }
+				"i586"   { "32-bit" }
+				"i686"   { "32-bit" }
+				default  { "64-bit" }
+			}
+			Write-Output "$($resolvedosc)Architecture:  $architecture ($bits)"
+		}
+		$total = ($script:ram | Measure-Object -Property Capacity -Sum).Sum / 1GB
+		if($script:gpu.AdapterDACType -eq "Internal") {
+			if ($precise) {
+				$usable = $script:osInfo.TotalVisibleMemorySize / 1MB
+				$reserved = [math]::Round(($total - $usable) * 1024, 0)
+				if ($reserved -gt 1024) {
+					$reservedgb = [math]::Round($reserved / 1024, 0)
+					$usageigpu = "($reservedgb`GB)"
+				} else {
+					$usageigpu = "($reserved`MB)"
+				}
+			} else {$usageigpu = ""}
+			$type = "[Integrated] $usageigpu"
+		} else {
+			$type = ""
+		}
+		Write-Output "$($resolvedosc)GPU:           $($script:gpu.Name) $type"
+		$speed = $script:ram[0].Speed
+		$gen = switch ($script:ram[0].SMBIOSMemoryType) {
 			18 { "DDR" }
 			19 { "DDR2" }
 			20 { "DDR2 FB-DIMM" }
@@ -1378,16 +2042,117 @@ function cfetch($larp) {
 			35 { "LPDDR5X" }
 			default { "DDR?" }
 		}
-		Write-Output "$($resolvedosc)RAM:         $($total)GB $($gen) $($speed)MT/s"
+		if ($gen -eq "DDR?") {
+			$gen = switch ($script:ram[0].MemoryType) {
+				2 {"DRAM"}
+				3 {"Synchronous DRAM"}
+				4 {"Cache DRAM"}
+				5 {"EDO"}
+				6 {"EDRAM"}
+				7 {"VRAM"}
+				8 {"SRAM"}
+				9 {"RAM"}
+				10 {"ROM"}
+				11 {"Flash"}
+				12 {"EEPROM"}
+				13 {"FEPROM"}
+				14 {"EPROM"}
+				15 {"CDRAM"}
+				16 {"3DRAM"}
+				17 {"SDRAM"}
+				18 {"SGRAM"}
+				19 {"RDRAM"}
+				20 {"DDR"}
+				21 {"DDR2"}
+				22 {"DDR2 FB-DIMM"}
+				23 {"FB-DIMM"}
+				24 {"DDR3"}
+				25 {"FBD2"}
+				26 {"DDR4"}
+				default {"RAM"} # how the HELL..? failing when even VRAM as system ram is detected..???
+			}
+		}
+		$soldered = @(27,28,29,30,31,33,35) # guys can we stop doing this stuff.. please..
+		if ($script:ram[0].SMBIOSMemoryType -in $soldered) {
+			$ff = "Soldered"
+		} else {
+			$ff = switch($script:ram[0].FormFactor) {
+				2 {"SIP"}
+				3 {"DIP"}
+				4 {"ZIP"}
+				5 {"SOJ"}
+				6 {"Proprietary Card"}
+				7 {"SIMM"}
+				8 {"DIMM"}
+				9 {"TSOP"}
+				10 {"PGA"}
+				11 {"RIMM"}
+				12 {"SO-DIMM"}
+				13 {"SRIMM"}
+				14 {"SMD"}
+				15 {"SSMP"}
+				16 {"QFP"}
+				17 {"TQFP"}
+				18 {"SOIC"}
+				19 {"LCC"}
+				20 {"PLCC"}
+				21 {"BGA"}
+				22 {"FBGA"}
+				23 {"LGA"}
+				24 {"FB-DIMM"} # this is likely to display weird, maybe change this? >> #1893
+				25 {"Die"}
+				26 {"CAMM"}
+				default {$null}
+			}
+		}
+		if (-not $ff) {
+			$ffadd = ""
+			if ($script:ram[0].Replaceable -eq $true -or $script:ram[0].Removable -eq $true) {
+				$ffadd += "Replaceable "
+			}
+			if ($script:ram[0].HotSwappable) {
+				$ffadd += "Hot Swappable " # wtf?
+			}
+			$ff = $ffadd.Trim()
+		}
+		if ($ff -eq "FB-DIMM" -and ($gen -eq "DDR2 FB-DIMM" -or $gen -eq "FB-DIMM")) {
+			$ff = "" # fixed :3 >> #1876
+		}
+		$usedRam = [math]::Round(($script:osInfo.TotalVisibleMemorySize - $script:osInfo.FreePhysicalMemory) / 1MB, 1)
+		$totalRam = [math]::Round($script:osInfo.TotalVisibleMemorySize / 1MB, 1)
+		$rampercent = [math]::Round(($usedRam/$totalRam)*100, 0)
+		if($rampercent -ge 75) {$col = $($color.red)} elseif ($rampercent -ge 50){$col = $($color.yellow)} else {$col = $($color.green)}
+	    $MMF = $script:ram[0].Manufacturer
+		if ($precise) {
+			if ($bloat) {
+				Write-Output "$($resolvedosc)RAM:           $($MMF) $($total)GB $($ff) $($gen) $($speed)MT/s"
+			} else {
+				Write-Output "$($resolvedosc)RAM:           $($total)GB $($ff) $($gen) $($speed)MT/s"
+			}
+		} elseif ($bloat) {
+			Write-Output "$($resolvedosc)RAM:           $($MMF) $($total)GB $($gen) $($speed)MT/s"
+		} else {
+			Write-Output "$($resolvedosc)RAM:           $($total)GB $($gen) $($speed)MT/s"
+		}
+		write-output "$($resolvedosc)RAM Usage:     $usedram`GB/$totalram`GB ($col$rampercent`%$($resolvedosc))"
+		$swapTotal = [math]::Round(($swap | Measure-Object -Property AllocatedBaseSize -Sum).Sum / 1024, 1)
+		$swapUsed  = [math]::Round(($swap | Measure-Object -Property CurrentUsage -Sum).Sum / 1024, 1)
+		$swapPercent = if ($swapTotal -gt 0) { [math]::Round(($swapUsed / $swapTotal) * 100) } else { 0 }
+		if ($swapPercent -ge 75) { $swapCol = $($color.red) }
+		elseif ($swapPercent -ge 50) { $swapCol = $($color.yellow) }
+		else { $swapCol = $($color.green) }
+		if ($swapTotal -gt 0) {
+			Write-Output "$($resolvedosc)Swap:          ${swapUsed}GB/${swapTotal}GB ($swapCol${swapPercent}%$($resolvedosc))"
+		}
 		$disks = Get-PhysicalDisk | Sort-Object DeviceId
-		$prefix = "$($resolvedosc)Storage:     "
-		$indent = " " * $prefix.Length
+		$prefix = "$($resolvedosc)Storage:       "
+		$indent = "$($resolvedosc)               "
 		Write-Host -NoNewline $prefix
 		$first = $true
 		foreach ($disk in $disks) {
 			$size = $disk.Size
 			$sizeStr = if ($size -ge 1000000000000) { "$([math]::Round($size / 1000000000000, 1))TB" }
-        else { "$([math]::Round($size / 1000000000))GB" }
+				else { "$([math]::Round($size / 1000000000))GB" }
 			$bus = $disk.BusType
 			$type = $disk.MediaType
 			$label = if ($bus -eq "NVMe") { "NVMe SSD" }
@@ -1403,47 +2168,300 @@ function cfetch($larp) {
 				Write-Output "$($resolvedosc)$indent$sizeStr $label"
 			}
 		}
-		$mobo = get-ciminstance Win32_BaseBoard
-		$moboStr = "$($mobo.Manufacturer) $($mobo.Product)".Trim()
-		Write-Output "$($resolvedosc)Motherboard: $($mobo.Manufacturer) $($mobo.Product)"
-		$uptime = (Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime
-		Write-Output "$($resolvedosc)Uptime:      $($uptime.Days)d $($uptime.Hours)h $($uptime.Minutes)m$($color.reset)"
+		if ($DiskUsage) {
+			$ldPrefix = "$($resolvedosc)Storage Usage: "
+			$ldindent = "$($resolvedosc)               "
+			$firstLd = $true
+			foreach ($ld in $logicalDisks) {
+				$letter = $ld.DeviceID
+				$fs     = if ($ld.FileSystem) { $ld.FileSystem } else { "RAW" }
+				$total  = $ld.Size
+				$free   = $ld.FreeSpace
+				$used   = $total - $free
+				$usedStr  = if ($used  -ge 1000000000000) { "$([math]::Round($used  / 1000000000000, 1))TB" }
+							else { "$([math]::Round($used  / 1000000000, 1))GB" }
+				$totalStr = if ($total -ge 1000000000000) { "$([math]::Round($total / 1000000000000, 1))TB" }
+							else { "$([math]::Round($total / 1000000000, 1))GB" }
+				$diskpercent = if ($total -gt 0) { [math]::Round(($used / $total) * 100) } else { 0 }
+				$pct = if ($total -gt 0) { "$diskpercent%" } else { "N/A" }
+				$col = if ($diskpercent -ge 75) { $color.red } elseif ($diskpercent -ge 50) { $color.yellow } else { $color.green }
+				$line = "$letter $usedStr/$totalStr ($($col)$diskpercent%$($resolvedosc)) $fs"
+				if ($firstLd) {
+					Write-Host "$($ldPrefix)$line"
+					$firstLd = $false
+				} else {
+					Write-Host "$($ldIndent)$line"
+				}
+			}
+		}
+		if ($script:mobo.manufacturer -eq "N/A") {
+			$modelKey = if ($script:csystem.Manufacturer) { $script:csystem.Manufacturer } else { $script:csysprod.Vendor }
+			if ($annoyingOEM.ContainsKey($modelKey)) {
+				$moboman = $annoyingOEM[$modelKey]
+			}
+			elseif ($script:bios.manufacturer) {
+				$moboman = $script:bios.Manufacturer
+			} else {
+				$moboman = "Generic" # moboman(TM).. or something
+			}
+		} else {
+			$moboman = $script:mobo.Manufacturer
+		}
+		if ($script:mobo.product -eq "N/A") {
+			$moboprod = "Motherboard"
+			$modelKey = if ($script:csystem.Model) { $script:csystem.Model } else { $script:csysprod.Model }
+			if ($annoyingOEM.ContainsKey($modelKey)) {
+				$moboprod = $annoyingOEM[$modelKey]
+			}
+		} else {
+			$moboprod = $script:mobo.Product
+		}
+		Write-Output "$($resolvedosc)Motherboard:   $($moboman) $($moboprod)"
+		if ($extra) {
+			if ($script:csystem.Manufacturer) {
+				$csysMan = $script:csystem.Manufacturer
+			} else {
+				if ($script:csysprod.Vendor) {
+					$csysMan = $script:csysprod.Vendor
+				}
+			}
+			if ($annoyingOEM.ContainsKey($csysMan)) {
+				$csysMan = $annoyingOEM[$csysMan]
+			}
+			if ($script:csystem.Model) {
+				$csysModel = $script:csystem.Model
+			} else {
+				if (-not $script:csysprod) {
+				}
+				if ($script:csysprod.Model) {
+					$csysModel = $script:csysprod.Model
+				}
+			}
+			if ($script:csystem.PCSystemType) {
+				$modtype = switch($script:csystem.PCSystemType) {
+					1 {"Desktop Model: "}
+					2 {"Laptop Model:  "}
+					3 {"Desktop Model: "}
+					4 {"Server Model:  "}
+					5 {"Server Model:  "}
+					6 {"Desktop Model: "}
+					7 {"Server Model:  "}
+					8 {"Tablet Model:  "} # what are you doing
+			  default {"Device Model:  "}
+				}
+			}
+			if ($battery -and $modtype -eq "Device Model:  ") {
+				$modtype = "Laptop Model:  "
+			}
+			if ($csysMan -and $csysModel) {
+				Write-Output "$($resolvedosc)$modtype$($csysMan) $($csysModel)"
+			} elseif ($csysMan) {
+				Write-Output "$($resolvedosc)Manufacturer:  $($csysMan)"
+			} elseif ($csysModel) {
+				Write-Output "$($resolvedosc)$modtype$($csysModel)"
+			}
+		}
+		if ($battery) {
+			if ($battery.EstimatedChargeRemaining -ge 75) {$batcol = $($color.green)}
+			elseif ($battery.EstimatedChargeRemaining -ge 50) {$batcol = $($color.yellow)}
+			elseif ($battery.EstimatedChargeRemaining -ge 25) {$batcol = $($color.orange)}
+			else {$batcol = $($color.red)}
+			$bstatus = switch ($battery.BatteryStatus) {
+				2 {"[AC Connected / Not Charging]"}
+				6 {"[AC Connected / Charging]"}
+				7 {"[AC Connected / Charging]"}
+				8 {"[AC Connected / Charging]"}
+				9 {"[AC Connected / Charging]"}
+				10 {"[No Battery]"}
+		default {""} # no info needed, can just read percentage
+			}
+			if ($bstatus -eq "[AC Connected / Not Charging]") {
+				if ($batteryValueFallback) {
+					if ($batteryValueFallback.Charging) {
+						$bstatus = "[AC Connected / Charging]"
+					} elseif ($batteryValueFallback.Discharging) {
+						$bstatus = "[AC Connected / Discharging]"
+					}
+				}
+			}
+			Write-Output "$($resolvedosc)Battery:       $($batcol)$($battery.EstimatedChargeRemaining)`%$($resolvedosc) $bstatus"
+		}
+		$uptime = (Get-Date) - $script:osInfo.LastBootUpTime
+		$uptimeParts = @()
+		if ($uptime.Days    -gt 0) { $uptimeParts += "$($uptime.Days)d"    }
+		if ($uptime.Hours   -gt 0) { $uptimeParts += "$($uptime.Hours)h"   }
+		if ($uptime.Minutes -gt 0) { $uptimeParts += "$($uptime.Minutes)m" }
+		$uptimeStr = if ($uptimeParts.Count -gt 0) { $uptimeParts -join " " } else { "0m" }
+		Write-Output "$($resolvedosc)Uptime:        $uptimeStr$($color.reset)"
 	} elseif ($IsLinux) {
+		if ($bloat) {
+			Write-output "$($resolvedosc)OS Class:      Unix-Like"
+		}
+		if ($Precise) {
+			Write-output "$($resolvedosc)Kernel:        $(& uname -r)"
+		} else {
+			$kern = [System.Environment]::OSVersion.Version
+			if (-not ($kern.Revision -ge 1)) {
+				Write-output "$($resolvedosc)Kernel:        Linux $($kern.Major).$($kern.Minor).$($kern.Build)"
+			} else {
+				write-output "$($resolvedosc)Kernel:        Linux $($kern.Major).$($kern.Minor).$($kern.Build).$($kern.Revision)"
+			}
+		}
+		if ($extra) {
+			if (Get-Command hostname -ErrorAction SilentlyContinue) {
+				$HostID = hostname
+			} elseif ($env:HOSTNAME) {
+				$HostID = $env:HOSTNAME
+			} elseif (Test-Path /etc/hostname) {
+				$HostID = (Get-Content /etc/hostname).Trim()
+			}
+			if ($env:USER) {
+				$user = $env:USER
+			} elseif ($env:LOGNAME) {
+				$user = $env:LOGNAME
+			} else {
+				$user = whoami
+			}
+			Write-Output "$($resolvedosc)User:          $user@$HostID"
+		}
+		if ($ESVersionTable -and $Precise) {
+			write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)`)"
+		} elseif ($ESVersionTable) {
+			write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion)"
+		} elseif ($Precise) {
+			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
+		} else {
+			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
+		}
+		if ($precise) {
+			write-output "$($resolvedosc)Terminal:      $term $term_version"
+		} else {
+			write-output "$($resolvedosc)Terminal:      $term"
+		}
+		if ($term_font) {
+			write-output "$($resolvedosc)Terminal Font: $term_font"
+		}
+		if ($de) {
+			if ($precise) {
+				Write-Output "$($resolvedosc)DE:            $de $de_version"
+			} else {
+				Write-Output "$($resolvedosc)DE:            $de"
+			}
+		}
+		if ($wm) {
+			if ($precise) {
+				Write-Output "$($resolvedosc)WM:            $wm $wm_version"
+			} else {
+				Write-Output "$($resolvedosc)WM:            $wm"
+			}
+			if ($wm_theme) {
+				Write-Output "$($resolvedosc)WM Theme:      $wm_theme"
+			}
+		}
+		if ($theme) {
+			Write-Output "$($resolvedosc)Theme:         $theme"
+		}
+		if ($sys_font) {
+			Write-Output "$($resolvedosc)System Font:   $sys_font"
+		}
+		if ($cursor) {
+			Write-Output "$($resolvedosc)Cursor:        $cursor"
+		}
 		$cpu = (lscpu | Select-String "Model name").ToString().Split(":")[1].Trim()
-		Write-Output "$($resolvedosc)CPU:         $cpu"
+		Write-Output "$($resolvedosc)CPU:           $cpu"
+		$base = $null
+		$boost = $null
 		$mhzLine = lscpu | Select-String "CPU max MHz"
 		if (-not $mhzLine) { $mhzLine = lscpu | Select-String "CPU MHz" }
 		if ($mhzLine) {
 			$base = [math]::Round([double]($mhzLine.Line.Split(":")[1].Trim()))
-			Write-Output "$($resolvedosc)CPU Base:    ${base}MHz"
 		} else {
 			$freqPath = "/sys/devices/system/cpu/cpu0/cpufreq/base_frequency"
-			$freqFallback = "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"
 			if (Test-Path $freqPath) {
 				$base = [math]::Round((Get-Content $freqPath) / 1000)
-				Write-Output "$($resolvedosc)CPU Base:    ${base}MHz"
-			} elseif (Test-Path $freqFallback) {
-				$base = [math]::Round((Get-Content $freqFallback) / 1000)
-				Write-Output "$($resolvedosc)CPU Base:    ${base}MHz"
-			} else {
-				Write-Output "$($resolvedosc)CPU Base:    failed to fetch"
 			}
+		}
+		$boostPath = "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"
+		if (Test-Path $boostPath) {
+			$boost = [math]::Round((Get-Content $boostPath) / 1000)
+		}
+		if ($base) {
+			Write-Output "$($resolvedosc)CPU Base:      ${base}MHz"
+		}
+		if ($boost) {
+			Write-Output "$($resolvedosc)CPU Boost:     ${boost}MHz"
 		}
 		$cores = (nproc)
 		$threads = (lscpu | Select-String "^CPU\(s\):").ToString().Split(":")[1].Trim()
-		Write-Output "$($resolvedosc)CPU Cores:   $cores"
-		Write-Output "$($resolvedosc)CPU Threads: $threads"
+		if ($bloat) {
+			$architecture = uname -m
+			$bits = switch ($arch) {
+				"x86"    { "32-bit" }
+				"ARM"    { "32-bit" }
+				"armv7l" { "32-bit" }
+				"i386"   { "32-bit" }
+				"i486"   { "32-bit" }
+				"i586"   { "32-bit" }
+				"i686"   { "32-bit" }
+				default  { "64-bit" }
+			}
+			Write-Output "$($resolvedosc)Architecture:  $architecture ($bits)"
+		}
+		Write-Output "$($resolvedosc)CPU Cores:     $cores"
+		Write-Output "$($resolvedosc)CPU Threads:   $threads"
 		$gpuLine = lspci | Select-String -Pattern "VGA|3D" | Select-Object -First 1
 		if ($gpuLine) {
 			$gpu = $gpuLine.ToString().Split(":")[2].Trim()
-			Write-Output "$($resolvedosc)GPU:         $gpu"
-		} else {
-			Write-Output "$($resolvedosc)GPU:         failed to fetch"
+			$pciSlot = $gpuLine.ToString().Split(" ")[0].Trim()
+			$isIGPU = $false
+			if ($gpu -match "Intel") {
+				$isIGPU = $pciSlot -match "^00:02\.0" # thx intel
+			} elseif ($gpu -match "AMD|ATI") {
+				$card = Get-ChildItem /sys/class/drm | Where-Object { $_.Name -match "^card\d+$" } | Select-Object -First 1
+				if ($card) {
+					$hwmon = Get-ChildItem "$($card.FullName)/device/hwmon" -ErrorAction SilentlyContinue | Select-Object -First 1
+					$isIGPU = $hwmon -and (Test-Path "$($hwmon.FullName)/in1_input")
+				}
+			}	
+			if ($isIGPU) {
+				if ($precise) {
+					$memInfoRam = [int]((Get-Content /proc/meminfo | Select-String "MemTotal").ToString() -replace "[^0-9]")
+					$dmidecode = dmidecode -t memory 2>/dev/null | Select-String "Size:" | Where-Object { $_ -notmatch "No Module" }
+					$totalMB = if ($dmidecode) {
+						($dmidecode | ForEach-Object {
+							if ($_ -match "(\d+)\s+GB") { [int]$Matches[1] * 1024 }
+							elseif ($_ -match "(\d+)\s+MB") { [int]$Matches[1] }
+						} | Measure-Object -Sum).Sum
+					} else { [math]::Round($memInfoRam / 1024, 0) }
+					$visibleMB = [math]::Round($memInfoRam / 1024, 0)
+					$reservedMB = $totalMB - $visibleMB
+					if ($reservedMB -gt 1024) {
+						$usageigpu = "($([math]::Round($reservedMB / 1024, 0))`GB)"
+					} else {
+						$usageigpu = "($reservedMB`MB)"
+					}
+				} else { $usageigpu = "" }
+				$type = "[Integrated] $usageigpu".Trim()
+			} else { $type = "" }
+			Write-Output "$($resolvedosc)GPU:           $gpu $type"
 		}
-		$memKb = (Get-Content /proc/meminfo | Where-Object { $_ -match '^MemTotal' }) -replace '[^0-9]'
+		$memInfo = Get-Content /proc/meminfo
+		$memKb = ($memInfo | Where-Object { $_ -match '^MemTotal' }) -replace '[^0-9]'
+		$memAvailableKb = [long](($memInfo | Where-Object { $_ -match '^MemAvailable' }) -replace '[^0-9]')
 		$ramGb = [long]$memKb / 1024 / 1024
+		$usedRam = [math]::Round(([long]$memKb - $memAvailableKb) / 1024 / 1024, 1)
+		$totalRam = [math]::Round([long]$memKb / 1024 / 1024, 1)
 		$sizeStr = if ($ramGb -ge 1) { "$([math]::Round($ramGb))GB" } else { "$([math]::Round($ramGb * 1024))MB" }
+		$ramUsageStr = "${usedRam}GB/${totalRam}GB"
 		$dmiRaw = $null
+		$ramPercent = [math]::Round(($usedRam / $totalRam) * 100)
+		if ($ramPercent -ge 75) {
+			$col = $($color.red)
+		} elseif ($ramPercent -ge 50) {
+			$col = $($color.yellow)
+		} else {
+			$col = $($color.green)
+		}
 		if (Get-Command dmidecode -ErrorAction SilentlyContinue) {
 			$dmiRaw = dmidecode -t 17 2>/dev/null
 			if ($LASTEXITCODE -ne 0) { $dmiRaw = $null }
@@ -1451,12 +2469,40 @@ function cfetch($larp) {
 		if ($dmiRaw) {
 			$type  = $dmiRaw | Select-String "^\s*Type:"  | Select-Object -First 1 | ForEach-Object { ($_ -split ":\s*")[1].Trim() }
 			$speed = $dmiRaw | Select-String "^\s*Speed:" | Select-Object -First 1 | ForEach-Object { ($_ -split ":\s*")[1].Trim() }
-			Write-Output "$($resolvedosc)RAM:         $sizeStr $type $speed"
+			$ff    = $dmiRaw | Select-String "^\s*Form Factor:" | Select-Object -First 1 | ForEach-Object { ($_ -split ":\s*")[1].Trim() }
+			$mmf    = $dmiRaw | Select-String "^\s*Manufacturer:" | Select-Object -First 1 | ForEach-Object { ($_ -split ":\s*")[1].Trim() }
+			if ($precise) {
+				if ($bloat) {
+					Write-Output "$($resolvedosc)RAM:           $mmf $sizeStr $ff $type $speed"
+				} else {
+					Write-Output "$($resolvedosc)RAM:           $sizeStr $ff $type $speed"
+				}
+			} else {
+				if ($bloat) {
+					Write-Output "$($resolvedosc)RAM:           $mmf $sizeStr $type $speed"
+				} else {
+					Write-Output "$($resolvedosc)RAM:           $sizeStr $type $speed"
+				}
+			}
 		} else {
-		Write-Output "$($resolvedosc)RAM:         $sizeStr"
+			Write-Output "$($resolvedosc)RAM:           $sizeStr"
+		}
+		write-output "$($resolvedosc)RAM Usage:     $ramUsageStr ($col$rampercent`%$($resolvedosc))"
+		$swapInfo = Get-Content /proc/meminfo
+		$swapTotalKb = [long](($swapInfo | Where-Object { $_ -match '^SwapTotal' }) -replace '[^0-9]')
+		$swapFreeKb  = [long](($swapInfo | Where-Object { $_ -match '^SwapFree' }) -replace '[^0-9]')
+		$swapUsedKb  = $swapTotalKb - $swapFreeKb
+		$swapTotal = [math]::Round($swapTotalKb / 1024 / 1024, 1)
+		$swapUsed  = [math]::Round($swapUsedKb  / 1024 / 1024, 1)
+		$swapPercent = if ($swapTotalKb -gt 0) { [math]::Round(($swapUsedKb / $swapTotalKb) * 100) } else { 0 }
+		if ($swapPercent -ge 75) { $swapCol = $($color.red) }
+		elseif ($swapPercent -ge 50) { $swapCol = $($color.yellow) }
+		else { $swapCol = $($color.green) }
+		if ($swapTotalKb -gt 0) {
+			Write-Output "$($resolvedosc)Swap:          ${swapUsed}GB/${swapTotal}GB `($swapCol$swapPercent%$($resolvedosc))"
 		}
 		$disks = lsblk -dn -o NAME,SIZE,ROTA --bytes | Where-Object { $_ -match "^\s*(sd[a-z]|nvme|vd|hd)" }
-		$prefix = "Storage:     "
+		$prefix = "Storage:       "
 		$indent = " " * $prefix.Length
 		$first = $true
 		foreach ($d in $disks) {
@@ -1465,22 +2511,98 @@ function cfetch($larp) {
 			$bytes = [long]$parts[1]
 			$rota  = $parts[2]
 			$sizeStr = if ($bytes -ge 1000000000000) { "$([math]::Round($bytes / 1000000000000, 1))TB" }
-            elseif ($bytes -ge 1000000000) { "$([math]::Round($bytes / 1000000000))GB" }
-            else { "$([math]::Round($bytes / 1000000))MB" }
+				elseif ($bytes -ge 1000000000) { "$([math]::Round($bytes / 1000000000))GB" }
+				else { "$([math]::Round($bytes / 1000000))MB" }
 			$label = if ($name -match "^nvme") { "NVMe SSD" }
-            elseif ($name -match "^sd" -and $rota -eq "0") { "SATA SSD" }
-            elseif ($rota -eq "1") { "HDD" }
-            else { "SSD" }
+				elseif ($name -match "^sd" -and $rota -eq "0") { "SATA SSD" }
+				elseif ($rota -eq "1") { "HDD" }
+				else { "SSD" }
 			$line = if ($first) { $prefix } else { $indent }
 			Write-Output "$($resolvedosc)$line$sizeStr $label"
 			$first = $false
 		}
+		if ($DiskUsage) {
+			$ldPrefix = "$($resolvedosc)Storage Usage: "
+			$ldIndent = "$($resolvedosc)               "
+			$firstLd = $true
+			$dfLines = (& df -T -x tmpfs -x devtmpfs -x squashfs --block-size=1 2>$null) | Select-Object -Skip 1
+			foreach ($line in $dfLines) {
+				$parts = $line -split '\s+', 7
+				if ($parts.Count -lt 7) { continue }
+				$fs      = $parts[1]
+				$total   = [long]$parts[2]
+				$used    = [long]$parts[3]
+				$mount   = $parts[6].Trim()
+				$diskpercent = if ($total -gt 0) { [math]::Round(($used / $total) * 100) } else { 0 }
+				$usedStr  = if ($used  -ge 1000000000000) { "$([math]::Round($used  / 1000000000000, 1))TB" }
+							else { "$([math]::Round($used  / 1000000000, 1))GB" }
+				$totalStr = if ($total -ge 1000000000000) { "$([math]::Round($total / 1000000000000, 1))TB" }
+							else { "$([math]::Round($total / 1000000000, 1))GB" }
+				$col = if ($diskpercent -ge 75) { $color.red } elseif ($diskpercent -ge 50) { $color.yellow } else { $color.green }
+				$entry = "$mount $usedStr/$totalStr ($($col)$diskpercent%$($resolvedosc)) $fs"
+				if ($firstLd) {
+					Write-Host "$($ldPrefix)$entry"
+					$firstLd = $false
+				} else {
+					Write-Host "$($ldIndent)$entry"
+				}
+			}
+		}
 		if (Test-Path "/sys/class/dmi/id/board_vendor") {
 			$vendor = Get-Content /sys/class/dmi/id/board_vendor
 			$name = Get-Content /sys/class/dmi/id/board_name
-			Write-Output "$($resolvedosc)Motherboard: $vendor $name"
-		} else {
-			Write-Output "$($resolvedosc)Motherboard: failed to fetch"
+			Write-Output "$($resolvedosc)Motherboard:   $vendor $name"
+		}
+		if ($extra) {
+			$csysMan   = (Get-Content /sys/class/dmi/id/sys_vendor       -ErrorAction SilentlyContinue)?.Trim()
+			$csysModel = (Get-Content /sys/class/dmi/id/product_name     -ErrorAction SilentlyContinue)?.Trim()
+			$chassis   = (Get-Content /sys/class/dmi/id/chassis_type     -ErrorAction SilentlyContinue)?.Trim()
+			$modtype = switch ($chassis) {
+				"3"  { "Desktop Model: " }
+				"4"  { "Desktop Model: " }
+				"6"  { "Desktop Model: " }
+				"7"  { "Desktop Model: " }
+				"8"  { "Laptop Model:  " }
+				"9"  { "Laptop Model:  " }
+				"10" { "Laptop Model:  " }
+				"11" { "Laptop Model:  " }
+				"14" { "Laptop Model:  " }
+				"17" { "Server Model:  " }
+				"23" { "Server Model:  " }
+				"28" { "Tablet Model:  " }
+				"31" { "Tablet Model:  " }
+				default { "Device Model:  " }
+			}
+			if ($batDir -and $modtype -eq "Device Model:  ") {
+				$modtype = "Laptop Model:  "
+			}
+			if ($csysMan -and $csysModel) {
+				Write-Output "$($resolvedosc)$modtype$csysMan $csysModel"
+			} elseif ($csysMan) {
+				Write-Output "$($resolvedosc)Manufacturer:  $csysMan"
+			} elseif ($csysModel) {
+				Write-Output "$($resolvedosc)$modtype$csysModel"
+			}
+		}
+		$batPath = "/sys/class/power_supply"
+		$batDir = Get-ChildItem $batPath | Where-Object { $_.Name -match "^BAT" } | Select-Object -First 1
+		if ($batDir) {
+			$batPercent = [int](Get-Content "$batPath/$($batDir.Name)/capacity" -ErrorAction SilentlyContinue)
+			$batStatus  = (Get-Content "$batPath/$($batDir.Name)/status" -ErrorAction SilentlyContinue)?.Trim()
+			if ($batPercent -ge 75)    { $batcol = $($color.green)  }
+			elseif ($batPercent -ge 50) { $batcol = $($color.yellow) }
+			elseif ($batPercent -ge 25) { $batcol = $($color.orange) }
+			else                        { $batcol = $($color.red)    }
+			$acDir = Get-ChildItem $batPath | Where-Object { $_.Name -match "^A[C]|^ACAD" } | Select-Object -First 1
+			$acOnline = if ($acDir) { [int](Get-Content "$batPath/$($acDir.Name)/online" -ErrorAction SilentlyContinue) } else { 0 }
+			$bstatus = switch ($batStatus) {
+				"Charging"     {"[AC Connected / Charging]"}
+				"Not charging" { if ($acOnline) { "[AC Connected / Not Charging]" } else { "" } }
+				"Full"         { if ($acOnline) { "[AC Connected / Not Charging]" } else { "" } }
+				"Discharging"  { if ($acOnline) { "[AC Connected / Discharging]"  } else { "" } }
+				default        { "" }
+			}
+			Write-Output "$($resolvedosc)Battery:       $($batcol)$($batPercent)`%$($resolvedosc) $bstatus"
 		}
 		$raw = [double](Get-Content /proc/uptime).Split()[0]
 		$ts = [timespan]::FromSeconds($raw)
@@ -1489,41 +2611,91 @@ function cfetch($larp) {
 		if ($ts.Hours)   { $parts += "$($ts.Hours)h" }
 		if ($ts.Minutes) { $parts += "$($ts.Minutes)m" }
 		$uptime = if ($parts) { $parts -join " " } else { "0m" }
-		Write-Output "$($resolvedosc)Uptime:      $uptime"
-		# write-output "cfetch is untested on Linux.`nvalues may be innacurate."
-	} elseif($IsMacOS) {
+		Write-Output "$($resolvedosc)Uptime:        $uptime"
+	} elseif ($IsMacOS) {
 		write-output "cfetch is untested on MacOS.`nrunning it may cause issues or report false system information.`nrun anyways?`n$($color.green)y$($color.reset)/$($color.red)n$($color.reset)"
 		$yn = (confirm "runanyways" "y" "n")
-		if($yn) {
+		if ($yn) {
+			if ($Precise) {
+				Write-output "$($resolvedosc)Kernel:        $(& uname -r)"
+			} else {
+				$kern = [System.Environment]::OSVersion.Version
+				if (-not ($kern.Revision -ge 1)) {
+					Write-output "$($resolvedosc)Kernel:        XNU $($kern.Major).$($kern.Minor).$($kern.Build)"
+				} else {
+					write-output "$($resolvedosc)Kernel:        XNU $($kern.Major).$($kern.Minor).$($kern.Build).$($kern.Revision)"
+				}
+			}
+			if ($ESVersionTable -and $Precise) {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)`)"
+			} elseif ($ESVersionTable) {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion)"
+			} elseif ($Precise) {
+				write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
+			} else {
+				write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
+			}
+			if ($precise) {
+				write-output "$($resolvedosc)Terminal:      $term $term_version"
+			} else {
+				write-output "$($resolvedosc)Terminal:      $term"
+			}
+			if($cursor) {
+				Write-Output "$($resolvedosc)Cursor:        $cursor"
+			}
 			$cpu = sysctl -n machdep.cpu.brand_string
 			$cores = sysctl -n hw.physicalcpu
 			$threads = sysctl -n hw.logicalcpu
-			Write-Output "$($resolvedosc)CPU:         $cpu"
-			Write-Output "$($resolvedosc)CPU Cores:   $cores"
-			Write-Output "$($resolvedosc)CPU Threads: $threads"
-			Write-Output "$($resolvedosc)CPU Base:    unsupported on macos"
+			Write-Output "$($resolvedosc)CPU:           $cpu"
+			Write-Output "$($resolvedosc)CPU Cores:     $cores"
+			Write-Output "$($resolvedosc)CPU Threads:   $threads"
+			Write-Output "$($resolvedosc)CPU Base:      unsupported on macos"
 			$ram = (sysctl -n hw.memsize) / 1GB
-			Write-Output "$($resolvedosc)RAM:         $([math]::Round($ram,1))GB"
-			Write-Output "$($resolvedosc)RAM Detail:  unsupported on macos"
+			Write-Output "$($resolvedosc)RAM:           $([math]::Round($ram,1))GB"
+			Write-Output "$($resolvedosc)RAM Detail:    unsupported on macos"
 			$gpuLine = system_profiler SPDisplaysDataType | Select-String "Chipset Model" | Select-Object -First 1
 			if ($gpuLine) {
 				$gpu = $gpuLine.ToString().Split(":")[1].Trim()
-				Write-Output "$($resolvedosc)GPU:         $gpu"
+				Write-Output "$($resolvedosc)GPU:           $gpu"
 			} else {
-				Write-Output "$($resolvedosc)GPU:         unsupported on macos"
+				Write-Output "$($resolvedosc)GPU:           unsupported on macos"
 			}
 			$disk = (df -h / | Select-Object -Last 1).Split()[1]
-			Write-Output "$($resolvedosc)Storage:     $disk"
-			Write-Output "$($resolvedosc)Storage Type: unsupported on macos"
-			Write-Output "$($resolvedosc)Motherboard: unsupported on macos"
+			Write-Output "$($resolvedosc)Storage:       $disk"
+			Write-Output "$($resolvedosc)Storage Type:  unsupported on macos" # if you care about mac support a LOT a lot then.. PR pls
+			Write-Output "$($resolvedosc)Motherboard:   unsupported on macos" # mac support is so scuffed.. we might as well drop it
 			$uptimeRaw = uptime
 			$uptime = (($uptimeRaw -split "up ")[1] -split ",")[0]
-			Write-Output "$($resolvedosc)Uptime:      $uptime"
+			Write-Output "$($resolvedosc)Uptime:        $uptime"
 		}
 	}
+	if ($locale) {
+			if ($PSCulture -and $PSUICulture) {
+				write-output "$($resolvedosc)Locale:        $PSCulture$($color.reset)"
+				write-output "$($resolvedosc)Language:      $PSUICulture$($color.reset)"
+			} elseif ($host) {
+				write-output "$($resolvedosc)Locale:        $($host.CurrentCulture)$($color.reset)"
+				write-output "$($resolvedosc)Language:      $($host.CurrentUICulture)$($color.reset)"
+			}
+	}
 	cdump
-}
+} # cfetch is over a thousand lines... jeez...
 
+function hyperc($larp, [switch]$clean) {
+	if ($larp) {
+		if (-not $clean) {
+			cfetch $larp -precise -bloat -extra -locale -diskusage
+		} else {
+			cfetch $larp -precise -bloat -extra -locale -diskusage -clean
+		}
+	} else {
+		if (-not $clean) {
+			cfetch -precise -bloat -extra -locale -diskusage
+		} else {
+			cfetch -precise -bloat -extra -locale -diskusage -clean
+		}
+	}
+}
 Export-ModuleMember -Variable color
 Export-ModuleMember -Variable time
 Export-ModuleMember -Variable esc

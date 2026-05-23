@@ -1,5 +1,5 @@
 ## LNXeSh Installer ##
-
+"{}" | Set-Content (Join-Path $root "emberCore" "ember.rice")
 if ($IsWindows) {
 	write-host "This Installer is Intended for Linux. you should not run it on Windows."
 	write-host "Press Enter to Exit"

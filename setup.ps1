@@ -1,8 +1,8 @@
-$root = Split-Path -Parent $MyInvocation.MyCommand.Path
-
 param(
     [switch]$o
 )
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+"{}" | Set-Content (Join-Path $root "emberCore" "ember.rice")
 
 $terminalIcon = Join-Path $root "emberRes\eshIcon\icon.png"
 $fileIcon     = Join-Path $root "emberRes\eshIcon\esh.ico"
