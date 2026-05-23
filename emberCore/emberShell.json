@@ -1,7 +1,7 @@
 {
 	"shell_name": "emberShell",
 	"shell_version": "1.4.0",
-	"sv_name": "Ignite Preview",
+	"sv_name": "Ignite",
 	"dev_name": "cereal",
 	"fork": false,
 	"clib_version": "1.4.0"
