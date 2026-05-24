@@ -1,4 +1,5 @@
 node_modules/
+emberPulse/node_modules/
 emberCore/path.ls
 emberCore/ember.rice
 dev/

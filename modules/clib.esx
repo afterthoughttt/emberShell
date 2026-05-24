@@ -308,7 +308,7 @@ function watermark($type, [switch]$fwd){
                              @@@@    @@  @@@@@                     @@@        @@@@@@                
                                @                                    @@         @@@@@                
                                                                     @@          @@@@                
-                                                                                 @@@                $($color.reset)"
+                                                                                 @@@                "
 	} elseif ($type -eq "lunar") {
 		write-output "$($color.lunar)                                              
                           @@*                                                                       
@@ -348,7 +348,7 @@ function watermark($type, [switch]$fwd){
                               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                             
                                  %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=                                
                                      @@@@@@@@@@@@@@@@@@@@@@@@@@*                                    
-                                           %+##@@@@@@@#@= `n$($color.reset)"
+                                           %+##@@@@@@@#@= `n"
 	} elseif ($type -eq "esh" -or $type -eq "eSh" -or $type -eq "emberShell") {
 write-output "$($color.azure)
                                                                           ******                    
@@ -396,7 +396,7 @@ write-output "$($color.azure)
                                                                                       *********     
                                                                                      *********      
                                                                                     ********        
-                                                                                  ****              $($color.reset)"
+                                                                                  ****              "
 	} elseif($type -eq "clib") { 
 write-output "
                                                     @@@@@@@                                         
@@ -434,7 +434,7 @@ write-output "$($color.invert)
             @@@@@@@@@@@   @@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@   @@@@@@@@@@@            
              @@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@@    @@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@             
               @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@    @@@@@@@@@   @@@@@@@@  @@@@@@@@@@@@@              
-                 @@@@@@@@@@@@@@       @@@@@@@@@    @@@@@@@@@   @@@@@@@@    @@@@@@@@@    $($color.reset)"
+                 @@@@@@@@@@@@@@       @@@@@@@@@    @@@@@@@@@   @@@@@@@@    @@@@@@@@@    "
 	} <-redundant #>
 	else {
 		if(-not $fwd) {
@@ -493,7 +493,7 @@ function render($type, [switch]$fwd) {
 	 if ($type -eq ":3") {
 		 write-output "$($color.cereal)
      ▀ ▀
-	▀▄▀▄▀$($color.reset)
+	▀▄▀▄▀
 	"
 
 	} elseif ($type -eq "windows_old") {
@@ -543,7 +543,7 @@ function render($type, [switch]$fwd) {
                                          $($color.yellow) ***++-========================+++@@@@                     
                                            $($color.yellow)  ####+++-:::======---+++++%%@@@@@@                      
                                              $($color.yellow)     ##########%%%%%%%%%@@@@@                          
-                                                $($color.yellow)         %%%%%%%%                                   `n$($color.reset)"
+                                                $($color.yellow)         %%%%%%%%                                   `n"
 	}elseif($type -eq "windows_11_old") {
 		write-output "$($color.win11)
 		############# #############
@@ -558,7 +558,7 @@ function render($type, [switch]$fwd) {
 		############# #############
 		############# #############
 		############# #############
-		############# #############`n$($color.reset)"
+		############# #############`n"
 	}elseif($type -eq "windows_10_old") {
 		write-output "$($color.win10)
                                                                          ****** 
@@ -604,7 +604,7 @@ function render($type, [switch]$fwd) {
                                      ****************************************** 
                                                   ***************************** 
                                                                **************** 
-                                                                           ****`n$($color.reset)"
+                                                                           ****`n"
 	}elseif($type -eq "win11_fetch" -or $type -eq "windows_11") {
 		write-output "$($color.win11)
   ██████ ██████
@@ -613,7 +613,7 @@ function render($type, [switch]$fwd) {
   ▄▄▄▄▄▄ ▄▄▄▄▄▄
   ██████ ██████
   ██████ ██████
-  ▀▀▀▀▀▀ ▀▀▀▀▀▀`n$($color.reset)" # handmade by cereal <3 (FUCK windows 11)
+  ▀▀▀▀▀▀ ▀▀▀▀▀▀`n" # handmade by cereal <3 (FUCK windows 11)
 	}elseif($type -eq "arch") {
 		write-output "$($color.win11)
                  ▄█▄
@@ -633,10 +633,10 @@ function render($type, [switch]$fwd) {
    ▄██████████▀        ▀█████████▄
   ▄██████▀▀▀              ▀▀██████▄
  ▄███▀▀                       ▀▀███▄
-▄▀▀                               ▀▀▄`n$($color.reset)" # im sorry arch users
+▄▀▀                               ▀▀▄`n" # im sorry arch users
 	}elseif($type -eq "mint" -or $type -eq "linux_mint") {
-			write-output "
-$($color.mint)
+			write-output "$($color.mint)
+
     ▄██
     ███
     ███   ▄█████████████▄
@@ -647,10 +647,10 @@ $($color.mint)
     ███▄   ▀▀    ▀▀  ▄███
     ▀███▄           ▄████
      ▀█████████████████▀
-	`n$($color.reset)"
+	`n"
 	}elseif($type -eq "ubuntu") {
-write-output "
-$($color.red)                         ██████
+write-output "$($color.red)
+                         ██████
 $($color.orange)                 ██████ $($color.red)████████
 $($color.orange)              $($color.orange)██████████$($color.red)████████
 $($color.yellow)          ███ $($color.orange)███████████$($color.red)███████
@@ -667,10 +667,10 @@ $($color.yellow)        ██████ $($color.red)████████
 $($color.yellow)          ███$($color.red)████████████$($color.yellow)███████
 $($color.red)              ██████████$($color.yellow)█████████
 $($color.red)                  █████ $($color.yellow)████████
-$($color.yellow)                         ██████`n$($color.reset)"
+$($color.yellow)                         ██████`n"
 	}elseif($type -eq "pop!_os" -or $type -eq "pop") {
-write-output "
-$($color.pop)             █████████████
+write-output "$($color.pop)
+             █████████████
          █████████████████████
       ███████$($color.white)████$($color.pop)████████████████
     ██████$($color.white)███████████$($color.pop)██████████████
@@ -689,10 +689,10 @@ $($color.pop)             █████████████
     █████$($color.white)█████████████████████$($color.pop)█████
       ███████████████████████████
          █████████████████████
-             █████████████`n$($color.reset)"
+             █████████████`n"
 	}elseif($type -eq "debian") {
-write-output "
-$($color.debian)       _,met`$`$`$`$`$gg.
+write-output "$($color.debian)
+       _,met`$`$`$`$`$gg.
     ,g`$`$`$`$`$`$`$`$`$`$`$`$`$`$`$P.
   ,g`$`$P`"        `"`"`"Y`$`$.`".
  ,`$`$P'              '`$`$`$.
@@ -708,27 +708,27 @@ $($color.debian)  'Y`$`$
      '`$`$b.
        'Y`$`$b.
           `"Y`$b._
-              '`"`"`"`n$($color.reset)" # dear neofetch pls stop using quotes and backticks <3
+              '`"`"`"`n" # dear neofetch pls stop using quotes and backticks <3
 										# idfk how to make this my own, the other distros were somewhat ez
 	}elseif($type -eq "lesbian") {
-write-output "
-$($color.lesbian1)       _,met`$`$`$`$`$gg.
+write-output "$($color.lesbian1)
+       _,met`$`$`$`$`$gg.
     ,g`$`$`$`$`$`$`$`$`$`$`$`$`$`$`$P.
-  ,g`$`$P`"        `"`"`"Y`$`$.`".$($color.reset)
+  ,g`$`$P`"        `"`"`"Y`$`$.`".
 $($color.lesbian2) ,`$`$P'              '`$`$`$.
 ',`$`$P       ,ggs.     '`$`$b:
-`d`$`$'     ,`$P`"'   .    `$`$`$$($color.reset)
+`d`$`$'     ,`$P`"'   .    `$`$`$
 $($color.white) `$`$P      d`$'     ,    `$`$P
  `$`$:      `$`$.   -    ,d`$`$'
  `$`$;      Y`$b._   _,d`$P'
  Y`$`$.    `.'`"Y`$`$`$`$P`"'
- '`$`$b      `"-.__$($color.reset)
+ '`$`$b      `"-.__
 $($color.lesbian3)  'Y`$`$
    'Y`$`$.
-     '`$`$b.$($color.reset)
+     '`$`$b.
 $($color.lesbian4)       'Y`$`$b.
           `"Y`$b._
-              '`"`"`"`n$($color.reset)" # dear neofetch pls stop using quotes and backticks <3
+              '`"`"`"`n" # dear neofetch pls stop using quotes and backticks <3
 										# idfk how to make this my own, the other distros were somewhat ez
 	}elseif($type -eq "win10_fetch" -or $type -eq "windows_10") {
 		write-output "$($color.win11)
@@ -754,11 +754,11 @@ $($color.lesbian4)       'Y`$`$b.
 █████████████████   ███████████████████████
           ███████   ███████████████████████
                         ███████████████████
-                                     ██████`n$($color.reset)"
+                                     ██████`n"
 	}elseif($type -eq "win_fetch" -or $type -eq "windows") {
-		write-output "
+		write-output "$($color.afterthought)
 		                                              
-$($color.afterthought)          ██████████████▄                     
+          ██████████████▄                     
 $($color.afterthought)         ████████████████▄                    
 $($color.afterthought)         █████████████████ $($color.mint)███▄          ▄██  
 $($color.afterthought)        ██████████████████ $($color.mint)██████████████████ 
@@ -778,7 +778,7 @@ $($color.win10) █████████████████  $($color.ye
 $($color.win10)  █▀           ██▀ $($color.yellow)██████████████████         
 $($color.yellow)                   ██████████████████         
 $($color.yellow)                     ███████████████▀
-					$($color.reset)" # handmade by cereal <3
+					" # handmade by cereal <3
 <#
           ██████████████▄                     
          ████████████████▄                    
@@ -811,7 +811,7 @@ handmade by cereal <3
    █▀
   
    ▀
-		$($color.reset)"
+		"
 	} elseif($type -eq "cerealos") {
 		write-output "$($color.pink)
       ▄█▄
@@ -819,7 +819,7 @@ handmade by cereal <3
    ▀██▄ ▄██▀
      ▀███▀
        ▀
-		$($color.reset)"
+		"
 	} elseif($type -eq "mac") {
 		write-output "$($color.cyan)
                         ██████                                 
@@ -844,10 +844,10 @@ handmade by cereal <3
         ███████████████████████████                            
          ████████████████████████                              
            █████         █████
-		$($color.reset)" # ▀▌█▐▄
+		" # ▀▌█▐▄
 	} elseif($type -eq "tux" -or $type -eq "linux") {
-		write-output "
-        $($color.darkgray)█████
+		write-output "$($color.darkgray)
+        █████
        $($color.darkgray)███████
        $($color.darkgray)██$($color.white)▀$($color.darkgray)█$($color.white)▀$($color.darkgray)██
        $($color.darkgray)█$($color.yellow)█████$($color.darkgray)█
@@ -859,7 +859,7 @@ handmade by cereal <3
 $($color.yellow)██████$($color.darkgray)█$($color.white)███████$($color.darkgray)█$($color.yellow)██████
 $($color.yellow)███████$($color.darkgray)█$($color.white)█████$($color.darkgray)█$($color.yellow)███████
   $($color.yellow)█████$($color.darkgray)███████$($color.yellow)█████
-		$($color.reset)"
+		"
 	} elseif($type -eq "fedora") {
 		write-output "$($color.win11)
                   ▄▄████▄▄
@@ -874,7 +874,7 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
      ▐████▄   ▄█████▀
       ▀██████████▀
          ▀▀███▀▀
-		$($color.reset)"
+		"
 	} elseif($type -eq "alpine") {
 		write-output "$($color.win11)
           ▄██▄
@@ -883,14 +883,14 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
     ▄███▀      ▀███▄  ▀████▄
   ▄███▀          ▀███▄  ▀████▄
  ███▀              ▀███   ▀████
-		$($color.reset)"
+		"
 	} elseif($type -eq "nyarch") {
 		write-output "$($color.win11)
 			   :c..
 			 no nyarch yet
 			    ▀  ▀
 			   ▄▀▀▀▀▄
-		$($color.reset)"
+		"
 	} elseif($type -eq "gentoo") {
 		write-output "$($color.lunar)
              █████████████
@@ -911,7 +911,7 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
     ██████████████████████
     ███████████████████
       ████████████
-		$($color.reset)"
+		"
 	} elseif($type -eq "opensuse" -or $type -eq "opensuse_leap") {
 		write-output "$($color.mint)
             ████
@@ -932,7 +932,7 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
          ████  ████
            ██████
              ██
-		$($color.reset)"
+		"
 	} elseif($type -eq "opensuse_butter" -or $type -eq "opensuse_tumbleweed") {
 		write-output "$($color.butter)
           █████
@@ -957,7 +957,7 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
                        ████ ███      ████
                          ██████    █████
                             █████████
-		$($color.reset)"
+		"
 	} elseif($type -eq "kde_neon" -or $type -eq "neon") {
 		write-output "$($color.mint)
              ██████████████
@@ -979,14 +979,14 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
       █████        ██        █████
          ███████   ██   ███████
              ██████████████
-		$($color.reset)"
+		"
 	} elseif($type -eq "zorin") {
 		write-output "$($color.win11)
 			   oopsie..
 			 no zorin yet
 			    ▀  ▀
 			   ▄▀▀▀▀▄
-		$($color.reset)"
+		"
 	} elseif($type -eq "elementary") {
 		write-output "
 			   oopsie..
@@ -1021,7 +1021,7 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
   █████████                        ███████████  
  ██████                                 ███████ 
 ██                                           ███
-		$($color.reset)"
+		"
 	} elseif($type -eq "android") { # what are we doing here
 		write-output "$($color.mint)
                      ██                  ██                      
@@ -1056,13 +1056,13 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
                       ███████      ███████                      
                       ███████      ███████                      
                         ███          ███
-		$($color.reset)"
+		"
 	} elseif($type -eq "amogos") {
 		write-output "$($color.red)
 			    ███
-			   ██$($color.reset)$($color.cyan)██$($color.reset)
+			   ██$($color.cyan)██
 			   $($color.red)████
-			    █ █$($color.reset)"
+			    █ █"
 	} elseif($type -eq "uwuntu") {
 	write-output "$($color.lesbian3)
 	                                  ██
@@ -1084,7 +1084,7 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
            $($color.lesbian3)██████$($color.cereal)        █████████   █████████████
  $($color.lesbian3)██████     ████$($color.cereal)                     ████████
 $($color.lesbian3)███      ██████$($color.cereal)
-  $($color.lesbian3)████████████$($color.reset)`n" # what did they do to you
+  $($color.lesbian3)████████████`n" # what did they do to you
   } elseif($type -eq "discord") {
 	write-output "$($color.win10)  
                   ████               ████                  
@@ -1154,8 +1154,8 @@ $($color.lesbian3)███      ██████$($color.cereal)
   ███████████████  ██████████████▀
   ▀█████████████▀  ██████████████
    ▀██████████▀     ▀██████████▀
-     ▀███████▀        ███████▀$($color.debian)
-        ▄▄▄   ▄▄████▄▄ ▄▄▄▄
+     ▀███████▀        ███████▀
+$($color.debian)        ▄▄▄   ▄▄████▄▄ ▄▄▄▄
      ▄████▀  █████████  ▀███▄
     ▄███▀    ▀███████▀    ▀███▄
    ▄██▀  ▄▄██▄▄  ▀▀ ▄▄███▄▄ ▀██▄
@@ -1171,12 +1171,12 @@ $($color.lesbian3)███      ██████$($color.cereal)
      ▀█████    ▀▀▀▀▀▀   ██████▀
        ▀▀▀    ▄▄▄▄▄▄▄▄   ▀▀▀▀
             ▄██████████
-             ▀▀▀████▀▀$($color.reset)
+             ▀▀▀████▀▀
 			 "
 	} elseif ($type -eq "Germany") {
 		$conswidth = $Host.UI.RawUI.WindowSize.Width
 		$bar = repstring "█" $conswidth append
-		write-output "`n$($color.black)$bar`n$bar`n$($color.red)$bar`n$bar`n$($color.gold)$bar`n$bar`n$($color.reset)`n"
+		write-output "`n$($color.black)$bar`n$bar`n$($color.red)$bar`n$bar`n$($color.gold)$bar`n$bar`n`n"
 	} else {
 		if(-not $fwd) {
 			watermark $type -fwd
@@ -1429,7 +1429,7 @@ $annoyingOEM = @{
 	"Acebook 12" = "TU140" # 556B REVO3"
 }
 
-function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage) { # now thats a LOT of flags.. i know....
+function legacfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$backend) { # now thats a LOT of flags.. i know....
 if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
 	$script:osInfo = Get-CimInstance Win32_OperatingSystem
 	$swap = Get-CimInstance Win32_PageFileUsage
@@ -1739,10 +1739,14 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 		# preserved for the forks to use ig
 	if ($larp) {
 		$resolvedosc = resolveOSC($larp)
-		if ($larp -notin $validOSes) {
-			render "fetch_unknown_os"
+		if (-not $backend) {
+			if ($larp -notin $validOSes) {
+				render "fetch_unknown_os"
+			} else {
+				render $larp
+			}
 		} else {
-			render $larp
+			write-output "OSKey:         $larp"
 		}
 		if ($larp -eq "win_fetch" -or $larp -eq "windows") {
 			write-output "$($resolvedosc)OS:            Windows"
@@ -1813,10 +1817,14 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 			$logo = lesbian
 		}
 		$resolvedosc = resolveOSC($logo)
-		if ($logo -notin $validOSes) {
-			render "fetch_unknown_os"
-		} else {
-			render $logo
+		if (-not $backend) {
+			if ($logo -notin $validOSes) {
+				render "fetch_unknown_os"
+			} else {
+				render $logo
+			}
+			} else {
+				write-output "OSKey:         $logo"
 		}
 		$winedition = $script:osInfo.Caption -replace "Microsoft Windows \d+ ", ""
 		$winversion = $script:osInfo.Caption -replace "Microsoft Windows ", ""
@@ -2147,7 +2155,6 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 		$disks = Get-PhysicalDisk | Sort-Object DeviceId
 		$prefix = "$($resolvedosc)Storage:       "
 		$indent = "$($resolvedosc)               "
-		Write-Host -NoNewline $prefix
 		$first = $true
 		foreach ($disk in $disks) {
 			$size = $disk.Size
@@ -2162,7 +2169,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 					 elseif ($bus -eq "ATAPI") { "Disc Drive" }
 					 else { "$bus $type".Trim() }
 			if ($first) {
-				Write-Output "$($resolvedosc)$sizeStr $label"
+				Write-Output "$($resolvedosc)$prefix$sizeStr $label"
 				$first = $false
 			} else {
 				Write-Output "$($resolvedosc)$indent$sizeStr $label"
@@ -2187,10 +2194,10 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 				$col = if ($diskpercent -ge 75) { $color.red } elseif ($diskpercent -ge 50) { $color.yellow } else { $color.green }
 				$line = "$letter $usedStr/$totalStr ($($col)$diskpercent%$($resolvedosc)) $fs"
 				if ($firstLd) {
-					Write-Host "$($ldPrefix)$line"
+					Write-Output "$($ldPrefix)$line"
 					$firstLd = $false
 				} else {
-					Write-Host "$($ldIndent)$line"
+					Write-Output "$($ldIndent)$line"
 				}
 			}
 		}
@@ -2541,10 +2548,10 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 				$col = if ($diskpercent -ge 75) { $color.red } elseif ($diskpercent -ge 50) { $color.yellow } else { $color.green }
 				$entry = "$mount $usedStr/$totalStr ($($col)$diskpercent%$($resolvedosc)) $fs"
 				if ($firstLd) {
-					Write-Host "$($ldPrefix)$entry"
+					Write-output "$($ldPrefix)$entry"
 					$firstLd = $false
 				} else {
-					Write-Host "$($ldIndent)$entry"
+					Write-output "$($ldIndent)$entry"
 				}
 			}
 		}
@@ -2613,7 +2620,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 		$uptime = if ($parts) { $parts -join " " } else { "0m" }
 		Write-Output "$($resolvedosc)Uptime:        $uptime"
 	} elseif ($IsMacOS) {
-		write-output "cfetch is untested on MacOS.`nrunning it may cause issues or report false system information.`nrun anyways?`n$($color.green)y$($color.reset)/$($color.red)n$($color.reset)"
+		<# write-output "cfetch is untested on MacOS.`nrunning it may cause issues or report false system information.`nrun anyways?`n$($color.green)y$($color.reset)/$($color.red)n$($color.reset)"
 		$yn = (confirm "runanyways" "y" "n")
 		if ($yn) {
 			if ($Precise) {
@@ -2667,7 +2674,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 			$uptimeRaw = uptime
 			$uptime = (($uptimeRaw -split "up ")[1] -split ",")[0]
 			Write-Output "$($resolvedosc)Uptime:        $uptime"
-		}
+		}#>
+		invoke-panic "cfetch does not support MacOS."
 	}
 	if ($locale) {
 			if ($PSCulture -and $PSUICulture) {
@@ -2678,8 +2686,50 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 				write-output "$($resolvedosc)Language:      $($host.CurrentUICulture)$($color.reset)"
 			}
 	}
-	cdump
+	# cdump # not needed in backend recode
 } # cfetch is over a thousand lines... jeez...
+
+# legacfetch -> legacy/backend of cfetch
+# cfetch's new frontend is internally called neocfetch
+
+function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage) {
+    if ($clean) { Clear-Host }
+
+    $data = legacfetch $larp -precise:$precise -bloat:$bloat -extra:$extra -locale:$locale -diskusage:$diskusage -backend
+    $infoLines = $data -split "`n"
+
+    $osKey = ($infoLines | Where-Object { $_ -match "^OSKey:" }) -replace "OSKey:\s+", ""
+    $infoLines = $infoLines | Where-Object { $_ -notmatch "^OSKey:" }
+
+    $resolvedosc = resolveOSC $osKey
+    $logoName = if ($osKey -notin $validOSes) { "fetch_unknown_os" } else { $osKey }
+    $logoRaw = render $logoName
+    $logoLines = $logoRaw -split "`n"
+    $maxLogoWidth = ($logoLines | ForEach-Object { ($_ -replace '\x1b\[[0-9;]*[mGKHF]', '').Length } | Measure-Object -Maximum).Maximum
+    $cursorColumn = $maxLogoWidth + 4
+
+    Write-Host $logoRaw
+    $moveUp = $logoLines.Count
+    Write-Host "`e[${moveUp}A" -NoNewline
+
+    $lastLogoColor = $null
+    for ($j = $logoLines.Count - 1; $j -ge 0; $j--) {
+        $match = [regex]::Match($logoLines[$j], '^\x1b\[[0-9;]*m')
+        if ($match.Success) { $lastLogoColor = $match.Value; break }
+    }
+    $currentColor = if ($lastLogoColor) { $lastLogoColor } else { $resolvedosc }
+
+    for ($i = 0; $i -lt $infoLines.Count; $i++) {
+        if ($i -lt $logoLines.Count) {
+            $match = [regex]::Matches($logoLines[$i], '\x1b\[[0-9;]*m') | Select-Object -Last 1
+            if ($match.Success) { $currentColor = $match.Value }
+        }
+        $strippedLine = $infoLines[$i] -replace '^\x1b\[[0-9;]*m', ''
+        $strippedLine = $strippedLine -replace [regex]::Escape($resolvedosc), $currentColor
+        Write-Host "`e[${cursorColumn}G$currentColor$strippedLine"
+    }
+    Write-Host $color.reset
+}
 
 function hyperc($larp, [switch]$clean) {
 	if ($larp) {
@@ -2699,6 +2749,7 @@ function hyperc($larp, [switch]$clean) {
 Export-ModuleMember -Variable color
 Export-ModuleMember -Variable time
 Export-ModuleMember -Variable esc
+Export-ModuleMember -Variable validOSes
 Export-ModuleMember -Function *
 
 # clib // Copyright (c) cerealdev 2026
