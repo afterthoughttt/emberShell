@@ -1,0 +1,130 @@
+$idocsPath = $global:eShScriptRoot
+$entries = Get-ChildItem -Path $idocsPath -Filter "*.esh" |
+	Where-Object { $_.Name -ne "gui.esh" } |
+	Sort-Object Name
+
+$selected = 0
+
+$ESC = [char]27
+function New_Ansi($code) { return "$ESC[$code`m" }
+
+$BB        = New_Ansi "44;37"
+$BB_W      = New_Ansi "44;97"
+$BB_DG     = New_Ansi "44;90"
+$BB_BOLD   = New_Ansi "44;97;1"
+$BB_CYAN   = New_Ansi "44;96"
+$BB_GREEN  = New_Ansi "44;92"
+$BB_YELLOW = New_Ansi "44;93"
+$BB_RED    = New_Ansi "44;91"
+$BG        = New_Ansi "47;34;1"
+$BG_SEL    = New_Ansi "47;34;1"
+$RESET     = New_Ansi "0"
+
+function Pad_Right($str, $len) {
+	if ($null -eq $str) { $str = "" }
+	if ($str.Length -ge $len) { return $str.Substring(0, $len) }
+	return $str + (" " * ($len - $str.Length))
+}
+
+function Format-FileSize($bytes) {
+	if ($bytes -lt 1024)       { return "$bytes B" }
+	if ($bytes -lt 1048576)    { return "$([Math]::Round($bytes / 1024, 1)) KB" }
+	return "$([Math]::Round($bytes / 1048576, 1)) MB"
+}
+
+function Render_Screen {
+	$W       = [Console]::WindowWidth
+	$H       = [Console]::WindowHeight
+	$leftW   = [Math]::Floor($W * 0.55)
+	$detH    = 7
+	$visRows = $H - 5 - $detH + 1
+
+	$e = $entries[$selected]
+	[Console]::SetCursorPosition(0, 0)
+
+	# header
+	$title  = " Interactive Documents "
+	$hpad   = [Math]::Max(0, [Math]::Floor(($W - $title.Length) / 2))
+	$header = Pad_Right ((" " * $hpad) + $title) $W
+	Write-Host "$BG$header$RESET"
+
+	# top divider
+	$divider = [string][char]0x2550 * $W
+	Write-Host "$BB_W$divider$RESET"
+
+	# list
+	$startIdx = [Math]::Max(0, [Math]::Min($selected - [Math]::Floor($visRows / 2), $entries.Count - $visRows))
+	if ($startIdx -lt 0) { $startIdx = 0 }
+
+	for ($r = 0; $r -lt $visRows; $r++) {
+		$idx = $startIdx + $r
+		if ($idx -ge $entries.Count) {
+			Write-Host "$BB$(" " * $W)$RESET"
+			continue
+		}
+		$item  = $entries[$idx]
+		$isSel = ($idx -eq $selected)
+		$name  = [System.IO.Path]::GetFileNameWithoutExtension($item.Name)
+
+		if ($isSel) {
+			$nameStr = Pad_Right $name ($leftW - 4)
+			$row     = Pad_Right " $([char]0xBB) $nameStr" $leftW
+			$rest    = Pad_Right "" ($W - $leftW)
+			Write-Host "$BG_SEL$row$rest$RESET"
+		} else {
+			$nameStr = Pad_Right $name ($leftW - 3)
+			$row     = Pad_Right "   $nameStr" $leftW
+			$rest    = Pad_Right "" ($W - $leftW)
+			Write-Host "$BB_DG$row$rest$RESET"
+		}
+	}
+
+	# mid divider
+	Write-Host "$BB_W$divider$RESET"
+
+	# detail header
+	$dHeader = Pad_Right " $([char]0xBB) $([System.IO.Path]::GetFileNameWithoutExtension($e.Name))" $W
+	Write-Host "$BB_BOLD$dHeader$RESET"
+
+	# detail rows
+	function Det_Row($label, $val) {
+		$l = Pad_Right "  $label" 18
+		$v = Pad_Right $val ($W - 18)
+		Write-Host -NoNewline "$BB_CYAN$l$RESET"
+		Write-Host "$BB_W$v$RESET"
+	}
+
+	Det_Row "Size"     (Format-FileSize $e.Length)
+	Det_Row "Modified" $e.LastWriteTime.ToString("yyyy-MM-dd  HH:mm:ss")
+	Det_Row "Created"  $e.CreationTime.ToString("yyyy-MM-dd  HH:mm:ss")
+
+	for ($p = (3 + $descLines.Count); $p -lt ($detH - 1); $p++) {
+		Write-Host "$BB$(" " * $W)$RESET"
+	}
+
+	# footer
+	$footer = Pad_Right "  [↑] [↓] Navigate    [Enter] Open    [Q] Quit" $W
+	Write-Host "$BG$footer$RESET" -nonewline
+}
+
+[Console]::CursorVisible = $false
+Clear-Host
+Render_Screen
+
+$running = $true
+while ($running) {
+	$key = [Console]::ReadKey($true)
+	switch ($key.Key) {
+		"UpArrow"   { $selected = ($selected - 1 + $entries.Count) % $entries.Count; Render_Screen }
+		"DownArrow" { $selected = ($selected + 1) % $entries.Count; Render_Screen }
+		"Q" { [Console]::CursorVisible = $true; Clear-Host; $running = $false; return }
+		"Enter"     {
+			$name = [System.IO.Path]::GetFileNameWithoutExtension($entries[$selected].Name)
+			[Console]::CursorVisible = $true
+			Clear-Host
+			idoc $name
+			$running = $false
+			return
+		}
+	}
+}

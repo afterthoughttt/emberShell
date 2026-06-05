@@ -1,7 +1,0 @@
-== Dependencies ==
-	  lscpu
-	  lsblk
-	  lspci
-	  nproc
-	dmidecode
-	powershell

@@ -1,0 +1,12 @@
+Linux:
+  lscpu     (cfetch)
+  lsblk     (cfetch)
+  lspci     (cfetch)
+  nproc     (cfetch)
+  dmidecode (cfetch)
+  PowerShell
+
+Windows:
+  Theoretical: PowerShell 4.0+
+  Known Works: PowerShell 5.1+
+  Recommended: PowerShell 7.1+

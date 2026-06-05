@@ -2,10 +2,25 @@ $emberRoot = Split-Path -Parent $PSScriptRoot
 $Host.UI.RawUI.WindowTitle = "emberShell"
 $config = Get-Content (Join-Path $emberRoot "emberCore\emberConfig.json") -Raw | ConvertFrom-Json
 $shell  = Get-Content (Join-Path $emberRoot "emberCore\emberShell.json")  -Raw | ConvertFrom-Json
+$psver = "7.7.0-preview.2"
+$psver = $psver.Split('-')[0]  # returns "7.7.0"
+if (test-path /etc/os-release) {
+	$name = (cat /etc/os-release | ? { $_ -match "^NAME=" }).Split('=')[1].Trim('"')
+	$ver  = (cat /etc/os-release | ? { $_ -match "^VERSION=" }).Split('=')[1].Trim('"')
+	if ($name -and $ver) {
+		$osdat = "$name $ver"
+	} elseif ($name) {
+		$osdat = $name
+	} elseif ($ver) {
+		$osdat = $ver
+	}
+}
 $ESVersionTable = @{
 	ESVersion = "$($shell.shell_version)"
 	ESEdition = "$($shell.sv_name)"
 	clibVersion = "$($shell.clib_version)"
+	ESParent = "PowerShell $psver-$($PSVersionTable.PSEdition)" # change this when porting to other shells/langs
+	OS = "$osdat"
 }
 if ($config.show_esh_Version) {
 	$esc = [char]0x1b
@@ -25,14 +40,14 @@ if ($config.show_clib_Version) {
 	}
 }
 
-if ($config.start_dir) {
+<#if ($config.start_dir) {
     $dir = [Environment]::ExpandEnvironmentVariables($config.start_dir)
     if (Test-Path $dir) {
         Set-Location $dir
     } else {
         Write-Host "start_dir '$dir' does not exist." -ForegroundColor Red
     }
-}
+} #> # deprecated
 
 if ($config.aliaspack) { # opt-in aliaspack
 	# set-alias cpkg winget # replaced by cpkg native
@@ -42,6 +57,16 @@ if ($config.aliaspack) { # opt-in aliaspack
 	set-alias pwease sudo
 	set-alias dewete rm
 	#>
+}
+
+if ($config.aliaspack) {
+	function mk($path) {
+		if ($path.EndsWith('/') -or $path.EndsWith('\')) {
+			New-Item -ItemType Directory -Path $path.TrimEnd('/\')
+		} else {
+			New-Item -ItemType File -Path $path
+		}
+	}
 }
 
 <#
@@ -73,7 +98,7 @@ if(get-command apt -ErrorAction SilentlyContinue) {
 	$pmngr = "n/a"
 }
 
-function cpkg($action, $package) {
+function legacpkg($action, $package) {
 	if ($package) {
 		if ($pmngr -eq "apt") {
 			if($action -in @("install","inst")) {
@@ -217,10 +242,15 @@ function esh {
     }
     $path = Resolve-Path $file -ErrorAction Stop
     $global:eShScriptRoot = Split-Path -Parent $path
-    $temp = [System.IO.Path]::ChangeExtension([System.IO.Path]::GetTempFileName(), ".psm1")
-    Copy-Item $path $temp
-    Import-Module $temp -Force -Global
-    Remove-Item $temp
+    $tempDir = [System.IO.Path]::GetTempPath()
+    $tempName = [System.IO.Path]::GetFileNameWithoutExtension($path) + ".ps1"
+    $temp = Join-Path $tempDir $tempName
+    Copy-Item $path $temp -Force
+    try {
+        . $temp
+    } finally {
+        Remove-Item $temp -Force -ErrorAction SilentlyContinue
+    }
 }
 
 function Read-EsxPaths {
@@ -330,6 +360,7 @@ if($config.lids) { # not recommended on macos     // "Linux Identity Spoof"
 if (-not $global:clib_panic_addon) {
 	function Invoke-Panic {
 		param([string]$Message = "A fatal error has occurred.")
+		$Host.UI.RawUI.WindowTitle = "SHELL PANIC!"
 		[Console]::BackgroundColor = "DarkBlue"
 		[Console]::ForegroundColor = "White"
 		[Console]::Clear()
@@ -354,4 +385,21 @@ if (-not $global:clib_panic_addon) {
 $emberRice = Get-Content (Join-Path $global:emberRoot "emberCore\ember.rice") -Raw | ConvertFrom-Json
 $emberRice.PSObject.Properties | ForEach-Object {
     esx $_.Name $_.Value -ErrorAction SilentlyContinue
+}
+
+function idoc($name) {
+	if (!$name) {
+		if (test-path (join-path $emberRoot "emberCore/idocs/gui.esh")) {
+			esh (join-path $emberRoot "emberCore/idocs/gui")
+		} else {
+			invoke-panic "idocs/gui is missing please manually navigate idocs." # this should not happen unless you use a debloater.
+		}
+	}
+	elseif (test-path (join-path $emberRoot "emberCore/idocs")) {
+		if (test-path (join-path $emberRoot "emberCore/idocs/$name`.esh")) {
+			esh (join-path $emberRoot "emberCore/idocs/$name")
+		} else {
+			invoke-panic "Attempt to call Invalid idoc." # this should not happen unless you make a typo or use a debloater.
+		}
+	}
 }

@@ -1,0 +1,130 @@
+{
+	"Alacritty": {
+		"Order": 1,
+		"Name": "Alacritty",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly, most thoroughly tested"
+	},
+	"Windows_Terminal": {
+		"Order": 2,
+		"Name": "Windows Terminal",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Conhost": {
+		"Order": 3,
+		"Name": "Conhost",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"MinTTY": {
+		"Order": 4,
+		"Name": "MinTTY",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Tabby": {
+		"Order": 5,
+		"Name": "Tabby",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Konsole": {
+		"Order": 6,
+		"Name": "Konsole",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Kitty": {
+		"Order": 7,
+		"Name": "Kitty",
+		"Compatibility": "Likely to work",
+		"_Fix": "Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"WezTerm": {
+		"Order": 8,
+		"Name": "WezTerm",
+		"Compatibility": "Likely to work",
+		"_Fix": "Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"Foot": {
+		"Order": 9,
+		"Name": "Foot",
+		"Compatibility": "Likely to work",
+		"_Fix": "Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"GNOME_Terminal": {
+		"Order": 10,
+		"Name": "GNOME Terminal",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"XFCE_Terminal": {
+		"Order": 11,
+		"Name": "XFCE Terminal",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"rxvt_unicode": {
+		"Order": 12,
+		"Name": "rxvt-unicode (urxvt)",
+		"Compatibility": "Likely to work",
+		"_Fix": "Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"st": {
+		"Order": 13,
+		"Name": "st (suckless terminal)",
+		"Compatibility": "Likely to work",
+		"_Fix": "Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"Termux": {
+		"Order": 14,
+		"Name": "Termux",
+		"Compatibility": "Compatible",
+		"_Fix": "Unlikely",
+		"_Status": "Tested",
+		"_extDesc": "Annoying to get working"
+	},
+	"Apple_Terminal": {
+		"Order": 15,
+		"Name": "Apple Terminal",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Unlikely",
+		"_Status": "Untested",
+		"_extDesc": "Will not be supported without PRs"
+	},
+	"Other_Terminals": {
+		"Order": 16,
+		"Name": "Other Terminals",
+		"Compatibility": "Unknown",
+		"_Fix": "Unknown",
+		"_Status": "Untested",
+		"_extDesc": "Compatibility unknown, untested"
+	}
+}

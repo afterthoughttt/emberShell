@@ -45,7 +45,7 @@ if(get-command apt -ErrorAction SilentlyContinue) {
 	exit 2
 }
 
-function cpkg($package) {
+function cpkg($package) { # this is a MINIMAL cpkg wrapper. do not rely on this in eSh
 	if ($pmngr -eq "apt") {
 		if ($useSudo) {
 			sudo apt install -y $package
@@ -163,7 +163,8 @@ if ($instPkgs) {
 		}
 	}
 }
-
+Get-ChildItem $root -Recurse -Include "desktop.ini","Thumbs.db" | Remove-Item -Force
+write-host "Deleted Windows Litter"
 $delWF = confirm "Delete Redundant files?" "Y" "n" $true
 if ($delWF) {
 	crm "setup.ps1"
@@ -179,6 +180,7 @@ $delDoc = confirm "Delete Documentation?" "y" "N" $false
 if ($delDoc) {
 	crm "README.txt"
 	crm "Documentation" -recurse
+	# crm "emberCore/idocs" -recurse # DO NOT!!! THIS WILL MAKE eSh CRASH!!
 }
 
 $corePath    = Join-Path $root "emberCore/emberCore.psm1"

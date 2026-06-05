@@ -3,3 +3,5 @@ emberPulse/node_modules/
 emberCore/path.ls
 emberCore/ember.rice
 dev/
+emberShell.ps1
+emberShell.bat

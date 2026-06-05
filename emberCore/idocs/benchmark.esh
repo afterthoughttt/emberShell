@@ -1,0 +1,139 @@
+$jsonPath = Join-Path $eShScriptRoot "bmark.json"
+$raw = Get-Content $jsonPath -Raw | ConvertFrom-Json
+$entries = $raw.PSObject.Properties | ForEach-Object { $_.Value } | Sort-Object { $_.Order }
+
+$selected = 0
+
+$ESC = [char]27
+function New_Ansi($code) { return "$ESC[$code`m" }
+
+$BB        = New_Ansi "44;37"
+$BB_W      = New_Ansi "44;97"
+$BB_DG     = New_Ansi "44;90"
+$BB_BOLD   = New_Ansi "44;97;1"
+$BB_CYAN   = New_Ansi "44;96"
+$BB_GREEN  = New_Ansi "44;92"
+$BB_YELLOW = New_Ansi "44;93"
+$BB_RED    = New_Ansi "44;91"
+$BG        = New_Ansi "47;34;1"
+$BG_SEL    = New_Ansi "47;34;1"
+$RESET     = New_Ansi "0"
+
+function Get-BootColor($time) {
+	if ($null -eq $time -or $time -eq "N/A") { return $BB_DG }
+	if ($time -match "^~?(\d+(\.\d+)?) s") {
+		$secs = [double]$Matches[1]
+		if ($secs -ge 2)   { return $BB_RED }
+		if ($secs -ge 0.8) { return $BB_YELLOW }
+		return $BB_GREEN
+	}
+	if ($time -match "ms") { return $BB_GREEN }
+	return $BB_DG
+}
+
+function Pad_Right($str, $len) {
+	if ($null -eq $str) { $str = "" }
+	if ($str.Length -ge $len) { return $str.Substring(0, $len) }
+	return $str + (" " * ($len - $str.Length))
+}
+
+function Render_Screen {
+	$W       = [Console]::WindowWidth
+	$H       = [Console]::WindowHeight
+	$leftW   = [Math]::Floor($W * 0.55)
+	$compatW = 16
+	$detH    = 7
+	$visRows = $H - 5 - $detH + 2
+
+	$e = $entries[$selected]
+	[Console]::SetCursorPosition(0, 0)
+
+	# header
+	$title  = " cfetch -- Boot Benchmark "
+	$hpad   = [Math]::Max(0, [Math]::Floor(($W - $title.Length) / 2))
+	$header = Pad_Right ((" " * $hpad) + $title) $W
+	Write-Host "$BG$header$RESET"
+
+	# top divider
+	$divider = [string][char]0x2550 * $W
+	Write-Host "$BB_W$divider$RESET"
+
+	# list
+	$startIdx = [Math]::Max(0, [Math]::Min($selected - [Math]::Floor($visRows / 2), $entries.Count - $visRows))
+	if ($startIdx -lt 0) { $startIdx = 0 }
+
+	for ($r = 0; $r -lt $visRows; $r++) {
+		$idx = $startIdx + $r
+		if ($idx -ge $entries.Count) {
+			Write-Host "$BB$(" " * $W)$RESET"
+			continue
+		}
+		$item  = $entries[$idx]
+		$isSel = ($idx -eq $selected)
+
+		$compatStr = if ($item._WarmBoot) { $item._WarmBoot } else { "N/A" }
+		if ($compatStr.Length -gt $compatW) { $compatStr = $compatStr.Substring(0, $compatW) }
+		$compatPad = Pad_Right $compatStr $compatW
+
+		if ($isSel) {
+			$nameStr = Pad_Right $item.Name ($leftW - 4)
+			$row     = Pad_Right " $([char]0xBB) $nameStr" $leftW
+			$badge   = " [$compatPad]"
+			$rest    = Pad_Right "" ($W - $leftW - $badge.Length)
+			Write-Host "$BG_SEL$row$badge$rest$RESET"
+		} else {
+			$nameStr = Pad_Right $item.Name ($leftW - 3)
+			$row     = Pad_Right "   $nameStr" $leftW
+			$bracketL = " ["
+			$bracketR = "]"
+			$rest     = Pad_Right "" ($W - $leftW - 2 - $compatW - 1)
+			Write-Host -NoNewline "$BB_DG$row$bracketL$RESET"
+			Write-Host -NoNewline "$(Get-BootColor $item._WarmBoot)$compatPad$RESET"
+			Write-Host "$BB_DG$bracketR$rest$RESET"
+		}
+	}
+
+	# mid divider
+	Write-Host "$BB_W$divider$RESET"
+
+	# detail header
+	$dHeader = Pad_Right " $([char]0xBB) $($e.Name)" $W
+	Write-Host "$BB_BOLD$dHeader$RESET"
+
+	# detail rows
+	$coldColor = Get-BootColor $e._ColdBoot
+	$warmColor = Get-BootColor $e._WarmBoot
+
+	function Det_Row($label, $val, $valColor) {
+		$l   = Pad_Right "  $label" 18
+		$v   = Pad_Right $val ($W - 18)
+		Write-Host -NoNewline "$BB_CYAN$l$RESET"
+		Write-Host "$valColor$v$RESET"
+	}
+
+	Det_Row "Cold Boot" $e._ColdBoot $coldColor
+	Det_Row "Warm Boot" $e._WarmBoot $warmColor
+
+	for ($p = (3 + $descLines.Count); $p -lt ($detH - 1); $p++) {
+		Write-Host "$BB$(" " * $W)$RESET"
+	}
+
+	# footer
+	$footer = Pad_Right "  [↑] [↓] Navigate    [Q] Quit" $W
+	Write-Host "$BG$footer$RESET" -nonewline
+}
+
+[Console]::CursorVisible = $false
+Clear-Host
+Render_Screen
+
+$running = $true
+while ($running) {
+	$key = [Console]::ReadKey($true)
+	switch ($key.Key) {
+		"UpArrow"   { $selected = ($selected - 1 + $entries.Count) % $entries.Count; Render_Screen }
+		"DownArrow" { $selected = ($selected + 1) % $entries.Count; Render_Screen }
+		"Q"         { [Console]::CursorVisible = $true; Clear-Host; $running = $false; idoc}
+		"Escape"    { [Console]::CursorVisible = $true; Clear-Host; $running = $false; return }
+	}
+}

@@ -1,0 +1,92 @@
+{
+	"WT_eSh": {
+		"Order": 1,
+		"Name": "Windows Terminal — emberShell",
+		"_ColdBoot": "~2.2s",
+		"_WarmBoot": "~380 ms"
+	},
+	"WT_PS7": {
+		"Order": 2,
+		"Name": "Windows Terminal — PowerShell 7.6.1",
+		"_ColdBoot": "~2s",
+		"_WarmBoot": "~355 ms"
+	},
+	"WT_PS5": {
+		"Order": 3,
+		"Name": "Windows Terminal — PowerShell 5.1.2",
+		"_ColdBoot": "~1.8s",
+		"_WarmBoot": "~312 ms"
+	},
+	"CH_eSh": {
+		"Order": 4,
+		"Name": "ConHost — emberShell",
+		"_ColdBoot": "~1.8s",
+		"_WarmBoot": "~350 ms"
+	},
+	"CH_PS7": {
+		"Order": 5,
+		"Name": "ConHost — PowerShell 7.6.1",
+		"_ColdBoot": "~1.9s",
+		"_WarmBoot": "~360 ms"
+	},
+	"CH_PS5": {
+		"Order": 6,
+		"Name": "ConHost — PowerShell 5.1.2",
+		"_ColdBoot": "~1.7s",
+		"_WarmBoot": "~307 ms"
+	},
+	"ISE_PS5": {
+		"Order": 7,
+		"Name": "PowerShell ISE — PowerShell 5.1.2",
+		"_ColdBoot": "~1.9s",
+		"_WarmBoot": "~210 ms"
+	},
+	"ISEx86_PS5": {
+		"Order": 8,
+		"Name": "PowerShell ISE (x86) — PowerShell 5.1.2",
+		"_ColdBoot": "~2.4s",
+		"_WarmBoot": "~360 ms"
+	},
+	"Mintty_PS7": {
+		"Order": 9,
+		"Name": "MinTTY 3.8.2 — PowerShell 7.6.1",
+		"_ColdBoot": "~2.2s",
+		"_WarmBoot": "~354 ms"
+	},
+	"Mintty_PS5": {
+		"Order": 10,
+		"Name": "MinTTY 3.8.2 — PowerShell 5.1.2",
+		"_ColdBoot": "~1.9s",
+		"_WarmBoot": "~388 ms"
+	},
+	"Kon_PS7": {
+		"Order": 11,
+		"Name": "Konsole 250402 — PowerShell 7.6.1",
+		"_ColdBoot": "~1.1s",
+		"_WarmBoot": "~500 ms"
+	},
+	"TTY_PS7": {
+		"Order": 12,
+		"Name": "Linux TTY — PowerShell 7.6.1",
+		"_ColdBoot": "~750 ms",
+		"_WarmBoot": "~600 ms"
+	},
+	"SSH_D7W5": {
+		"Order": 13,
+		"Name": "SSH (Debian: 7.6.1, Windows: 5.1.2)",
+		"_ColdBoot": "~1.5s",
+		"_WarmBoot": "~800 ms"
+	},
+	"SSH_D7W7": {
+		"Order": 14,
+		"Name": "SSH (Debian: 7.6.1, Windows: 7.6.1)",
+		"_ColdBoot": "~1.2s",
+		"_WarmBoot": "~677 ms"
+	},
+	"SSH_D7WeSh": {
+		"Order": 15,
+		"Name": "SSH (Debian: 7.6.1, Windows: emberShell)",
+		"_ColdBoot": "~924 ms",
+		"_WarmBoot": "~667 ms"
+	}
+}

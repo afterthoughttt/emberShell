@@ -104,7 +104,7 @@ function confirm($content, $y, $n, $default) {
 
 function uac {
 	if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-		Start-Process powershell -Verb RunAs -ArgumentList "-File `"$PSCommandPath`""
+		Start-Process powershell -Verb RunAs -ArgumentList "-NoExit -File `"$PSCommandPath`""
 		exit
 	}
 }
@@ -483,7 +483,7 @@ function htaToolPure {
     $r = [Convert]::ToInt32($Hex.Substring(0,2),16)
     $g = [Convert]::ToInt32($Hex.Substring(2,2),16)
     $b = [Convert]::ToInt32($Hex.Substring(4,2),16)
-	if (-not ($host.Name -eq "Windows PowerShell ISE Host" -or $psise)) {
+	if (-not ($host.Name -eq "Windows PowerShell ISE Host")) {
 		return "${esc}[38;2;$r;$g;${b}m"
 	}
 }
@@ -697,7 +697,7 @@ write-output "$($color.debian)
   ,g`$`$P`"        `"`"`"Y`$`$.`".
  ,`$`$P'              '`$`$`$.
 ',`$`$P       ,ggs.     '`$`$b:
-`d`$`$'     ,`$P`"'   $($color.debian).$($color.debian)    `$`$`$
+ `d`$`$'     ,`$P`"'   $($color.debian).$($color.debian)    `$`$`$
  `$`$P      d`$'     $($color.debian),$($color.debian)    `$`$P
  `$`$:      `$`$.   $($color.debian)-$($color.debian)    ,d`$`$'
  `$`$;      Y`$b._   _,d`$P'
@@ -717,7 +717,7 @@ write-output "$($color.lesbian1)
   ,g`$`$P`"        `"`"`"Y`$`$.`".
 $($color.lesbian2) ,`$`$P'              '`$`$`$.
 ',`$`$P       ,ggs.     '`$`$b:
-`d`$`$'     ,`$P`"'   .    `$`$`$
+ `d`$`$'     ,`$P`"'   .    `$`$`$
 $($color.white) `$`$P      d`$'     ,    `$`$P
  `$`$:      `$`$.   -    ,d`$`$'
  `$`$;      Y`$b._   _,d`$P'
@@ -821,28 +821,28 @@ handmade by cereal <3
        ▀
 		"
 	} elseif($type -eq "mac") {
-		write-output "$($color.cyan)
-                        ██████                                 
-                      ███████                                  
-                     ███████                                   
-                    ███████                                    
-                    ████                                       
-       ███████████      █████████                             
-      ██████████████████████████████                           
-    █████████████████████████████████                          
-   ████████████████████████████████                            
-   ██████████████████████████████                              
-  ██████████████████████████████                               
-  ██████████████████████████████                               
-  ███████████████████████████████                              
-   ██████████████████████████████                              
-   ████████████████████████████████                            
-   ██████████████████████████████████                          
-    ██████████████████████████████████                         
-     ████████████████████████████████                          
-      ██████████████████████████████                           
-        ███████████████████████████                            
-         ████████████████████████                              
+		write-output "$($color.mint)
+                        ██████
+                      ███████
+                     ███████
+                    ███████
+                    ████
+       ███████████      █████████
+      ██████████████████████████████
+  $($color.gold)  █████████████████████████████████
+   ████████████████████████████████
+   ██████████████████████████████
+ $($color.lesbian2) ██████████████████████████████
+  ██████████████████████████████
+  ███████████████████████████████
+ $($color.debian)  ██████████████████████████████
+   ████████████████████████████████
+   ██████████████████████████████████
+  $($color.lesbian3)  ██████████████████████████████████
+     ████████████████████████████████
+      ██████████████████████████████
+    $($color.win11)    ███████████████████████████
+         ████████████████████████
            █████         █████
 		" # ▀▌█▐▄
 	} elseif($type -eq "tux" -or $type -eq "linux") {
@@ -1177,6 +1177,42 @@ $($color.debian)        ▄▄▄   ▄▄████▄▄ ▄▄▄▄
 		$conswidth = $Host.UI.RawUI.WindowSize.Width
 		$bar = repstring "█" $conswidth append
 		write-output "`n$($color.black)$bar`n$bar`n$($color.red)$bar`n$bar`n$($color.gold)$bar`n$bar`n`n"
+	} elseif ($type -eq "winmeows") {
+		write-output "
+                                          $($color.azure)█$($color.win11)              
+                                         ███$($color.azure)█$($color.win11)             
+        $($color.azure)█$($color.win11)███                             ███$($color.azure)█$($color.win11)             
+       $($color.azure)██$($color.win11)███                           ██████$($color.azure)█$($color.win11)            
+       $($color.azure)█$($color.win11)████                           ███████$($color.azure)███$($color.win11)          
+       $($color.azure)█$($color.win11)███████               ████████████████████        
+      $($color.azure)█$($color.win11)█████████████████    ███████████████████████       
+    █████████████████████   ███████████████████████       
+    █████████████████████   ████████████████████████      
+    ██████████████████████ █████████████████████████      
+    ██████████████████████ ████████$($color.azure)███$($color.win11)███████████████     
+    █████████████$($color.azure)███$($color.win11)██████  ██████$($color.azure)█████$($color.win11)███████████████    
+    ███████████$($color.azure)██████$($color.win11)█████  ██████$($color.azure)█$($color.win11)██$($color.azure)█$($color.win11)███████████████     
+    ███████████████████████ ██████████████████████████    
+    ███████████████████████ ██████████████████████████    
+    ███████████████████████  █████████████████████████    
+    ██████████████████████   █████████████████████████    
+     ████████████████████     ████████████████████████    
+      ██████████                    ████████████████     
+          █████████                   ███████           
+      █████████████████████ $($color.cereal)█████$($color.win11)████       ███████████   
+     ███████████████████████$($color.cereal)█████$($color.win11)██████████$($color.azure)█$($color.win11)████████████         ████          
+    ██████████████$($color.azure)██$($color.win11)███████$($color.cereal)████$($color.win11)█$($color.azure)████$($color.win11)████$($color.azure)███$($color.win11)█████████████         █████         
+    ███████████████$($color.azure)█████████$($color.win11)██ ████$($color.azure)█████$($color.win11)████████████████        ██████         
+     ██████████████████████████ ████████████████████████        █████          
+      █████████████████████████ ████████████████████████       ██████          
+      █████████████████████████ ████████████████████████      ██████           
+       ████████████████████████ ████████████████████████      █████            
+       ████████████████████████ ███████████████████████     ███████            
+        ██████████████████████   ██████████████████████   ████████             
+         █████████████████████    ██████████████████████████████               
+          █████████████████         ██████████████████████████                 
+             ██████████████             ███████████
+			 "
 	} else {
 		if(-not $fwd) {
 			watermark $type -fwd
@@ -1237,7 +1273,7 @@ Write-Host $line
 }
 
 function Reset-CIMCache {
-	if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and !($IsMacOS))) {
 		$script:osInfo = Get-CimInstance Win32_OperatingSystem
 		$script:csystem = get-ciminstance Win32_ComputerSystem
 		$script:csysprod = get-ciminstance Win32_ComputerSystemProduct
@@ -1246,20 +1282,40 @@ function Reset-CIMCache {
 		$script:ram = get-ciminstance Win32_PhysicalMemory
 		$script:mobo = get-ciminstance Win32_BaseBoard
 		$script:bios = get-ciminstance Win32_BIOS
+		$parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($PID)"
+		$parentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($parent.ParentProcessId)"
+		$script:sh = $parentProcess.Name
+		if ($script:sh -eq "cmd.exe") {
+			$script:cmdver = "$([System.Environment]::OSVersion.Version)"
+		}
 	}
 }
 Reset-CIMCache
-
-function Get-OSKey {
+function Test-OsRelease {
+    param([string]$Path = "/etc/os-release")
+    if (-not (Test-Path $Path)) { return $false }
+    $lines = Get-Content $Path -ErrorAction SilentlyContinue
+    if (-not $lines) { return $false }
+    $validLine  = '^[A-Z_][A-Z0-9_]*=(".*"|''.*''|[^"'' ].*)$'
+    $validCount = ($lines | Where-Object { $_ -match $validLine }).Count
+    if ($validCount -lt 2) { return $false }
+    $hasName = $lines | Where-Object { $_ -match '^(NAME|ID)=' }
+    return [bool]$hasName
+}
+function Get-OSKey([switch]$skipOSR) {
 	if($IsDiscord) { return "discord" } # wow discord os
     $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     if ($os -match "Windows") {
-        $caption = $script:osInfo.Caption
-        if ($caption -match "Windows 11") { return "win11_fetch" }
-        elseif ($caption -match "Windows 10") { return "win10_fetch" }
-        else { return "win_fetch" }
+		if (Test-OsRelease -and -not $skipOSR) {
+			$os = "Linux"
+		} else {
+			$caption = $script:osInfo.Caption
+			if ($caption -match "Windows 11") { return "win11_fetch" }
+			elseif ($caption -match "Windows 10") { return "win10_fetch" }
+			else { return "win_fetch" }
+		}
     }
-    elseif ($os -match "Linux") {
+    if ($os -match "Linux") {
         if (-not (Test-Path /etc/os-release)) {
             return "tux"
         }
@@ -1289,6 +1345,8 @@ function Get-OSKey {
 			"manjaro" {"manjaro"}
 			"kali" {"kali"}
 			"raspbian" {"raspbian"}
+			"windows" {"win11_fetch"}
+			"winmeows" {"winmeows"}
             default      { "tux" }
         }
 		if ($ResolvedOSK -ne "tux") {
@@ -1306,7 +1364,7 @@ function Get-OSKey {
 				($pretty_name -match "cerealos")    { "cerealos" } # **my** operating system??
 				($pretty_name -match "ubuntu")    { "ubuntu" }
 				($pretty_name -match "uwuntu")    { "uwuntu" }
-				"pop"       { "pop" }
+				($pretty_name -match "pop")       { "pop" }
 				($pretty_name -match "android") { "android" }
 				($pretty_name -match "amogos") { "amogos" }
 				($pretty_name -match "alpine") { "alpine" }
@@ -1338,6 +1396,7 @@ function Get-OSKey {
 				"suse" { "opensuse" }
 				"gentoo" { "gentoo" }
 				"kali" {"kali"}
+				"windows" {"win11_fetch"}
 				default      { "tux" }
 			}
 		}
@@ -1357,7 +1416,7 @@ function lesbian{
 }
 
 function resolveOSC($OSin) {
-	if($OSin -eq "arch" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
+	if($OSin -eq "arch" -or $OSin -eq "winmeows" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
 		return $($color.win11)
 	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord") {
 		return $($color.win10)
@@ -1421,26 +1480,175 @@ $validOSes = @(
 "discord",
 "manjaro",
 "kali",
-"raspbian", "pi", "raspberry"
+"raspbian", "pi", "raspberry",
+"winmeows"
 )
 
 $annoyingOEM = @{
 	"Shenzhen DOKE electronic co.,LTD" = "Blackview"
 	"Acebook 12" = "TU140" # 556B REVO3"
+} # pls lmk if theres more
+$script:psget_count = 0
+function lspkg([switch]$winget, [switch]$langpkgs) {
+	if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!$IsLinux -and !$IsMacOS)) {
+		if ($winget) {
+			if (gcm winget -ea silentlycontinue) {
+				$script:wget_raw = winget list --disable-interactivity --accept-source-agreements 2>$null
+				$script:wget_count = ($script:wget_raw | Where-Object { $_ -match '\S' }).Count - 2
+			}
+		}
+		if (gcm scoop -ea silentlycontinue) {
+			$script:scoop_count = (ls "$env:USERPROFILE\scoop\apps" -di 2>$null).Count - 1
+		}
+		if (gcm choco -ea silentlycontinue) {
+			$script:choco_raw = choco list 2>$null
+			$script:choco_count = if ($script:choco_raw[-1] -match '(\d+) packages? installed') { [int]$Matches[1] } else { 0 }
+		}
+		if (gcm cpkg -ea silentlycontinue) {
+			$script:cpkg_count = cpkg c -n
+		}
+		if (test-path C:\msys64\usr\bin\bash.exe) {
+			$script:pacman_raw = & C:\msys64\usr\bin\bash.exe --login -i -c "pacman -Q" | Measure-Object -Line
+			$script:pacman_count = $script:pacman_raw.Lines
+		}
+		if ($langpkgs) {
+			if (gcm npm -ea silentlycontinue) {
+				$script:npm_count = npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+			if (gcm pip -ea silentlycontinue) {
+				$script:pip_count = pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+			if (gcm cargo -ea silentlycontinue) {
+				$script:cargo_raw = cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines
+				$script:cargo_count = $cargo_raw / 2
+			}
+			if (gcm gem -ea silentlycontinue) {
+				$script:gem_count = gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+			if (gcm Get-InstalledPSResource -ea silentlycontinue) {
+				$script:psget_raw = Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count
+				$script:psget_count += $script:psget_raw
+			}
+			if (gcm Get-InstalledModule -ea silentlycontinue) {
+				$script:psget_raw = Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count
+				$script:psget_count += $script:psget_raw
+			}
+			if (gcm luarocks -ea silentlycontinue) {
+				$script:luarocks_count = luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+		}
+	}
+	if ($IsLinux) {
+		if (gcm dpkg-query -ea silentlycontinue) {
+			$script:apt_count = (dpkg-query -f '.\n' -W 2>$null).Count
+		}
+		if (gcm pacman -ea silentlycontinue) {
+			$script:pacman_count = (pacman -Qq 2>$null).Count
+		}
+		if (gcm rpm -ea silentlycontinue) {
+			$script:rpm_count = (rpm -qa 2>$null).Count
+		}
+		if (gcm zypper -ea silentlycontinue) {
+			$script:zypper_count = (zypper se --installed-only 2>$null).Count - 5
+		}
+		if (gcm flatpak -ea silentlycontinue) {
+    		$script:flatpak_count = (flatpak list 2>$null).Count - 1
+		}
+		if (gcm snap -ea silentlycontinue) {
+    		$script:snap_count = (snap list 2>$null).Count - 1
+		}
+		if (gcm brew -ea silentlycontinue) {
+    		$script:brew_count = (brew list 2>$null).Count
+		}
+		if (gcm nix-env -ea silentlycontinue) {
+    		$script:nix_count = (nix-env -q 2>$null).Count
+		}
+		if (gcm xbps-query -ea silentlycontinue) {
+    		$script:xbps_count = (xbps-query -l 2>$null).Count
+		}
+		if (gcm apk -ea silentlycontinue) {
+    		$script:apk_count = (apk info 2>$null).Count
+		}
+		if (gcm qlist -ea silentlycontinue) {
+		    $script:emerge_count = (qlist -I 2>$null).Count
+		}
+		if (gcm opkg -ea silentlycontinue) {
+		    $script:opkg_count = (opkg list-installed 2>$null).Count
+		}
+		if (gcm pacstall -ea silentlycontinue) {
+    		$script:pacstall_count = (pacstall -L 2>$null).Count
+		}
+		if (gcm port -ea silentlycontinue) {
+    		$script:port_count = (port installed 2>$null).Count - 1
+		}
+		if (gcm pkg -ea silentlycontinue) {
+			$script:pkg_count = (pkg info 2>$null).Count
+		}
+		if (gcm tazpkg -ea silentlycontinue) {
+    		$script:tazpkg_count = (tazpkg list 2>$null).Count - 6
+		}
+		if (gcm equo -ea silentlycontinue) {
+    		$script:equo_count = (equo query list installed 2>$null).Count
+		}
+		if (gcm guix -ea silentlycontinue) {
+    		$script:guix_count = (guix package -I 2>$null).Count
+		}
+		if (gcm slackpkg -ea silentlycontinue) {
+    		$script:slackpkg_count = (Get-ChildItem /var/lib/pkgtools/packages 2>$null).Count
+		}
+		if (gcm cave -ea silentlycontinue) {
+			$script:cave_count = (cave show-install-reasons 2>$null).Count
+		}
+		if (gcm cpkg -ea silentlycontinue) {
+			$script:cpkg_count = cpkg c -n
+		}
+		if ($langpkgs) {
+			if (gcm npm -ea silentlycontinue) {
+				$script:npm_count = npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+			if (gcm pip -ea silentlycontinue) {
+				$script:pip_count = pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			} elseif (gcm pip3 -ea silentlycontinue) {
+				$script:pip_count = pip3 list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+			if (gcm cargo -ea silentlycontinue) {
+				$script:cargo_raw = cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines
+				$script:cargo_count = $cargo_raw / 2
+			}
+			if (gcm gem -ea silentlycontinue) {
+				$script:gem_count = gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+			if (gcm Get-InstalledPSResource -ea silentlycontinue) {
+				$script:psget_raw = Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count
+				$script:psget_count += $script:psget_raw
+			}
+			if (gcm Get-InstalledModule -ea silentlycontinue) {
+				$script:psget_raw = Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count
+				$script:psget_count += $script:psget_raw
+			}
+			if (gcm luarocks -ea silentlycontinue) {
+				$script:luarocks_count = luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines
+			}
+		}
+	}
 }
+lspkg
 
-function legacfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$backend) { # now thats a LOT of flags.. i know....
-if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+function legacfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$winget, [switch]$langpkgs, [switch]$backend) { # now thats a LOT of flags.. i know....
+if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and !($IsMacOS))) {
 	$script:osInfo = Get-CimInstance Win32_OperatingSystem
 	$swap = Get-CimInstance Win32_PageFileUsage
 	$battery = get-ciminstance Win32_Battery
 	$batteryValueFallback = Get-CimInstance -Namespace ROOT\WMI BatteryStatus
 	$logicalDisks = Get-CIMInstance Win32_LogicalDisk | Where-Object { $_.DriveType -ne 5 } | Sort-Object DeviceID
 }
+	if ($winget -or $langpkgs) {
+		lspkg -winget:$winget -langpkgs:$langpkgs
+	}
 	if ($clean) {
 		clear
 	}
-	if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and !($IsMacOS))) {
 		$dwm = (Get-Item "$env:SystemRoot\System32\dwm.exe").VersionInfo.ProductVersion
 		$wm = "Desktop Window Manager"
 		$wm_version = $dwm
@@ -1596,7 +1804,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
 			default          { $term = $env:TERM }
 		}
 		$term_version = ""
-	} elseif ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+	} elseif ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and !($IsMacOS))) {
 		$term = "conhost"
 		$term_version = ""
 	} else {
@@ -1604,7 +1812,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
 		$term_version = ""
 	}
 	$cursor = $null
-	if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and !($IsMacOS))) {
 		$cursor = (Get-Item "HKCU:\Control Panel\Cursors" -ErrorAction SilentlyContinue).GetValue("")
 		if (-not $cursor) {
 			$path = Get-ItemPropertyValue "HKCU:\Control Panel\Cursors" -Name "Arrow" -ErrorAction SilentlyContinue
@@ -1627,7 +1835,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
 	}
 
 	$sys_font = $null
-if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
+if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and !($IsMacOS))) {
 	$wh_font_active = Get-ChildItem "C:\ProgramData\Windhawk\Engine\ModsWritable\mod-status" -Filter "*_explorer-font-changer" -ErrorAction SilentlyContinue
 	$wh_font = if ($wh_font_active) {
     Get-ItemPropertyValue "HKLM:\Software\Windhawk\Engine\Mods\explorer-font-changer\Settings" -Name "font.name" -ErrorAction SilentlyContinue
@@ -1674,12 +1882,21 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 	} elseif ($term -eq "Kitty" -and (Test-Path "$HOME/.config/kitty/kitty.conf")) {
 		$term_font = (Get-Content "$HOME/.config/kitty/kitty.conf" | Select-String "^font_family") -replace "font_family\s+", ""
 	} elseif ($term -eq "Alacritty") {
-		$alacrittyToml = "$HOME/.config/alacritty/alacritty.toml"
-		$alacrittyYml  = "$HOME/.config/alacritty/alacritty.yml"
-		if (Test-Path $alacrittyToml) {
-			$term_font = (Get-Content $alacrittyToml | Select-String "^\s*family\s*=") -replace '.*=\s*"?([^"]+)"?.*', '$1'
-		} elseif (Test-Path $alacrittyYml) {
-			$term_font = (Get-Content $alacrittyYml | Select-String "^\s*family:") -replace '.*family:\s*', ''
+		if (test-path "$HOME/.config/alacritty") {
+			$alacrittyToml = "$HOME/.config/alacritty/alacritty.toml"
+			$alacrittyYml  = "$HOME/.config/alacritty/alacritty.yml"
+			$alacrittyConfig = 1
+		} else {
+			$alacrittyToml = "~/AppData/Roaming/alacritty/alacritty.toml"
+			$alacrittyYml = "~/AppData/Roaming/alacritty/alacritty.yml"
+			$alacrittyConfig = 1
+		}
+		if ($alacrittyConfig) {
+			if (Test-Path $alacrittyToml) {
+				$term_font = (Get-Content $alacrittyToml | Select-String "^\s*family\s*=") -replace '.*=\s*"?([^"]+)"?.*', '$1'
+			} elseif (Test-Path $alacrittyYml) {
+				$term_font = (Get-Content $alacrittyYml | Select-String "^\s*family:") -replace '.*family:\s*', ''
+			}
 		}
 	} elseif ($term -eq "Konsole") {
 		$konsoleProfile = Get-ChildItem "$HOME/.local/share/konsole/*.profile" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -1692,7 +1909,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 	} elseif ($term -eq "Windows PowerShell ISE" -or $term -eq "Windows PowerShell ISE(x86)") {
 		$term_font = $psise.options.fontname
 	} elseif ($term -eq "Tabby") {
-    $tabbyConfig = if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+    $tabbyConfig = if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and !($IsMacOS))) {
         "$env:APPDATA\tabby\config.yaml"
     } else {
         "$HOME/.config/tabby/config.yaml"
@@ -1702,6 +1919,10 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
             $term_font = (Get-Content $tabbyConfig | Select-String "^\s*font:") -replace '.*font:\s*', ''
         } catch { $term_font = $null }
     }
+} elseif ($term -eq "MinTTY") {
+	if (test-path C:/msys64/home/cereal/.minttyrc) {
+		$term_font = (Select-String -Path "C:\msys64\home\cereal\.minttyrc" -Pattern '^Font=').Line -replace '^Font=', ''
+	}
 }
 	if (-not $term_font -and $term -eq "Windows Terminal") {
 		$term_font = "Cascadia Mono"
@@ -1808,11 +2029,16 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 			write-output "$($resolvedosc)OS:            Raspberry Pi OS"
 		} elseif ($larp -eq "discord") {
 			write-output "$($resolvedosc)OS:            Discord"
+		} elseif ($larp -eq "winmeows") {
+			write-output "$($resolvedosc)OS:            Winmeows"
 		} else { 
 			write-output "$($resolvedosc)OS:            $larp"
 		}
 	} else {
 		$logo = Get-OSKey
+		if ($logo -eq "win11_fetch" -and (test-osrelease)) {
+			$logo = Get-OSKey -skipOSR
+		}
 		if($logo -eq "debian") {
 			$logo = lesbian
 		}
@@ -1890,17 +2116,25 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 			write-output "$($resolvedosc)OS:            Raspberry Pi OS"
 		} elseif ($logo -eq "discord") {
 			write-output "$($resolvedosc)OS:            Discord"
+		} elseif ($logo -eq "winmeows") {
+			write-output "$($resolvedosc)OS:            Winmeows $winversion"
 		} else {
-			if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop")) {
-				render win_fetch
+			if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!($IsLinux) -and !($IsMacOS))) {
+				if (!$backend) {
+					render win_fetch
+				}
 				$winfallback = $script:osInfo.Caption -replace "Microsoft ", ""
 				write-host "$($resolvedosc)OS:            $winfallback"
 			} elseif ($IsMac) {
-				render mac
+				if (!$backend) {
+					render mac
+				}
 				resolveOSC("mac")
 				write-output "$($resolvedosc)OS:            MacOS"
 			} elseif ($IsLinux) {
-				render tux
+				if (!$backend) {
+					render tux
+				}
 				resolveOSC("tux")
 				write-output "$($resolvedosc)OS:            Linux"
 			} else {
@@ -1908,7 +2142,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 			}
 		}
 	}
-	if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop")) {
+	if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!($IsLinux) -and !($IsMacOS))) {
 		if ($bloat) {
 			Write-output "$($resolvedosc)OS Class:      NT" # ... it says this in the kernel name ... why do you need to know?
 		}
@@ -1957,20 +2191,141 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 			write-output "$($resolvedosc)User:          $user@$hostid"
 		}
 		if ($ESVersionTable -and $Precise) {
-			write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)`)"
+			if ($script:sh -eq "nu.exe") {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(NuShell $(nu -c '(version).version'))"
+			} elseif ($script:sh -eq "bash.exe") {
+				$bashver = bash -c 'echo "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}.${BASH_VERSINFO[2]}"'
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(bash $bashver)"
+			} elseif ($script:sh -eq "fish.exe") {
+				if (test-path C:\msys64\usr\bin\bash.exe) {
+					$rawfish = C:\msys64\usr\bin\bash.exe --login -i -c "fish --version"
+					$fishdat = $rawfish -replace '^fish, version\s+', ''
+					$fishver = "fish $fishdat"
+				} elseif (gcm fish) {
+					$rawfish = fish --version
+					$fishdat = $rawfish -replace '^fish, version\s+', ''
+					$fishver = "fish $fishdat"
+				} else {
+					$fishver = "fish"
+				}
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($fishver)"
+			} elseif ($script:sh -eq "zsh.exe") {
+				if (test-path C:\msys64\usr\bin\bash.exe) {
+					$zshraw = C:\msys64\usr\bin\bash.exe --login -i -c "zsh --version"
+				} elseif (gcm zsh) {
+					$zshraw = zsh --version
+				} else {
+					$zshraw = "zsh"
+				}
+				$zshver = $zshraw -replace '\s*\(.*\)$', ''
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($zshver)"
+			} elseif ($script:sh -eq "cmd.exe") {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(CMD $script:cmdver)"
+			} else {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)`)"
+			}
 		} elseif ($ESVersionTable) { # hey cool! someone using clib the intended way
 			write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion)"
 		} elseif ($Precise) {
-			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
+			if ($script:sh -eq "nu.exe") {
+				write-output "$($resolvedosc)Shell:         NuShell $(nu -c '(version).version') `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} elseif ($script:sh -eq "bash.exe") {
+				$bashver = bash -c 'echo "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}.${BASH_VERSINFO[2]}"'
+				write-output "$($resolvedosc)Shell:         bash $bashver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} elseif ($script:sh -eq "fish.exe") {
+				if (test-path C:\msys64\usr\bin\bash.exe) {
+					$rawfish = C:\msys64\usr\bin\bash.exe --login -i -c "fish --version"
+					$fishdat = $rawfish -replace '^fish, version\s+', ''
+					$fishver = "fish $fishdat"
+				} elseif (gcm fish) {
+					$rawfish = fish --version
+					$fishdat = $rawfish -replace '^fish, version\s+', ''
+					$fishver = "fish $fishdat"
+				} else {
+					$fishver = "fish `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+				}
+				write-output "$($resolvedosc)Shell:         $fishver"
+			} elseif ($script:sh -eq "zsh.exe") {
+				if (test-path C:\msys64\usr\bin\bash.exe) {
+					$zshraw = C:\msys64\usr\bin\bash.exe --login -i -c "zsh --version"
+				} elseif (gcm zsh) {
+					$zshraw = zsh --version
+				} else {
+					$zshraw = "zsh"
+				}
+				$zshver = $zshraw -replace '\s*\(.*\)$', ''
+				write-output "$($resolvedosc)Shell:         $zshver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} elseif ($script:sh -eq "cmd.exe") {
+				write-output "$($resolvedosc)Shell:         CMD $script:cmdver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} else {
+				write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
+			}
 		} else {
-			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
+			if ($script:sh -eq "nu.exe") {
+				write-output "$($resolvedosc)Shell:         NuShell $(nu -c '(version).version')"
+			} elseif ($script:sh -eq "bash.exe") {
+				$bashver = bash -c 'echo "${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}.${BASH_VERSINFO[2]}"'
+				write-output "$($resolvedosc)Shell:         bash $bashver"
+			} elseif ($script:sh -eq "fish.exe") {
+				if (test-path C:\msys64\usr\bin\bash.exe) {
+					$rawfish = C:\msys64\usr\bin\bash.exe --login -i -c "fish --version"
+					$fishdat = $rawfish -replace '^fish, version\s+', ''
+					$fishver = "fish $fishdat"
+				} elseif (gcm fish) {
+					$rawfish = fish --version
+					$fishdat = $rawfish -replace '^fish, version\s+', ''
+					$fishver = "fish $fishdat"
+				} else {
+					$fishver = "fish"
+				}
+				write-output "$($resolvedosc)Shell:         $fishver"
+			} elseif ($script:sh -eq "zsh.exe") {
+				if (test-path C:\msys64\usr\bin\bash.exe) {
+					$zshraw = C:\msys64\usr\bin\bash.exe --login -i -c "zsh --version"
+				} elseif (gcm zsh) {
+					$zshraw = zsh --version
+				} else {
+					$zshraw = "zsh"
+				}
+				$zshver = $zshraw -replace '\s*\(.*\)$', ''
+				write-output "$($resolvedosc)Shell:         $zshver"
+			} elseif ($script:sh -eq "cmd.exe") {
+				write-output "$($resolvedosc)Shell:         CMD $script:cmdver"
+			} else {
+				write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
+			}
+		}
+		if ($pkgs) {
+			$pkglines = @()
+			if ($script:wget_count)    { $pkglines += "winget   - $script:wget_count" }
+			if ($script:scoop_count)   { $pkglines += "scoop    - $script:scoop_count" }
+			if ($script:choco_count)   { $pkglines += "choco    - $script:choco_count" }
+			if ($script:cpkg_count)    { $pkglines += "cpkg     - $script:cpkg_count" }
+			if ($script:pacman_count)  { $pkglines += "pacman   - $script:pacman_count" }
+			if ($langpkgs) {
+			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
+			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
+			if ($script:cargo_count)   { $pkglines += "cargo    - $script:cargo_count" }
+			if ($script:gem_count)     { $pkglines += "gem      - $script:gem_count" }
+			if ($script:luarocks_count){ $pkglines += "luarocks - $script:luarocks_count" }
+			if ($script:psget_count)   { $pkglines += "psget    - $script:PSGet_count" }
+			}
+			if ($pkglines.Count -gt 0) {
+				$label = "Packages:"
+				foreach ($line in $pkglines) {
+					write-output "$($resolvedosc)$($label.PadRight(15))$line"
+					$label = ""  # blank after first line so label only prints once
+				}
+			}
 		}
 		if ($precise) {
 			write-output "$($resolvedosc)Terminal:      $term $term_version"
 		} else {
 			write-output "$($resolvedosc)Terminal:      $term"
 		}
-		write-output "$($resolvedosc)Terminal Font: $term_font"
+		if ($term_font) {
+			write-output "$($resolvedosc)Terminal Font: $term_font"
+		}
 		<#if ($bloat) {
 			if ($bloat_wtpname) {
 				write-output "$($resolvedosc)Profile:       $bloat_wtpname"
@@ -2002,7 +2357,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 		Write-Output "$($resolvedosc)CPU Threads:   $($script:cpu.NumberOfLogicalProcessors)"
 		if ($bloat) {
 			$architecture = $env:PROCESSOR_ARCHITECTURE
-			$bits = switch ($arch) {
+			$bits = switch ($architecture) {
 				"x86"    { "32-bit" }
 				"ARM"    { "32-bit" }
 				"armv7l" { "32-bit" }
@@ -2340,6 +2695,45 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 		} else {
 			write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
 		}
+		if ($pkgs) {
+			$pkglines = @()
+			if ($script:apt_count)      { $pkglines += "apt      - $script:apt_count" }
+			if ($script:pacman_count)   { $pkglines += "pacman   - $script:pacman_count" }
+			if ($script:rpm_count)      { $pkglines += "rpm      - $script:rpm_count" }
+			if ($script:zypper_count)   { $pkglines += "zypper   - $script:zypper_count" }
+			if ($script:flatpak_count)  { $pkglines += "flatpak  - $script:flatpak_count" }
+			if ($script:snap_count)     { $pkglines += "snap     - $script:snap_count" }
+			if ($script:brew_count)     { $pkglines += "brew     - $script:brew_count" }
+			if ($script:nix_count)      { $pkglines += "nix      - $script:nix_count" }
+			if ($script:xbps_count)     { $pkglines += "xbps     - $script:xbps_count" }
+			if ($script:apk_count)      { $pkglines += "apk      - $script:apk_count" }
+			if ($script:emerge_count)   { $pkglines += "emerge   - $script:emerge_count" }
+			if ($script:opkg_count)     { $pkglines += "opkg     - $script:opkg_count" }
+			if ($script:pacstall_count) { $pkglines += "pacstall - $script:pacstall_count" }
+			if ($script:port_count)     { $pkglines += "port     - $script:port_count" }
+			if ($script:pkg_count)      { $pkglines += "pkg      - $script:pkg_count" }
+			if ($script:tazpkg_count)   { $pkglines += "tazpkg   - $script:tazpkg_count" }
+			if ($script:equo_count)     { $pkglines += "equo     - $script:equo_count" }
+			if ($script:guix_count)     { $pkglines += "guix     - $script:guix_count" }
+			if ($script:slackpkg_count) { $pkglines += "slackpkg - $script:slackpkg_count" }
+			if ($script:cave_count)     { $pkglines += "cave     - $script:cave_count" }
+			if ($script:cpkg_count)     { $pkglines += "cpkg     - $script:cpkg_count" }
+			if ($langpkgs) {
+			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
+			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
+			if ($script:cargo_count)   { $pkglines += "cargo    - $script:cargo_count" }
+			if ($script:gem_count)     { $pkglines += "gem      - $script:gem_count" }
+			if ($script:luarocks_count){ $pkglines += "luarocks - $script:luarocks_count" }
+			if ($script:psget_count)   { $pkglines += "psget    - $script:PSGet_count" }
+			}
+			if ($pkglines.Count -gt 0) {
+				$label = "Packages:"
+				foreach ($line in $pkglines) {
+					write-output "$($resolvedosc)$($label.PadRight(15))$line"
+					$label = ""  # blank after first line so label only prints once
+				}
+			}
+		}
 		if ($precise) {
 			write-output "$($resolvedosc)Terminal:      $term $term_version"
 		} else {
@@ -2402,7 +2796,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 		$threads = (lscpu | Select-String "^CPU\(s\):").ToString().Split(":")[1].Trim()
 		if ($bloat) {
 			$architecture = uname -m
-			$bits = switch ($arch) {
+			$bits = switch ($architecture) {
 				"x86"    { "32-bit" }
 				"ARM"    { "32-bit" }
 				"armv7l" { "32-bit" }
@@ -2692,10 +3086,10 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop') {
 # legacfetch -> legacy/backend of cfetch
 # cfetch's new frontend is internally called neocfetch
 
-function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage) {
+function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$winget, [switch]$langpkgs) {
     if ($clean) { Clear-Host }
 
-    $data = legacfetch $larp -precise:$precise -bloat:$bloat -extra:$extra -locale:$locale -diskusage:$diskusage -backend
+    $data = legacfetch $larp -precise:$precise -bloat:$bloat -extra:$extra -locale:$locale -diskusage:$diskusage -pkgs:$pkgs -winget:$winget -langpkgs:$langpkgs -backend
     $infoLines = $data -split "`n"
 
     $osKey = ($infoLines | Where-Object { $_ -match "^OSKey:" }) -replace "OSKey:\s+", ""
@@ -2731,18 +3125,18 @@ function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch
     Write-Host $color.reset
 }
 
-function hyperc($larp, [switch]$clean) {
+function hyperc($larp, [switch]$clean, [switch]$winget, [switch]$langpkgs) {
 	if ($larp) {
 		if (-not $clean) {
-			cfetch $larp -precise -bloat -extra -locale -diskusage
+			cfetch $larp -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs
 		} else {
-			cfetch $larp -precise -bloat -extra -locale -diskusage -clean
+			cfetch $larp -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -clean
 		}
 	} else {
 		if (-not $clean) {
-			cfetch -precise -bloat -extra -locale -diskusage
+			cfetch -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs
 		} else {
-			cfetch -precise -bloat -extra -locale -diskusage -clean
+			cfetch -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -clean
 		}
 	}
 }

@@ -1,0 +1,290 @@
+{
+	"Windows_Vista": {
+		"Order": 1,
+		"Name": "Windows Vista",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Not Planned",
+		"_Status": "Untested",
+		"_extDesc": "Not Compatible due to PowerShell only upgrading\nuntil PowerShell 2.0 on Vista."
+	},
+	"Windows_7": {
+		"Order": 2,
+		"Name": "Windows 7",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Requires SP1 and WMF 5.1, PowerShell 7.1.4 is recommended."
+	},
+	"Windows_8": {
+		"Order": 3,
+		"Name": "Windows 8",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Not Planned",
+		"_Status": "Tested",
+		"_extDesc": "Not Compatible due to PowerShell only upgrading\nuntil PowerShell 3.0 on Windows 8."
+	},
+	"Windows_8_1": {
+		"Order": 4,
+		"Name": "Windows 8.1",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Untested",
+		"_extDesc": "Works Perfectly, PowerShell 7.2 recommended"
+	},
+	"Windows_10": {
+		"Order": 5,
+		"Name": "Windows 10",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly, PowerShell 7+ recommended"
+	},
+	"Windows_11": {
+		"Order": 6,
+		"Name": "Windows 11",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly, PowerShell 7+ recommended"
+	},
+	"Gentoo": {
+		"Order": 7,
+		"Name": "Gentoo",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"Alpine": {
+		"Order": 8,
+		"Name": "Alpine",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Arch": {
+		"Order": 9,
+		"Name": "Arch",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Artix": {
+		"Order": 10,
+		"Name": "Artix",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Nyarch": {
+		"Order": 11,
+		"Name": "Nyarch",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Arch base"
+	},
+	"Manjaro": {
+		"Order": 12,
+		"Name": "Manjaro",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Arch base"
+	},
+	"Pop_OS": {
+		"Order": 13,
+		"Name": "Pop!_OS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"ElementaryOS": {
+		"Order": 14,
+		"Name": "ElementaryOS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"Zorin_OS": {
+		"Order": 15,
+		"Name": "Zorin OS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"KDE_Neon": {
+		"Order": 16,
+		"Name": "KDE Neon",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"Linux_Mint": {
+		"Order": 17,
+		"Name": "Linux Mint",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu/Debian base"
+	},
+	"Kubuntu": {
+		"Order": 18,
+		"Name": "kUbuntu",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"Xubuntu": {
+		"Order": 19,
+		"Name": "xUbuntu",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"Lubuntu": {
+		"Order": 20,
+		"Name": "lUbuntu",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"Ubuntu": {
+		"Order": 21,
+		"Name": "Ubuntu",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Debian base"
+	},
+	"UwUntu": {
+		"Order": 22,
+		"Name": "UwUntu",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work due to Ubuntu(Debian) base"
+	},
+	"Debian": {
+		"Order": 23,
+		"Name": "Debian",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Raspbian": {
+		"Order": 24,
+		"Name": "Raspbian",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work due to Debian base"
+	},
+	"Raspberry_Pi_OS": {
+		"Order": 25,
+		"Name": "Raspberry Pi OS",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work due to Debian base"
+	},
+	"Fedora": {
+		"Order": 26,
+		"Name": "Fedora",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work"
+	},
+	"RHEL_Based": {
+		"Order": 27,
+		"Name": "RHEL Based",
+		"Compatibility": "Likely to work",
+		"_Fix": "Through PRs & Forks",
+		"_Status": "Untested",
+		"_extDesc": "Red Hat based Distros are boycotted; Support can be added through PRs. Likely to work."
+	},
+	"OpenSUSE_Leap": {
+		"Order": 28,
+		"Name": "OpenSUSE Leap",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work if PowerShell can be installed"
+	},
+	"OpenSUSE_Tumbleweed": {
+		"Order": 29,
+		"Name": "OpenSUSE Tumbleweed",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work if PowerShell can be installed"
+	},
+	"Kali": {
+		"Order": 30,
+		"Name": "Kali",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work due to Debian base"
+	},
+	"Other_Distros": {
+		"Order": 36,
+		"Name": "Other Distros",
+		"Compatibility": "Likely to work",
+		"_Fix": "Very Likely",
+		"_Status": "Untested",
+		"_extDesc": "Likely to work if PowerShell is available"
+	},
+	"AmogOS": {
+		"Order": 31,
+		"Name": "AmogOS",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Unlikely",
+		"_Status": "Untested",
+		"_extDesc": "Unknown Compatibility; May work because of Debian base"
+	},
+	"Android": {
+		"Order": 32,
+		"Name": "Android",
+		"Compatibility": "Compatible",
+		"_Fix": "Unlikely",
+		"_Status": "Tested",
+		"_extDesc": "Annoying to get working"
+	},
+	"MacOS": {
+		"Order": 33,
+		"Name": "MacOS",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Unlikely",
+		"_Status": "Untested",
+		"_extDesc": "Will not be supported without PRs"
+	},
+	"Lesbian": {
+		"Order": 34,
+		"Name": "Lesbian",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Impossible",
+		"_Status": "Untested",
+		"_extDesc": "Outdated Kernel"
+	},
+	"CerealOS": {
+		"Order": 35,
+		"Name": "CerealOS",
+		"Compatibility": "Not Compatible",
+		"_Fix": "Impossible",
+		"_Status": "Untested",
+		"_extDesc": "Not a real Distro"
+	}
+}

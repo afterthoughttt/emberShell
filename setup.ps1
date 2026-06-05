@@ -31,6 +31,7 @@ if ($o) {
 	if(test-path (join-path $root "setup.sh")) {
 		$plf = $(confirm "Delete Linux specific Files?" "y" "N" $false)
 	}
+	$useps1 = $(confirm "Create .ps1 launcher? (recommended over .bat)" "y" "N" $false)
 }
 
 if(-not (get-command "pwsh" -ErrorAction SilentlyContinue) -and ("--update-pwsh" -or "--update-powershell") -in $args) {
@@ -42,7 +43,6 @@ if(-not (get-command "pwsh" -ErrorAction SilentlyContinue) -and ("--update-pwsh"
 		write-host "PowerShell is already on the Latest Version." -ForegroundColor Red
 	}
 }
-
 
 if(-not (get-command "wt" -ErrorAction SilentlyContinue) -and "--install-wt" -in $args) {
 	winget install Microsoft.WindowsTerminal
@@ -113,7 +113,6 @@ if ($hasWT) {
     }
 }
 
-
 $staleKeys = @(
     "HKCU:\Software\Classes\efasShellScript",
     "HKCU:\Software\Classes\emberShell.Script",
@@ -122,7 +121,6 @@ $staleKeys = @(
 foreach ($key in $staleKeys) {
     if (Test-Path $key) {
         Remove-Item -Path $key -Recurse -Force
-        #Write-Host "Removed stale key: $key" -ForegroundColor DarkYellow
     }
 }
 
@@ -142,12 +140,6 @@ Set-ItemProperty -Path "HKCU:\Software\Classes\$esxProgId" -Name "(Default)" -Va
 New-Item -Path "HKCU:\Software\Classes\$esxProgId\DefaultIcon" -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\Classes\$esxProgId\DefaultIcon" -Name "(Default)" -Value $fileIcon
 
-<#
-Write-Host "ESH: $(Get-ItemPropertyValue "HKCU:\Software\Classes\$eshProgId" "(Default)")" -ForegroundColor Yellow
-Write-Host "ESH icon: $(Get-ItemPropertyValue "HKCU:\Software\Classes\$eshProgId\DefaultIcon" "(Default)")" -ForegroundColor Yellow
-Write-Host "ESX: $(Get-ItemPropertyValue "HKCU:\Software\Classes\$esxProgId" "(Default)")" -ForegroundColor Yellow
-Write-Host "ESX icon: $(Get-ItemPropertyValue "HKCU:\Software\Classes\$esxProgId\DefaultIcon" "(Default)")" -ForegroundColor Yellow
-#>
 $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
 if ($currentPath -notlike "*$root*") {
     [Environment]::SetEnvironmentVariable("PATH", ($currentPath + ";" + $root), "User")
@@ -160,6 +152,39 @@ if ($hasWT) {
     $batContent = "@echo off" + [Environment]::NewLine + "start `"`" " + $launchCmd
 }
 [System.IO.File]::WriteAllText($launcher, $batContent, [System.Text.Encoding]::ASCII)
+
+if ($useps1) {
+    $ps1Content = @"
+# launcher for eSh
+if (!(gcm pwsh -ea silentlycontinue)) {
+	if (gcm pwsh-preview -ea silentlycontinue) {
+		sal pwsh pwsh-preview
+	} elseif (gcm powershell -ea silentlycontinue) {
+		sal pwsh powershell
+	} else {
+		function script:pwsh {
+			if (test-path "`$env:PROGRAMFILES/PowerShell/*/pwsh.exe") { # check if ANY progfiles/powershell exists
+				saps (gi "`$env:PROGRAMFILES/PowerShell/*/pwsh.exe" | sort { [version]`$_.Directory.Name } -desc | select -first 1 -exp FullName) @args # prefer the newest one
+			} elseif (test-path "`$env:LOCALAPPDATA/PowerShell/*/pwsh.exe") { # check if ANY appdata/powershell exists
+				saps (gi "`$env:LOCALAPPDATA/PowerShell/*/pwsh.exe" | sort { [version]`$_.Directory.Name } -desc | select -first 1 -exp FullName) @args # prefer the newest one
+			} elseif (test-path "`$env:LOCALAPPDATA/Microsoft/WindowsApps/pwsh.exe") { # check if ANY MSIX or MSStore powershell exists
+				saps "`$env:LOCALAPPDATA/Microsoft/WindowsApps/pwsh.exe" @args
+			} elseif (test-path "`$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe") {
+				saps "`$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" @args
+			} else {
+				write-host "your powershell is not stored in any clean directory.``nplease add it to PATH.``npress enter to exit." -f r
+				read-host
+				exit
+			}
+		}
+	}
+}
+
+pwsh -NoExit -ExecutionPolicy Bypass -Command "clear; Import-Module '$corePath'; . '$profilePath'"
+"@
+    [System.IO.File]::WriteAllText((Join-Path $root "emberShell.ps1"), $ps1Content, [System.Text.Encoding]::UTF8)
+    Write-Host "PS1 launcher created." -ForegroundColor Cyan
+}
 
 $iconCache = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Explorer"
 Get-ChildItem -Path $iconCache -Filter "iconcache*" | Remove-Item -Force -ErrorAction SilentlyContinue
@@ -177,9 +202,11 @@ if(test-path (join-path $root "lnxsetup.ps1")) {
 	}
 }
 
+$launcherLabel = if ($useps1) { "emberShell.bat + emberShell.ps1" } else { "emberShell.bat" }
 $termLabel = if ($hasWT) { "Windows Terminal" } else { "standalone window (no wt)" }
 Write-Host "emberShell setup complete." -ForegroundColor Green
 Write-Host "  Shell:    $psExe" -ForegroundColor DarkCyan
 Write-Host "  Terminal: $termLabel" -ForegroundColor DarkCyan
+Write-Host "  Launcher: $launcherLabel" -ForegroundColor DarkCyan
 Write-Host "  Root:     $root" -ForegroundColor DarkCyan
 Read-Host "Press enter to close"
