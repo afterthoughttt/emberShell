@@ -5,3 +5,4 @@ emberCore/ember.rice
 dev/
 emberShell.ps1
 emberShell.bat
+modules/CIM-Cache.json

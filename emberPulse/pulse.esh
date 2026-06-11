@@ -1,2 +1,0 @@
-$host.UI.RawUI.WindowTitle = "pulse"
-& node "$eShScriptRoot\pulse.js" | Out-Host
