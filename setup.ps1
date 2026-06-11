@@ -2,7 +2,6 @@ param(
     [switch]$o
 )
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-"{}" | Set-Content (Join-Path $root "emberCore" "ember.rice")
 
 $terminalIcon = Join-Path $root "emberRes\eshIcon\icon.png"
 $fileIcon     = Join-Path $root "emberRes\eshIcon\esh.ico"
@@ -19,6 +18,15 @@ function confirm($content, $y, $n, $default) {
 	} else {
 		return $default
 	}
+}
+if ($IsMacOS) {
+	write-host "This Installer is Intended for Windows. you should not run it on MacOS." -fo r
+	write-host "Launching lnxsetup.ps1..." -fo r
+	. (join-path $root "lnxsetup.ps1")
+} elseif ($IsLinux) {
+	write-host "This Installer is Intended for Windows. you should not run it on Linux." -fo r
+	write-host "Launching lnxsetup.ps1..." -fo r
+	. (join-path $root "lnxsetup.ps1")
 }
 
 if ($o) {

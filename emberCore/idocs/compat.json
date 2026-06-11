@@ -95,6 +95,14 @@
 		"_Status": "Tested",
 		"_extDesc": "Likely to work due to Arch base"
 	},
+	"cachy": {
+		"Order": 12,
+		"Name": "CachyOS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
 	"Pop_OS": {
 		"Order": 13,
 		"Name": "Pop!_OS",
@@ -286,5 +294,13 @@
 		"_Fix": "Impossible",
 		"_Status": "Untested",
 		"_extDesc": "Not a real Distro"
+	},
+	"LISO": {
+		"Order": 37,
+		"Name": "Live ISOs",
+		"Compatibility": "Partial",
+		"_Fix": "Unlikely",
+		"_Status": "Tested",
+		"_extDesc": "Likely to work if parent distro works, may have minor issues."
 	}
 }

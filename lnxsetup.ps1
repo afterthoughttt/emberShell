@@ -1,18 +1,16 @@
 ## LNXeSh Installer ##
-"{}" | Set-Content (Join-Path $root "emberCore" "ember.rice")
-if ($IsWindows) {
-	write-host "This Installer is Intended for Linux. you should not run it on Windows."
-	write-host "Press Enter to Exit"
-	read-host
-	exit 3
-} elseif ($PSVersionTable.PSVersion.Major -lt 6) {
-	write-host "This Installer is Intended for Linux. you should not run it on Windows."
-	write-host "Press Enter to Exit"
-	read-host
-	exit 3
-}
 
-$pmngr = $null
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+if ($IsWindows) {
+	write-host "This Installer is Intended for Linux. you should not run it on Windows." -fo r
+	write-host "Launching setup.ps1..."
+	. (join-path $root "setup.ps1")
+} elseif ($PSVersionTable.PSVersion.Major -lt 6) {
+	write-host "This Installer is Intended for Linux. you should not run it on Windows." -fo r
+	write-host "Launching setup.ps1..."
+	. (join-path $root "setup.ps1")
+}
 
 function confirm($content, $y, $n, $default) {
 	write-host "$content`n[$y/$n]"
@@ -25,6 +23,16 @@ function confirm($content, $y, $n, $default) {
 		return $default
 	}
 }
+
+if ($IsMacOS) {
+	write-host "This Installer is Intended for Linux.`nIt May run on MacOS, but it is untested."
+	$cont = "Continue anyways?" y N 0
+	if (!$cont) {
+		return
+	}
+} # PR if this is an issue to you!
+
+$pmngr = $null
 
 if(get-command apt -ErrorAction SilentlyContinue) {
 	$pmngr = "apt"
@@ -39,7 +47,7 @@ if(get-command apt -ErrorAction SilentlyContinue) {
 } elseif (get-command yay -ErrorAction SilentlyContinue) {
 	$pmngr = "yay"
 } else {
-	write-host "Couldn't find a supported Package Manager." -ForegroundColor Red
+	write-host "Couldn't find a supported Package Manager." -ForegroundColor Red # this will probably bork it for mac
 	write-host "Press Enter to Exit"
 	read-host
 	exit 2

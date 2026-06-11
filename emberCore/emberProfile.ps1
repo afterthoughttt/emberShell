@@ -16,12 +16,14 @@ if (test-path /etc/os-release) {
 	}
 }
 $ESVersionTable = @{
-	ESVersion = "$($shell.shell_version)"
+	ESVersion = [System.Version]"$($shell.shell_version)"
 	ESEdition = "$($shell.sv_name)"
 	clibVersion = "$($shell.clib_version)"
 	ESParent = "PowerShell $psver-$($PSVersionTable.PSEdition)" # change this when porting to other shells/langs
 	OS = "$osdat"
 }
+sv -n ESVersionTable -o r  # make eSh ver table immutable // this may cause issues if undone
+
 if ($config.show_esh_Version) {
 	$esc = [char]0x1b
 	# this redacts the shell lol /// write-output "${esc}[38;2;231;136;214m${esc}[48;2;231;136;214m"
@@ -283,12 +285,15 @@ function Read-EsxPaths {
 function esx {
     param(
         [string]$file,
-        [string]$fromPath = "main"
+        [string]$fromPath = "main",
+		[switch]$silent
     )
     $paths = Read-EsxPaths
 
     if (-not $paths.Contains($fromPath)) {
-        Write-Host "esx: unknown path '$fromPath'"
+		if (!$silent) {
+			Write-Host "esx: unknown path '$fromPath'"
+		}
         return
     }
 
@@ -303,7 +308,9 @@ function esx {
     }
 
     if (-not $resolved) {
-        Write-Host "esx: module '$file' not found in path '$fromPath' ($base)"
+		if (!$silent) {
+			Write-Host "esx: module '$file' not found in path '$fromPath' ($base)"
+		}
         return
     }
 
@@ -350,8 +357,8 @@ if ($config.auto_esx_clib) {
 	}
 }
 
-if($config.lids) { # not recommended on macos     // "Linux Identity Spoof"
-	# Remove-Alias -Name cd -Force -Scope Global // works without spam forcing
+if($config.lids) { # not recommended on macos   <-- but y?  // "Linux Identity Spoof"
+	# Remove-Alias -Name cd -Force -Scope Global           // works without spam forcing
     esx lids
 	if($IsWindows) {
 		Remove-Alias -Name cd -Force -Scope Global
@@ -379,9 +386,13 @@ if (-not $global:clib_panic_addon) {
 		clear
 		exit
 	}
-	esx paper panic -erroraction silentlycontinue
+	esx paper panic -silent # this is kinda stupid, fix this in 1.8, PAPER belongs in ember.rice
 }
-
+if (!(test-path (Join-Path $global:emberRoot "emberCore\ember.rice"))) {
+	"{
+		
+	}" > (Join-Path $global:emberRoot "emberCore\ember.rice")
+}
 $emberRice = Get-Content (Join-Path $global:emberRoot "emberCore\ember.rice") -Raw | ConvertFrom-Json
 $emberRice.PSObject.Properties | ForEach-Object {
     esx $_.Name $_.Value -ErrorAction SilentlyContinue

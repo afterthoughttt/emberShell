@@ -119,8 +119,24 @@
 		"_Status": "Untested",
 		"_extDesc": "Will not be supported without PRs"
 	},
-	"Other_Terminals": {
+	"PS_ISE": {
 		"Order": 16,
+		"Name": "Windows PowerShell ISE",
+		"Compatibility": "Partial",
+		"_Fix": "Unlikely",
+		"_Status": "Tested",
+		"_extDesc": "Works fine, ANSI must be disabled,\nencoding may not be UTF-8 which will break most logos."
+	},
+	"PS_ISE_86": {
+		"Order": 16,
+		"Name": "Windows PowerShell ISE (x86)",
+		"Compatibility": "Partial",
+		"_Fix": "Unlikely",
+		"_Status": "Tested",
+		"_extDesc": "Works fine, ANSI must be disabled,\nencoding may not be UTF-8 which will break most logos."
+	},
+	"Other_Terminals": {
+		"Order": 17,
 		"Name": "Other Terminals",
 		"Compatibility": "Unknown",
 		"_Fix": "Unknown",
