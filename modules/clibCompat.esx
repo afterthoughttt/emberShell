@@ -1,10 +1,79 @@
 $clibManifest = @{
 	esx = $true
     fork = $false
-	dev_name = "cereal" # Copyright (c) cerealdev 2026
-	ver_name = "sugar"
-	version = "1.4"
-	lib_name = "clib"
+	dev_name = "cereal"
+	ver_name = "steamy"
+	version = "1.6"
+	lib_name = "clibCompat"
+} # CLIBMANIFEST WILL BE KILLED IN 2.0!
+# USE CLVersionTable INSTEAD!
+$CLVersionTable = [ordered]@{
+	CLVersion = [System.Version]"1.6"
+	CLEdition = "Steamy"
+	esx       = $true
+	fork      = $false
+	dev       = "cereal"
+}
+sv -n CLVersionTable -o r  # make cl ver table immutable // this may cause issues if undone
+
+# 0.1 - 0.9 -> flake
+# 1.0 - 1.2 -> oats
+# 1.3       -> crunch
+# 1.4 - 1.5 -> sugar
+# 1.6       -> steamy
+
+if (test-path (join-path $global:eShScriptRoot "clib.rice")) {
+	$clibConfig = (join-path $global:eShScriptRoot "clib.rice")
+} else {
+	"{
+		`"DisableTrueColor`": false,
+		`"DisableANSI`": false,
+		`"SilentISE`": false
+	}" > (join-path $global:eShScriptRoot "clib.rice")
+	if (test-path (join-path $global:eShScriptRoot "clib.rice")) {
+		$clibConfig = (join-path $global:eShScriptRoot "clib.rice")
+	} else {
+		write-host "clib: couldn't find clib.rice`nclib: couldn't create clib.rice" -fo r 
+	}
+}
+
+function set-clibconfig($key, $value) {
+    $path = "$global:eShScriptRoot/clib.rice"
+    $config = if (Test-Path $path) { Get-Content $path -Raw | ConvertFrom-Json -AsHashtable } else { @{} }
+    $config[$key] = $value
+    $config | ConvertTo-Json | Set-Content $path
+	$clibConfig = $path
+}
+
+function confirm($content, $y, $n, $default) {
+	write-host "$content`n[$y/$n]"
+	$answer = read-host
+	if ($answer -eq $y) {
+		return $true
+	} elseif ($answer -eq $n) {
+		return $false
+	} else {
+		return $default
+	}
+}
+
+if ($PSISE) {
+	if (!$clibConfig.SilentISE) {
+		write-host "Detected PowerShell ISE variable..."
+		warn "PowerShell ISE doesn't support ANSI."
+		$dANSI = confirm "Disable ANSI?" Y n $true
+		if ($dANSI) {
+			set-clibconfig DisableANSI $true
+		}
+	}
+}
+
+function warn($str, [switch]$disablepref) {
+	if (!$disablepref) {
+		write-host "<`!>$str" -fo y
+	} else {
+		write-host $str -fo y
+	}
 }
 
 function random($min, $max) {
@@ -87,18 +156,6 @@ function write-log($text, $fmt, $type) {
 	softthrow "[$logtime]: $text"
 	} else {
 		write-output "[$logtime]: $text"
-	}
-}
-
-function confirm($content, $y, $n, $default) {
-	write-host "$content`n[$y/$n]"
-	$answer = read-host
-	if ($answer -eq $y) {
-		return $true
-	} elseif ($answer -eq $n) {
-		return $false
-	} else {
-		return $default
 	}
 }
 
@@ -198,9 +255,10 @@ function fuck($reps, [switch]$log) {
 }
 $esc = [char]0x1b
 function softthrow($string) {
-    write-host "${esc}[38;2;231;72;86m${string}${esc}[0m"
+  #  write-host "${esc}[38;2;231;72;86m${string}${esc}[0m"
+  write-host "${string}" -foregroundcolor red
 }
-if (-not ($host.Name -eq "Windows PowerShell ISE Host")) {
+if (!$clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 	$color = @{
 		reset = "${esc}[0m"
 		# rainbow
@@ -237,8 +295,47 @@ if (-not ($host.Name -eq "Windows PowerShell ISE Host")) {
 		lesbian3 = "${esc}[38;2;210;98;165m"
 		lesbian4 = "${esc}[38;2;165;0;98m"
 		gold = "${esc}[38;2;255;206;0m"
+		cachy = "${esc}[38;2;0;172;137m"
 	}
-} else { # PS ISE doesnt have truecolor ANSI lol.. i doubt they even HAVE ANSI
+} elseif ($clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
+	$color = @{
+		reset = "${esc}[0m"
+		# rainbow
+		red    = "${esc}[31m"
+		orange = "${esc}[33m"
+		yellow = "${esc}[33m"
+		green  = "${esc}[32m"
+		cyan   = "${esc}[36m"
+		blue   = "${esc}[34m"
+		indigo = "${esc}[34m"
+		violet = "${esc}[35m"
+		pink   = "${esc}[35m"
+		# grayscale
+		white     = "${esc}[37m"
+		lightgray = "${esc}[37m"
+		gray      = "${esc}[37m"
+		darkgray  = "${esc}[30m"
+		black     = "${esc}[30m"
+		# special
+		cobalt       = "${esc}[34m"
+		cereal       = "${esc}[35m"
+		afterthought = "${esc}[31m"
+		azure        = "${esc}[36m"
+		lunar        = "${esc}[37m"
+		win11        = "${esc}[36m"
+		mint         = "${esc}[32m"
+		pop          = "${esc}[36m"
+		debian       = "${esc}[31m"
+		win10        = "${esc}[34m"
+		butter       = "${esc}[33m"
+		lesbian1     = "${esc}[31m"
+		lesbian2     = "${esc}[33m"
+		lesbian3     = "${esc}[35m"
+		lesbian4     = "${esc}[35m"
+		gold         = "${esc}[33m"
+		cachy        = "${esc}[32m"
+	}
+} else { # geez
 	$color = @{
 		reset = ""
 		# rainbow
@@ -274,6 +371,7 @@ if (-not ($host.Name -eq "Windows PowerShell ISE Host")) {
 		lesbian3 = ""
 		lesbian4 = ""
 		gold = ""
+		cachy = ""
 	}
 }
 
@@ -297,7 +395,7 @@ function htaTool {
     $g = [Convert]::ToInt32($Hex.Substring(2,2),16)
     $b = [Convert]::ToInt32($Hex.Substring(4,2),16)
 
-	if (-not ($host.Name -eq "Windows PowerShell ISE Host" -or $psise)) {
+	if (!$clibConfig.DisableANSI -or !$clibConfig.DisableTrueColor) {
 		write-output "${esc}[38;2;$r;$g;${b}m`${esc}[38;2;$r;$g;${b}m"
 	} else {
 		write-output "`${esc}[38;2;$r;$g;${b}m"
@@ -319,7 +417,7 @@ function htaToolPure {
     $r = [Convert]::ToInt32($Hex.Substring(0,2),16)
     $g = [Convert]::ToInt32($Hex.Substring(2,2),16)
     $b = [Convert]::ToInt32($Hex.Substring(4,2),16)
-	if (-not ($host.Name -eq "Windows PowerShell ISE Host")) {
+	if (!$clibConfig.DisableANSI -or !$clibConfig.DisableTrueColor) {
 		return "${esc}[38;2;$r;$g;${b}m"
 	}
 }
@@ -427,7 +525,8 @@ function clib([switch]$version, [switch]$fork, [switch]$dev, [switch]$vername, [
 		}
 	}
 }
-
+# DEPRECATED // DO NOT KEEP USING CDUMP.
+# if you desperately need cdump please just PR
 function cdump { # this function is uh.. not very useful.. unless youre just deciding to dump clib colors
 $order = @('black','darkgray','gray','lightgray','white','afterthought','debian','lesbian1','red','orange','lesbian2','yellow','butter','mint','green','cyan','pop','win11','azure','win10','cobalt','blue','indigo','violet','lesbian4','pink','lesbian3','cereal','lunar')
 $line = ""
@@ -445,25 +544,102 @@ foreach ($name in $order) {
 Write-Host $line
 }
 
-function Reset-CIMCache {
+<#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.++.+++++++++++++.-------------.----.+++++++++++.#>
+
+function Optimize-CIM($key, $str) {
+    $path = Join-Path $global:eShScriptRoot "CIM-Cache.json"
+    $cache = if (Test-Path $path) { Get-Content $path -Raw | ConvertFrom-Json } else { [PSCustomObject]@{} }
+    $cache | Add-Member -NotePropertyName $key -NotePropertyValue $str -Force
+    $cache | ConvertTo-Json -Depth 25 | Set-Content $path
+}
+
+function Reset-CIMCache([switch]$speed) {
 	if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and !($IsMacOS))) {
-		$script:osInfo = Get-CimInstance Win32_OperatingSystem
-		$script:csystem = get-ciminstance Win32_ComputerSystem
-		$script:csysprod = get-ciminstance Win32_ComputerSystemProduct
-		$script:cpu = get-ciminstance Win32_Processor
-		$script:gpu = get-ciminstance Win32_VideoController
-		$script:ram = get-ciminstance Win32_PhysicalMemory
-		$script:mobo = get-ciminstance Win32_BaseBoard
-		$script:bios = get-ciminstance Win32_BIOS
-		$parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($PID)"
-		$parentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($parent.ParentProcessId)"
-		$script:sh = $parentProcess.Name
-		if ($script:sh -eq "cmd.exe") {
-			$script:cmdver = "$([System.Environment]::OSVersion.Version)"
+		if (!$speed) {
+			$script:osInfo = Get-CimInstance Win32_OperatingSystem -ea si
+			Optimize-CIM osi $script:osInfo
+			$script:csystem = get-ciminstance Win32_ComputerSystem -ea si
+			Optimize-CIM csys $script:csystem
+			$script:csysprod = get-ciminstance Win32_ComputerSystemProduct -ea si
+			Optimize-CIM csp $script:csysprod
+			#$script:cpu = get-ciminstance Win32_Processor -ea si
+			#Optimize-CIM cpu $script:cpu
+			$script:gpu = get-ciminstance Win32_VideoController -ea si
+			Optimize-CIM gpu $script:gpu
+			$script:ram = get-ciminstance Win32_PhysicalMemory -ea si
+			Optimize-CIM ram $script:ram
+			$script:mobo = get-ciminstance Win32_BaseBoard -ea si
+			Optimize-CIM mobo $script:mobo
+			$script:bios = get-ciminstance Win32_BIOS -ea si
+			Optimize-CIM bios $script:bios
+			Optimize-CIM ts (get-date)
+		}
+		if ($speed) {
+			$parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($PID)" -ea si
+			$parentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($parent.ParentProcessId)" -ea si
+			$script:sh = $parentProcess.Name
+			$script:ancestorProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($parentProcess.ParentProcessId)" -ea si
+			$script:shpath = $parentProcess.path
+			if ($script:sh -eq "cmd.exe") {
+				$string = & $script:shpath /C ver 2>$null
+				if ($string) {
+					$script:cmdver = [regex]::Match($string, '(?m)^.*Version\s+([0-9][0-9\.\-a-zA-Z]+)').Groups[1].Value
+				} else {
+					$script:cmdver = ""
+				}
+			}
 		}
 	}
 }
-Reset-CIMCache
+
+function Reset-OptimizedCIM {
+	if (test-path (Join-Path $global:eShScriptRoot "CIM-Cache.json")) {
+		$cache = Get-Content (Join-Path $global:eShScriptRoot "CIM-Cache.json") -Raw | ConvertFrom-Json
+		$script:osInfo = $cache.osi
+		$script:csystem = $cache.csys
+		$script:csysprod = $cache.csp
+		#$script:cpu = $cache.cpu
+		$script:gpu = $cache.gpu
+		$script:ram = $cache.ram
+		$script:mobo = $cache.mobo
+		$script:bios = $cache.bios
+	}
+}
+if (test-path (Join-Path $global:eShScriptRoot "CIM-Cache.json")) {
+	$cache = Get-Content (Join-Path $global:eShScriptRoot "CIM-Cache.json") -Raw | ConvertFrom-Json
+	if ($cache) {
+		$timestamp = [Datetime]$cache.ts
+		$lifetime = if ($clibConfig.CacheLifetime) { [TimeSpan]::FromDays($clibConfig.CacheLifetime) } else { [TimeSpan]::FromDays(7) }
+		if ((Get-Date) - $timestamp -gt $lifetime) {
+		Reset-CIMCache
+		}
+	}
+	Reset-OptimizedCIM
+} else {
+	Reset-CIMCache
+}
+
+function Reset-RegCache {
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+		$key = 'HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor\0'
+		$cpuname = (Get-ItemPropertyValue $key 'ProcessorNameString').Trim()
+		$cpubase = Get-ItemPropertyValue $key '~MHz'
+		$threads = (Get-ChildItem 'HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor').Count
+		Add-Type -Path "$global:eshScriptRoot/cpuinfo.dll"
+		$cpuboost = [CPUNative]::GetBoostSpeedMHz()
+		$cores = [CPUNative]::GetPhysicalCores()
+		$script:cpu = @{
+			"Name" = "$cpuname"
+			"MaxClockSpeed" = "$cpubase"
+			"NumberOfLogicalProcessors" = "$threads"
+			"NumberOfCores" = "$cores"
+			"BoostClockSpeed" = "$cpuboost"
+		}
+	}
+}
+Reset-RegCache
+Reset-CIMCache -speed
+
 function Test-OsRelease {
     param([string]$Path = "/etc/os-release")
     if (-not (Test-Path $Path)) { return $false }
@@ -478,6 +654,21 @@ function Test-OsRelease {
 function Get-OSKey([switch]$skipOSR) {
 	if($IsDiscord) { return "discord" } # wow discord os
     $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
+	if(!$os) {
+		if ($PSVersionTable.Platform -eq "Unix") {
+			if (test-path /etc/os-release) {
+					$os = "Linux"
+			} else {
+				if ($PSVersionTable.OS -match "darwin") {
+					$os = "Darwin"
+				} else {
+					$os = "UNIX"
+				}
+			}
+		} else {
+			$os = $PSVersionTable.OS
+		}
+	}
     if ($os -match "Windows") {
 		if (Test-OsRelease -and -not $skipOSR) {
 			$os = "Linux"
@@ -520,6 +711,8 @@ function Get-OSKey([switch]$skipOSR) {
 			"raspbian" {"raspbian"}
 			"windows" {"win11_fetch"}
 			"winmeows" {"winmeows"}
+			"macos" {"mac"}
+			"cachyos" {"cachy"}	
             default      { "tux" }
         }
 		if ($ResolvedOSK -ne "tux") {
@@ -550,7 +743,41 @@ function Get-OSKey([switch]$skipOSR) {
 				($pretty_name -match "manjaro") {"manjaro"}
 				($pretty_name -match "kali") {"kali"}
 				($pretty_name -match "raspbian") {"raspbian"}
-				($pretty_name -match "rasperry pi") {"rasperry"}
+				($pretty_name -match "rasperry") {"rasperry"}
+				($pretty_name -match "cachy") {"cachy"}
+				default      { "tux" }
+			}
+		}
+		if ($ResolvedOSK -ne "tux") {
+			return $ResolvedOSK
+		} else {
+			$PSOS = $PSVersionTable.os
+			$ResolvedOSK = switch ($true) {
+				($PSOS -match "fedora")     {"fedora"}
+				($PSOS -match "arch")       { "arch" } # btw
+				($PSOS -match "nyarch")     { "nyarch" } # ntw
+				($PSOS -match "artix")      { "artix" } # btw
+				($PSOS -match "linux mint") { "mint" }
+				($PSOS -match "debian")     { "debian" }
+				($PSOS -match "lesbian")    { "lesbian" }
+				($PSOS -match "cerealos")    { "cerealos" } # **my** operating system??
+				($PSOS -match "ubuntu")    { "ubuntu" }
+				($PSOS -match "uwuntu")    { "uwuntu" }
+				($PSOS -match "pop")       { "pop" }
+				($PSOS -match "android") { "android" }
+				($PSOS -match "amogos") { "amogos" }
+				($PSOS -match "alpine") { "alpine" }
+				($PSOS -match "opensuse leap") { "opensuse" }
+				($PSOS -match "opensuse tumbleweed") { "opensuse_butter" }
+				($PSOS -match "gentoo") { "gentoo" }
+				($PSOS -match "kde neon") { "kde_neon" }
+				($PSOS -match "zorin") {"zorin"}
+				($PSOS -match "elementary") {"elementary"}
+				($PSOS -match "manjaro") {"manjaro"}
+				($PSOS -match "kali") {"kali"}
+				($PSOS -match "raspbian") {"raspbian"}
+				($PSOS -match "rasperry") {"rasperry"}
+				($PSOS -match "cachy") {"cachy"}
 				default      { "tux" }
 			}
 		}
@@ -578,6 +805,9 @@ function Get-OSKey([switch]$skipOSR) {
     elseif ($os -match "Darwin") {
         return "mac"
     }
+	elseif ($os -match "UNIX") {
+		return "unix"
+	}
     return "fetch_unknown_os"
 }
 function lesbian{
@@ -617,6 +847,8 @@ function resolveOSC($OSin) {
 		return ""
 	} elseif ($OSin -eq "uwuntu") {
 		return $($color.cereal)
+	} elseif ($OSin -eq "cachy") {
+		return ($($color.cachy))
 	} elseif($OSin -eq "linux" -or $OSin -eq "tux") {
 		return $($color.lightgray)
 	} else {
@@ -654,7 +886,9 @@ $validOSes = @(
 "manjaro",
 "kali",
 "raspbian", "pi", "raspberry",
-"winmeows"
+"winmeows",
+"cachy",
+"unix"
 )
 
 $annoyingOEM = @{
@@ -663,67 +897,121 @@ $annoyingOEM = @{
 } # pls lmk if theres more
 $script:psget_count = 0
 function lspkg([switch]$winget, [switch]$langpkgs) {
-	if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!$IsLinux -and !$IsMacOS)) {
-		if ($winget) {
-			if (gcm winget -ea silentlycontinue) {
-				$script:wget_raw = winget list --disable-interactivity --accept-source-agreements 2>$null
-				$script:wget_count = ($script:wget_raw | Where-Object { $_ -match '\S' }).Count - 2
-			}
-		}
-		if (gcm scoop -ea silentlycontinue) {
-			$script:scoop_count = (ls "$env:USERPROFILE\scoop\apps" -di 2>$null).Count - 1
-		}
-		if (gcm choco -ea silentlycontinue) {
-			$script:choco_raw = choco list 2>$null
-			$script:choco_count = if ($script:choco_raw[-1] -match '(\d+) packages? installed') { [int]$Matches[1] } else { 0 }
-		}
-		if (gcm cpkg -ea silentlycontinue) {
-			$script:cpkg_count = cpkg c -n
-		}
-		if (test-path C:\msys64\usr\bin\bash.exe) {
-			$script:pacman_raw = & C:\msys64\usr\bin\bash.exe --login -i -c "pacman -Q" | Measure-Object -Line
-			$script:pacman_count = $script:pacman_raw.Lines
-		}
-		if ($langpkgs) {
-			if (gcm npm -ea silentlycontinue) {
-				$script:npm_count = npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines
-			}
-			if (gcm pip -ea silentlycontinue) {
-				$script:pip_count = pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines
-			}
-			if (gcm cargo -ea silentlycontinue) {
-				$script:cargo_raw = cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines
-				$script:cargo_count = $cargo_raw / 2
-			}
-			if (gcm gem -ea silentlycontinue) {
-				$script:gem_count = gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines
-			}
-			if (gcm Get-InstalledPSResource -ea silentlycontinue) {
-				$script:psget_raw = Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count
-				$script:psget_count += $script:psget_raw
-			}
-			if (gcm Get-InstalledModule -ea silentlycontinue) {
-				$script:psget_raw = Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count
-				$script:psget_count += $script:psget_raw
-			}
-			if (gcm luarocks -ea silentlycontinue) {
-				$script:luarocks_count = luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines
-			}
-		}
-	}
-	if ($IsLinux) {
-		Invoke-Panic "Unix-Like systems are not supported on clibCompat, use clib natively instead."
-	}
+    $jobs = @{}
+
+    if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!$IsLinux -and !$IsMacOS)) {
+        if ($winget -and (gcm winget -ea silentlycontinue)) {
+            $jobs['winget'] = Start-Job {
+                $raw = winget list --disable-interactivity --accept-source-agreements 2>$null
+                ($raw | Where-Object { $_ -match '\S' }).Count - 2
+            }
+        }
+        if (gcm scoop -ea silentlycontinue) {
+            $jobs['scoop'] = Start-Job { (ls "$env:USERPROFILE\scoop\apps" -di 2>$null).Count - 1 }
+        }
+        if (gcm choco -ea silentlycontinue) {
+            $jobs['choco'] = Start-Job {
+                $raw = choco list 2>$null
+                if ($raw[-1] -match '(\d+) packages? installed') { [int]$Matches[1] } else { 0 }
+            }
+        }
+        if (gcm cpkg -ea silentlycontinue) {
+            $script:cpkg_count = cpkg c -n
+        }
+        if (Test-Path C:\msys64\usr\bin\bash.exe) {
+            $jobs['pacman'] = Start-Job { (& C:\msys64\usr\bin\bash.exe --login -c "pacman -Q" | Measure-Object -Line).Lines }
+        }
+        if ($langpkgs) {
+            if (gcm npm -ea silentlycontinue)    { $jobs['npm']    = Start-Job { npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm pip -ea silentlycontinue)    { $jobs['pip']    = Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm cargo -ea silentlycontinue)  { $jobs['cargo']  = Start-Job { (cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines) / 2 } }
+            if (gcm gem -ea silentlycontinue)    { $jobs['gem']    = Start-Job { gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm luarocks -ea silentlycontinue) { $jobs['luarocks'] = Start-Job { luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm Get-InstalledPSResource -ea silentlycontinue) { $jobs['psget_resource'] = Start-Job { Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
+            if (gcm Get-InstalledModule -ea silentlycontinue)     { $jobs['psget_module']   = Start-Job { Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
+        }
+    }
+
+    if ($IsLinux) {
+        if (gcm dpkg-query -ea silentlycontinue)  { $jobs['apt']       = Start-Job { (dpkg-query -f '.\n' -W 2>$null).Count } }
+        if (gcm pacman -ea silentlycontinue)       { $jobs['pacman']    = Start-Job { (pacman -Qq 2>$null).Count } }
+        if (gcm rpm -ea silentlycontinue)          { $jobs['rpm']       = Start-Job { (rpm -qa 2>$null).Count } }
+        if (gcm zypper -ea silentlycontinue)       { $jobs['zypper']    = Start-Job { (zypper se --installed-only 2>$null).Count - 5 } }
+        if (gcm flatpak -ea silentlycontinue)      { $jobs['flatpak']   = Start-Job { (flatpak list 2>$null).Count - 1 } }
+        if (gcm snap -ea silentlycontinue)         { $jobs['snap']      = Start-Job { (snap list 2>$null).Count - 1 } }
+        if (gcm brew -ea silentlycontinue)         { $jobs['brew']      = Start-Job { (brew list 2>$null).Count } }
+        if (gcm nix-env -ea silentlycontinue)      { $jobs['nix']       = Start-Job { (nix-env -q 2>$null).Count } }
+        if (gcm xbps-query -ea silentlycontinue)   { $jobs['xbps']      = Start-Job { (xbps-query -l 2>$null).Count } }
+        if (gcm apk -ea silentlycontinue)          { $jobs['apk']       = Start-Job { (apk info 2>$null).Count } }
+        if (gcm qlist -ea silentlycontinue)        { $jobs['emerge']    = Start-Job { (qlist -I 2>$null).Count } }
+        if (gcm opkg -ea silentlycontinue)         { $jobs['opkg']      = Start-Job { (opkg list-installed 2>$null).Count } }
+        if (gcm pacstall -ea silentlycontinue)     { $jobs['pacstall']  = Start-Job { (pacstall -L 2>$null).Count } }
+        if (gcm port -ea silentlycontinue)         { $jobs['port']      = Start-Job { (port installed 2>$null).Count - 1 } }
+        if (gcm pkg -ea silentlycontinue)          { $jobs['pkg']       = Start-Job { (pkg info 2>$null).Count } }
+        if (gcm tazpkg -ea silentlycontinue)       { $jobs['tazpkg']    = Start-Job { (tazpkg list 2>$null).Count - 6 } }
+        if (gcm equo -ea silentlycontinue)         { $jobs['equo']      = Start-Job { (equo query list installed 2>$null).Count } }
+        if (gcm guix -ea silentlycontinue)         { $jobs['guix']      = Start-Job { (guix package -I 2>$null).Count } }
+        if (gcm slackpkg -ea silentlycontinue)     { $jobs['slackpkg']  = Start-Job { (Get-ChildItem /var/lib/pkgtools/packages 2>$null).Count } }
+        if (gcm cave -ea silentlycontinue)         { $jobs['cave']      = Start-Job { (cave show-install-reasons 2>$null).Count } }
+        if (gcm cpkg -ea silentlycontinue)         { $script:cpkg_count = cpkg c -n }
+        if ($langpkgs) {
+            if (gcm npm -ea silentlycontinue)      { $jobs['npm']       = Start-Job { npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm pip -ea silentlycontinue)      { $jobs['pip']       = Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            elseif (gcm pip3 -ea silentlycontinue) { $jobs['pip']       = Start-Job { pip3 list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm cargo -ea silentlycontinue)    { $jobs['cargo']     = Start-Job { (cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines) / 2 } }
+            if (gcm gem -ea silentlycontinue)      { $jobs['gem']       = Start-Job { gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm luarocks -ea silentlycontinue) { $jobs['luarocks']  = Start-Job { luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm Get-InstalledPSResource -ea silentlycontinue) { $jobs['psget_resource'] = Start-Job { Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
+            if (gcm Get-InstalledModule -ea silentlycontinue)     { $jobs['psget_module']   = Start-Job { Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
+        }
+    }
+
+    # collect
+    $results = @{}
+    $jobs.GetEnumerator() | ForEach-Object {
+        $results[$_.Key] = Receive-Job $_.Value -Wait -AutoRemoveJob
+    }
+
+    # assign
+    $script:wget_count    = [int]$results['winget']
+    $script:scoop_count   = [int]$results['scoop']
+    $script:choco_count   = [int]$results['choco']
+    $script:pacman_count  = [int]$results['pacman']
+    $script:apt_count     = [int]$results['apt']
+    $script:rpm_count     = [int]$results['rpm']
+    $script:zypper_count  = [int]$results['zypper']
+    $script:flatpak_count = [int]$results['flatpak']
+    $script:snap_count    = [int]$results['snap']
+    $script:brew_count    = [int]$results['brew']
+    $script:nix_count     = [int]$results['nix']
+    $script:xbps_count    = [int]$results['xbps']
+    $script:apk_count     = [int]$results['apk']
+    $script:emerge_count  = [int]$results['emerge']
+    $script:opkg_count    = [int]$results['opkg']
+    $script:pacstall_count= [int]$results['pacstall']
+    $script:port_count    = [int]$results['port']
+    $script:pkg_count     = [int]$results['pkg']
+    $script:tazpkg_count  = [int]$results['tazpkg']
+    $script:equo_count    = [int]$results['equo']
+    $script:guix_count    = [int]$results['guix']
+    $script:slackpkg_count= [int]$results['slackpkg']
+    $script:cave_count    = [int]$results['cave']
+    $script:npm_count     = [int]$results['npm']
+    $script:pip_count     = [int]$results['pip']
+    $script:cargo_count   = [int]$results['cargo']
+    $script:gem_count     = [int]$results['gem']
+    $script:luarocks_count= [int]$results['luarocks']
+    $script:psget_count   = ([int]$results['psget_resource']) + ([int]$results['psget_module'])
 }
 lspkg
 
 function legacfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$winget, [switch]$langpkgs, [switch]$backend) { # now thats a LOT of flags.. i know....
 if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and !($IsMacOS))) {
-	$script:osInfo = Get-CimInstance Win32_OperatingSystem
-	$swap = Get-CimInstance Win32_PageFileUsage
-	$battery = get-ciminstance Win32_Battery
-	$batteryValueFallback = Get-CimInstance -Namespace ROOT\WMI BatteryStatus
-	$logicalDisks = Get-CIMInstance Win32_LogicalDisk | Where-Object { $_.DriveType -ne 5 } | Sort-Object DeviceID
+	$script:osInfo = Get-CimInstance Win32_OperatingSystem -ea si
+	$swap = Get-CimInstance Win32_PageFileUsage -ea si
+	$battery = get-ciminstance Win32_Battery -ea si
+	$batteryValueFallback = Get-CimInstance -Namespace ROOT\WMI BatteryStatus -ea si
+	$logicalDisks = Get-CIMInstance Win32_LogicalDisk -ea si | Where-Object { $_.DriveType -ne 5 } | Sort-Object DeviceID
 }
 	if ($winget -or $langpkgs) {
 		lspkg -winget:$winget -langpkgs:$langpkgs
@@ -1114,6 +1402,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			write-output "$($resolvedosc)OS:            Discord"
 		} elseif ($larp -eq "winmeows") {
 			write-output "$($resolvedosc)OS:            Winmeows"
+		} elseif ($larp -eq "cachy") {
+			write-output "$($resolvedosc)OS:            CachyOS"
 		} else { 
 			write-output "$($resolvedosc)OS:            $larp"
 		}
@@ -1201,6 +1491,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			write-output "$($resolvedosc)OS:            Discord"
 		} elseif ($logo -eq "winmeows") {
 			write-output "$($resolvedosc)OS:            Winmeows $winversion"
+		} elseif ($logo -eq "cachy") {
+			write-output "$($resolvedosc)OS:            CachyOS"
 		} else {
 			if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!($IsLinux) -and !($IsMacOS))) {
 				if (!$backend) {
@@ -1303,7 +1595,20 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 				$zshver = $zshraw -replace '\s*\(.*\)$', ''
 				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($zshver)"
 			} elseif ($script:sh -eq "cmd.exe") {
-				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(CMD $script:cmdver)"
+				if ($script:ancestorProcess.Name -eq "lua.exe") {
+					$parstring = (lua -v 2>&1) -replace '\s+Copyright.*', ''
+					write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($parstring)"
+				} else {
+					if ("$(& $script:shpath /? 2>$null)" -match "ReactOS") {
+						write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(ReactOS CMD $script:cmdver)"
+					} else {
+						write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(CMD $script:cmdver)"
+					}
+				}
+			} elseif ($script:sh -eq "node.exe") {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(Node $((node --version) -replace '^v', ''))"
+			} elseif ($script:sh -eq "python.exe") {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($(python --version))"
 			} else {
 				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)`)"
 			}
@@ -1338,8 +1643,21 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 				}
 				$zshver = $zshraw -replace '\s*\(.*\)$', ''
 				write-output "$($resolvedosc)Shell:         $zshver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} elseif ($script:sh -eq "node.exe") {
+				write-output "$($resolvedosc)Shell:         Node $((node --version) -replace '^v', '') `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} elseif ($script:sh -eq "python.exe") {
+				write-output "$($resolvedosc)Shell:         $(python --version) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
 			} elseif ($script:sh -eq "cmd.exe") {
-				write-output "$($resolvedosc)Shell:         CMD $script:cmdver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+				if ($script:ancestorProcess.Name -eq "lua.exe") {
+					$parstring = (lua -v 2>&1) -replace '\s+Copyright.*', ''
+					write-output "$($resolvedosc)Shell:         $parstring `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+				} else {
+					if ("$(& $script:shpath /? 2>$null)" -match "ReactOS") {
+						write-output "$($resolvedosc)Shell:         ReactOS CMD $script:cmdver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+					} else {
+						write-output "$($resolvedosc)Shell:         CMD $script:cmdver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+					}
+				}
 			} else {
 				write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
 			}
@@ -1373,7 +1691,20 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 				$zshver = $zshraw -replace '\s*\(.*\)$', ''
 				write-output "$($resolvedosc)Shell:         $zshver"
 			} elseif ($script:sh -eq "cmd.exe") {
-				write-output "$($resolvedosc)Shell:         CMD $script:cmdver"
+				if ($script:ancestorProcess.Name -eq "lua.exe") {
+					$parstring = (lua -v 2>&1) -replace '\s+Copyright.*', ''
+					write-output "$($resolvedosc)Shell:         $parstring"
+				} else {
+					if ("$(& $script:shpath /? 2>$null)" -match "ReactOS") {
+						write-output "$($resolvedosc)Shell:         ReactOS CMD $script:cmdver"
+					} else {
+						write-output "$($resolvedosc)Shell:         CMD $script:cmdver"
+					}
+				}
+			} elseif ($script:sh -eq "node.exe") {
+				write-output "$($resolvedosc)Shell:         Node $((node --version) -replace '^v', '')"
+			} elseif ($script:sh -eq "python.exe") {
+				write-output "$($resolvedosc)Shell:         $(python --version)"
 			} else {
 				write-output "$($resolvedosc)Shell:         PowerShell $($PSVersionTable.PSEdition) $("$($PSVersionTable.PSVersion)".Substring(0,5))"
 			}
@@ -1436,6 +1767,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 		}
 		Write-Output "$($resolvedosc)CPU:           $($script:cpu.Name)"
 		Write-Output "$($resolvedosc)CPU Base:      $($script:cpu.MaxClockSpeed)MHz"
+		Write-Output "$($resolvedosc)CPU Boost:     $($script:cpu.BoostClockSpeed)MHz"
 		Write-Output "$($resolvedosc)CPU Cores:     $($script:cpu.NumberOfCores)"
 		Write-Output "$($resolvedosc)CPU Threads:   $($script:cpu.NumberOfLogicalProcessors)"
 		if ($bloat) {
@@ -1810,6 +2142,7 @@ function hyperc($larp, [switch]$clean, [switch]$winget, [switch]$langpkgs) {
 		}
 	}
 }
+Export-ModuleMember -Variable CLVersionTable
 Export-ModuleMember -Variable color
 Export-ModuleMember -Variable time
 Export-ModuleMember -Variable esc

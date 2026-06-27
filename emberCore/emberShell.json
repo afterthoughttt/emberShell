@@ -1,8 +1,8 @@
 {
 	"shell_name": "emberShell",
-	"shell_version": "1.6.0",
+	"shell_version": "1.7.0",
 	"sv_name": "Reforged",
 	"dev_name": "cereal",
 	"fork": false,
-	"clib_version": "1.6.0"
+	"clib_version": "1.7.0"
 }

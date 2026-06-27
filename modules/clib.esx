@@ -1,3 +1,27 @@
+function initlog {
+	param(
+		[int]$status = 0,
+		[string]$message = ""
+	)
+	if ($status -eq 0) {
+		write-host "[   " -n
+		write-host "OK" -n -fo gre
+		write-host "   ] {$message}`n" -n
+	} elseif ($status -eq 1) {
+		write-host "[  " -n
+		write-host "INFO" -n -fo blu
+		write-host "  ] {$message}`n" -n
+	} elseif ($status -eq "3") {
+		write-host "[  " -n
+		write-host "ERROR" -n -fo r
+		write-host " ] {$message}`n" -n
+	} elseif ($status -eq "2") {
+		write-host "[  " -n
+		write-host "WARN" -n -fo y
+		write-host "  ] {$message}`n" -n
+	}
+}
+
 $clibManifest = @{
 	esx = $true
     fork = $false
@@ -7,8 +31,8 @@ $clibManifest = @{
 	lib_name = "clib"
 } # CLIBMANIFEST WILL BE KILLED IN 2.0!
 # USE CLVersionTable INSTEAD!
-$CLVersionTable = @{
-	CLVersion = [System.Version]"1.6"
+$CLVersionTable = [ordered]@{
+	CLVersion = [System.Version]"1.7"
 	CLEdition = "Steamy"
 	esx       = $true
 	fork      = $false
@@ -20,7 +44,7 @@ sv -n CLVersionTable -o r  # make cl ver table immutable // this may cause issue
 # 1.0 - 1.2 -> oats
 # 1.3       -> crunch
 # 1.4 - 1.5 -> sugar
-# 1.6       -> steamy
+# 1.6 - 1.8 -> steamy
 
 if (test-path (join-path $global:eShScriptRoot "clib.rice")) {
 	$clibConfig = (join-path $global:eShScriptRoot "clib.rice")
@@ -1082,17 +1106,32 @@ $($color.yellow)███████$($color.darkgray)█$($color.white)██�
 		"
 	} elseif($type -eq "zorin") {
 		write-output "$($color.win11)
-			   oopsie..
-			 no zorin yet
-			    ▀  ▀
-			   ▄▀▀▀▀▄
+			 ▄█████████▄
+
+		   ▄██████▀  ▄███▄
+		   ▀████▀  ▄█████▀
+
+		     ▀█████████▀
 		"
 	} elseif($type -eq "elementary") {
 		write-output "
-			   oopsie..
-		  no elementary yet
-			    ▀  ▀
-			   ▄▀▀▀▀▄
+         █████████████████
+      ███████████████████████
+    █████  ▄▄▄▄▄▄▄▄▄▄▄▄   █████
+  ████   ▄████▀     ▀███▄    ████
+ ████   ████          ███     ████
+███    ███            ███       ███
+███   ███            ███▀       ███
+██    ███           ████      ▄████
+██    ███         █████     ▄██████
+██    ███       █████▀    ▄█████ ██
+███   ████   ██████▀    ▄█████▀ ███
+███   ▄██████████▄   ▄██████▀  ▄███
+ ████████████████████████▀   ▄████
+  ████████▀████████████▀   ▄█████
+    █████▄               ▄█████
+      ██████▄         ▄██████
+         █████████████████
 		"
 	} elseif($type -eq "artix") {
 		write-output "$($color.win11)
@@ -1344,6 +1383,46 @@ $($color.debian)        ▄▄▄   ▄▄████▄▄ ▄▄▄▄
 		█   █  █ █ █   ██    ██
 		 ███   █  ██   ██  ██  ██
 		" # this one might need to get fixed in a PR :/ it kiiinda sucks
+		# ^ no it does not
+	} elseif ($type -eq "endeavour") {
+		write-output "$($color.lesbian1)
+                      ▄█$($color.violet)█$($color.win10)▄
+                   $($color.lesbian1) ▄██$($color.violet)███$($color.win10)█▄
+                 $($color.lesbian1) ▄██$($color.violet)███████$($color.win10)█
+               $($color.lesbian1) ▄██$($color.violet)█████████$($color.win10)█▄
+             $($color.lesbian1) ▄██$($color.violet)████████████$($color.win10)█▄
+           $($color.lesbian1) ▄██$($color.violet)███████████████$($color.win10)██▄
+         $($color.lesbian1) ▄███$($color.violet)█████████████████$($color.win10)██▄
+       $($color.lesbian1) ▄████$($color.violet)███████████████████$($color.win10)███
+      $($color.lesbian1)▄████$($color.violet)██████████████████████$($color.win10)███
+    $($color.lesbian1)▄█████$($color.violet)████████████████████████$($color.win10)███
+  $($color.lesbian1)▄█████$($color.violet)██████████████████████████$($color.win10)███▄
+$($color.lesbian1)▄██████$($color.violet)██████████████████████████$($color.win10)█████
+ $($color.lesbian1)▀▀▀██$($color.violet)█████████████████████████$($color.win10)██████▀
+   $($color.win10)▄███████████████████████████████▀
+  ▄█████████████████████████████▀▀
+  "
+	} elseif ($type -eq "postmarket") {
+		write-output "$($color.mint)
+                 ▄
+                ▄█▄
+               ▄███▄
+              ▄█████▄
+             ▄███████▄
+            ▄█████████▄
+            ▀██████████▄
+          ▄▄ ▀██████████▄
+         ▄██▄    ▀███████▄
+        ▄███████▀ ▀███████▄
+       ▄███████▀   ▀███████▄
+      ▄███████▀     ▀██▀ ▄▄▄▄
+     ▄███████▀       ▀▀ ▄████▄
+    ▄███████▀          ▄██████▄
+   ▄████████▄ ▀████████████████▄
+  ▄██████████▄ ▀████████████████▄
+ ▄███████████▀ ▄█████████████████▄
+▄███████████▀ ▄███████████████████▄
+"
 	} else {
 		if(-not $fwd) {
 			watermark $type -fwd
@@ -1422,8 +1501,8 @@ function Reset-CIMCache([switch]$speed) {
 			Optimize-CIM csys $script:csystem
 			$script:csysprod = get-ciminstance Win32_ComputerSystemProduct -ea si
 			Optimize-CIM csp $script:csysprod
-			$script:cpu = get-ciminstance Win32_Processor -ea si
-			Optimize-CIM cpu $script:cpu
+			#$script:cpu = get-ciminstance Win32_Processor -ea si
+			#Optimize-CIM cpu $script:cpu
 			$script:gpu = get-ciminstance Win32_VideoController -ea si
 			Optimize-CIM gpu $script:gpu
 			$script:ram = get-ciminstance Win32_PhysicalMemory -ea si
@@ -1458,7 +1537,7 @@ function Reset-OptimizedCIM {
 		$script:osInfo = $cache.osi
 		$script:csystem = $cache.csys
 		$script:csysprod = $cache.csp
-		$script:cpu = $cache.cpu
+		#$script:cpu = $cache.cpu
 		$script:gpu = $cache.gpu
 		$script:ram = $cache.ram
 		$script:mobo = $cache.mobo
@@ -1479,6 +1558,25 @@ if (test-path (Join-Path $global:eShScriptRoot "CIM-Cache.json")) {
 	Reset-CIMCache
 }
 
+function Reset-RegCache {
+	if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+		$key = 'HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor\0'
+		$cpuname = (Get-ItemPropertyValue $key 'ProcessorNameString').Trim()
+		$cpubase = Get-ItemPropertyValue $key '~MHz'
+		$threads = (Get-ChildItem 'HKLM:\HARDWARE\DESCRIPTION\System\CentralProcessor').Count
+		Add-Type -Path "$global:eshScriptRoot/cpuinfo.dll"
+		$cpuboost = [CPUNative]::GetBoostSpeedMHz()
+		$cores = [CPUNative]::GetPhysicalCores()
+		$script:cpu = @{
+			"Name" = "$cpuname"
+			"MaxClockSpeed" = "$cpubase"
+			"NumberOfLogicalProcessors" = "$threads"
+			"NumberOfCores" = "$cores"
+			"BoostClockSpeed" = "$cpuboost"
+		}
+	}
+}
+Reset-RegCache
 Reset-CIMCache -speed
 
 function Test-OsRelease {
@@ -1554,6 +1652,8 @@ function Get-OSKey([switch]$skipOSR) {
 			"winmeows" {"winmeows"}
 			"macos" {"mac"}
 			"cachyos" {"cachy"}	
+			"endeavouros" {"endeavour"}	
+			"postmarketos" {"postmarket"}
             default      { "tux" }
         }
 		if ($ResolvedOSK -ne "tux") {
@@ -1586,6 +1686,8 @@ function Get-OSKey([switch]$skipOSR) {
 				($pretty_name -match "raspbian") {"raspbian"}
 				($pretty_name -match "rasperry") {"rasperry"}
 				($pretty_name -match "cachy") {"cachy"}
+				($pretty_name -match "endeavour") {"endeavour"}
+				($pretty_name -match "postmarket") {"postmarket"}
 				default      { "tux" }
 			}
 		}
@@ -1619,6 +1721,8 @@ function Get-OSKey([switch]$skipOSR) {
 				($PSOS -match "raspbian") {"raspbian"}
 				($PSOS -match "rasperry") {"rasperry"}
 				($PSOS -match "cachy") {"cachy"}
+				($PSOS -match "endeavour") {"endeavour"}
+				($PSOS -match "postmarket") {"postmarket"}
 				default      { "tux" }
 			}
 		}
@@ -1662,9 +1766,9 @@ function lesbian{
 function resolveOSC($OSin) {
 	if($OSin -eq "arch" -or $OSin -eq "winmeows" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
 		return $($color.win11)
-	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord") {
+	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord" -or $OSin -eq "endeavour") {
 		return $($color.win10)
-	} elseif ($OSin -eq "mint" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint" -or $OSin -eq "manjaro") {
+	} elseif ($OSin -eq "mint" -or $OSin -eq "postmarket" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint" -or $OSin -eq "manjaro") {
 		return $($color.mint)
 	} elseif ($OSin -eq "pop") {
 		return $($color.pop)
@@ -1729,7 +1833,9 @@ $validOSes = @(
 "raspbian", "pi", "raspberry",
 "winmeows",
 "cachy",
-"unix"
+"unix",
+"endeavour",
+"postmarket"
 )
 
 $annoyingOEM = @{
@@ -2608,6 +2714,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 		}
 		Write-Output "$($resolvedosc)CPU:           $($script:cpu.Name)"
 		Write-Output "$($resolvedosc)CPU Base:      $($script:cpu.MaxClockSpeed)MHz"
+		Write-Output "$($resolvedosc)CPU Boost:     $($script:cpu.BoostClockSpeed)MHz"
 		Write-Output "$($resolvedosc)CPU Cores:     $($script:cpu.NumberOfCores)"
 		Write-Output "$($resolvedosc)CPU Threads:   $($script:cpu.NumberOfLogicalProcessors)"
 		if ($bloat) {
@@ -3061,6 +3168,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 				"i686"   { "32-bit" }
 				default  { "64-bit" }
 			}
+			if ($architecture -eq "x86_64") {$architecture = "AMD64"}
 			Write-Output "$($resolvedosc)Architecture:  $architecture ($bits)"
 		}
 		Write-Output "$($resolvedosc)CPU Cores:     $cores"
@@ -3395,6 +3503,7 @@ function hyperc($larp, [switch]$clean, [switch]$winget, [switch]$langpkgs) {
 		}
 	}
 }
+Export-ModuleMember -Variable CLVersionTable
 Export-ModuleMember -Variable color
 Export-ModuleMember -Variable time
 Export-ModuleMember -Variable esc

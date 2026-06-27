@@ -6,5 +6,6 @@
   "auto_esx_clib": true,
   "clib_compat": false,
   "aliaspack": true,
-  "lids": true
+  "lids": true,
+  "watermark": false
 }

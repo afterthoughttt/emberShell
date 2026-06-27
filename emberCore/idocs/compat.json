@@ -63,6 +63,14 @@
 		"_Status": "Tested",
 		"_extDesc": "Works Perfectly"
 	},
+	"PostmarketOS": {
+		"Order": 8,
+		"Name": "PostmarketOS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
 	"Arch": {
 		"Order": 9,
 		"Name": "Arch",
@@ -98,6 +106,14 @@
 	"cachy": {
 		"Order": 12,
 		"Name": "CachyOS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"endv": {
+		"Order": 12,
+		"Name": "EndeavourOS",
 		"Compatibility": "Compatible",
 		"_Fix": "Works Fine",
 		"_Status": "Tested",

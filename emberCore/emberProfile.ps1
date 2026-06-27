@@ -15,15 +15,31 @@ if (test-path /etc/os-release) {
 		$osdat = $ver
 	}
 }
-$ESVersionTable = @{
-	ESVersion = [System.Version]"$($shell.shell_version)"
-	ESEdition = "$($shell.sv_name)"
-	clibVersion = "$($shell.clib_version)"
-	ESParent = "PowerShell $psver-$($PSVersionTable.PSEdition)" # change this when porting to other shells/langs
-	OS = "$osdat"
+
+if ($shell.shell_version -match "-Nightly") {
+	$eshver = "$($shell.shell_version)"
+} else {
+	$eshver = [System.Version]"$($shell.shell_version)"
+}
+
+if ($shell.clib_version -match "-Nightly") {
+	$clver = "$($shell.clib_version)"
+} else {
+	$clver = [System.Version]"$($shell.clib_version)"
+}
+
+$ESVersionTable = [ordered]@{
+	ESVersion   = "$($eshver)"
+	ESEdition   = "$($shell.sv_name)"
+	GitCommitId = "$($eshver)"
+	ESParent    = "PowerShell $psver-$($PSVersionTable.PSEdition)" # change this when porting to other shells/langs
+	OS          = "$osdat"
+	clibVersion = "$($clver)"
 }
 sv -n ESVersionTable -o r  # make eSh ver table immutable // this may cause issues if undone
-
+if ($config.watermark) {
+	write-host "█████████████`n██      ███    ██ ██`n██████ █████████`n██          ██████`n██           ███ ██ ██`n██████████████" -fo darkgray
+}
 if ($config.show_esh_Version) {
 	$esc = [char]0x1b
 	# this redacts the shell lol /// write-output "${esc}[38;2;231;136;214m${esc}[48;2;231;136;214m"
@@ -35,8 +51,8 @@ if ($config.show_pwsh_Version) {
 }
 
 if ($config.show_clib_Version) {
-	if ($config.clib_compat) {
-		Write-Host "clib compat $($shell.clib_version)" -ForegroundColor DarkGray
+	if ($config.clib_compat -or !$PSVersionTable.PSEdition -or $PSVersionTable.PSEdition -eq "Desktop") {
+		Write-Host "clibCompat $($shell.clib_version)" -ForegroundColor DarkGray
 	} else {
 		Write-Host "clib $($shell.clib_version)" -ForegroundColor DarkGray
 	}
@@ -236,7 +252,6 @@ function legacpkg($action, $package) {
 	}
 }
 
-
 function esh {
     param([string]$file)
     if (!(Test-Path $file) -and (Test-Path "$file.esh")) {
@@ -350,7 +365,7 @@ function set-xtpath {
 }
 
 if ($config.auto_esx_clib) {
-	if ($config.clib_compat) {
+	if ($config.clib_compat -or !$PSVersionTable.PSEdition -or $PSVersionTable.PSEdition -eq "Desktop") {
 		esx clibCompat
 	} else {
 		esx clib

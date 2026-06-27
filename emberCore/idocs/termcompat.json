@@ -135,8 +135,16 @@
 		"_Status": "Tested",
 		"_extDesc": "Works fine, ANSI must be disabled,\nencoding may not be UTF-8 which will break most logos."
 	},
-	"Other_Terminals": {
+	"VS_Code": {
 		"Order": 17,
+		"Name": "Visual Studio Code",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Other_Terminals": {
+		"Order": 18,
 		"Name": "Other Terminals",
 		"Compatibility": "Unknown",
 		"_Fix": "Unknown",
