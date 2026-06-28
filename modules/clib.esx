@@ -320,6 +320,8 @@ if (!$clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 		lesbian4 = "${esc}[38;2;165;0;98m"
 		gold = "${esc}[38;2;255;206;0m"
 		cachy = "${esc}[38;2;0;172;137m"
+		rose = "${esc}[38;2;220;117;189m"
+		mulberry = "${esc}[38;2;175;65;130m"
 	}
 } elseif ($clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 	$color = @{
@@ -814,6 +816,27 @@ write-output "$($color.pop)
              █████████████`n"
 	}elseif($type -eq "debian") {
 write-output "$($color.debian)
+       _,met`$`$`$`$`$gg.
+    ,g`$`$`$`$`$`$`$`$`$`$`$`$`$`$`$P.
+  ,g`$`$P`"        `"`"`"Y`$`$.`".
+ ,`$`$P'              '`$`$`$.
+',`$`$P       ,ggs.     '`$`$b:
+ `d`$`$'     ,`$P`"'   $($color.debian).$($color.debian)    `$`$`$
+ `$`$P      d`$'     $($color.debian),$($color.debian)    `$`$P
+ `$`$:      `$`$.   $($color.debian)-$($color.debian)    ,d`$`$'
+ `$`$;      Y`$b._   _,d`$P'
+ Y`$`$.    $($color.debian)`.$($color.debian)'`"Y`$`$`$`$P`"'
+$($color.debian) '`$`$b      $($color.debian)`"-.__
+$($color.debian)  'Y`$`$
+   'Y`$`$.
+     '`$`$b.
+       'Y`$`$b.
+          `"Y`$b._
+              '`"`"`"`n" # dear neofetch pls stop using quotes and backticks <3
+						# idfk how to make this my own, the other distros were somewhat ez
+						 # from fastfetch; pls fix in PRs, idk how :c
+	}elseif($type -eq "droidian") {
+write-output "$($color.mint)
        _,met`$`$`$`$`$gg.
     ,g`$`$`$`$`$`$`$`$`$`$`$`$`$`$`$P.
   ,g`$`$P`"        `"`"`"Y`$`$.`".
@@ -1423,6 +1446,42 @@ $($color.lesbian1)▄██████$($color.violet)████████�
  ▄███████████▀ ▄█████████████████▄
 ▄███████████▀ ▄███████████████████▄
 "
+	} elseif ($type -eq "nix") {
+		write-output "
+          $($color.win10)▗▄▄▄       $($color.win11)▗▄▄▄▄    ▄▄▄▖
+          $($color.win10)▜███▙       $($color.win11)▜███▙  ▟███▛
+           $($color.win10)▜███▙       $($color.win11)▜███▙▟███▛
+            $($color.win10)▜███▙       $($color.win11)▜██████▛
+     $($color.win10)▟█████████████████▙ $($color.win11)▜████▛     $($color.win10)▟▙
+    $($color.win10)▟███████████████████▙ $($color.win11)▜███▙    $($color.win10)▟██▙
+           $($color.win11)▄▄▄▄▖           $($color.win11)▜███▙  $($color.win10)▟███▛
+          $($color.win11)▟███▛             $($color.win11)▜██▛ $($color.win10)▟███▛
+         $($color.win11)▟███▛               $($color.win11)▜▛ $($color.win10)▟███▛
+$($color.win11)▟███████████▛                  $($color.win10)▟██████████▙
+$($color.win11)▜██████████▛                  $($color.win10)▟███████████▛
+      $($color.win11)▟███▛ $($color.win10)▟▙               $($color.win10)▟███▛
+     $($color.win11)▟███▛ $($color.win10)▟██▙             $($color.win10)▟███▛
+    $($color.win11)▟███▛  $($color.win10)▜███▙           $($color.win10)▝▀▀▀▀
+    $($color.win11)▜██▛    $($color.win10)▜███▙ $($color.win11)▜██████████████████▛
+     $($color.win11)▜▛     $($color.win10)▟████▙ $($color.win11)▜████████████████▛
+           $($color.win10)▟██████▙         $($color.win11)▜███▙
+          $($color.win10)▟███▛▜███▙         $($color.win11)▜███▙
+         $($color.win10)▟███▛  ▜███▙         $($color.win11)▜███▙
+         $($color.win10)▝▀▀▀    ▀▀▀▀▘         $($color.win11)▀▀▀▘" # from fastfetch!! its great, fits the style
+	} elseif($type -eq "bedrock") {
+		write-output "$($color.white)
+   ▀██████████▄
+    ▀█▄      ▀█▄
+     ▀█▄      ▀█▄
+      ▀█▄      ▀███████████████▄
+       ▀█▄                    ▀█▄
+        ▀█▄                    ▀█▄
+         ▀█▄        ▄▄▄▄▄▄      ▀█▄
+          ▀█▄                   ▄█▀
+           ▀█▄                 ▄█▀
+            ▀█▄               ▄█▀
+             ▀█████████████████▀
+		"
 	} else {
 		if(-not $fwd) {
 			watermark $type -fwd
@@ -1591,6 +1650,21 @@ function Test-OsRelease {
     return [bool]$hasName
 }
 function Get-OSKey([switch]$skipOSR) {
+	if ((Test-Path /bedrock/etc/os-release) -and !$env:BEDROCK_RESTRICT) {
+		$script:prefstr = "Bedrock Linux ("
+		$script:suffstr = ")"
+		$script:bedrock = 1
+	} else {
+		$script:prefstr = ""
+		$script:suffstr = ""
+		$script:bedrock = 0
+	}
+	if (test-path "/.dockerenv") {
+		$script:suffstr += " (Docker)"
+	}
+	if ($env:WSL_DISTRO_NAME) {
+		$script:suffstr += " (WSL)"
+	}
 	if($IsDiscord) { return "discord" } # wow discord os
     $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
 	if(!$os) {
@@ -1654,6 +1728,8 @@ function Get-OSKey([switch]$skipOSR) {
 			"cachyos" {"cachy"}	
 			"endeavouros" {"endeavour"}	
 			"postmarketos" {"postmarket"}
+			"droidian" {"droidian"}
+			"nixos" {"nix"}
             default      { "tux" }
         }
 		if ($ResolvedOSK -ne "tux") {
@@ -1688,6 +1764,8 @@ function Get-OSKey([switch]$skipOSR) {
 				($pretty_name -match "cachy") {"cachy"}
 				($pretty_name -match "endeavour") {"endeavour"}
 				($pretty_name -match "postmarket") {"postmarket"}
+				($pretty_name -match "droidian") {"droidian"}
+				($pretty_name -match "nixos") {"nix"}
 				default      { "tux" }
 			}
 		}
@@ -1723,6 +1801,8 @@ function Get-OSKey([switch]$skipOSR) {
 				($PSOS -match "cachy") {"cachy"}
 				($PSOS -match "endeavour") {"endeavour"}
 				($PSOS -match "postmarket") {"postmarket"}
+				($PSOS -match "droidian") {"droidian"}
+				($PSOS -match "nixos") {"nix"}
 				default      { "tux" }
 			}
 		}
@@ -1732,6 +1812,7 @@ function Get-OSKey([switch]$skipOSR) {
 			$id_like = $osInfo.ID_LIKE.ToLower()
 			$ResolvedOSK = switch ($id_like) {
 				"fedora"    {"fedora"}
+				"ubuntu" {"ubuntu"}
 				"arch"        { "arch" } # btw
 				"debian"    { "debian" }
 				"cerealos"    { "cerealos" } # **my** operating system??
@@ -1742,6 +1823,7 @@ function Get-OSKey([switch]$skipOSR) {
 				"gentoo" { "gentoo" }
 				"kali" {"kali"}
 				"windows" {"win11_fetch"}
+				"nixos" {"nix"}
 				default      { "tux" }
 			}
 		}
@@ -1766,9 +1848,9 @@ function lesbian{
 function resolveOSC($OSin) {
 	if($OSin -eq "arch" -or $OSin -eq "winmeows" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
 		return $($color.win11)
-	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord" -or $OSin -eq "endeavour") {
+	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord" -or $OSin -eq "endeavour" -or $OSin -eq "nix") {
 		return $($color.win10)
-	} elseif ($OSin -eq "mint" -or $OSin -eq "postmarket" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint" -or $OSin -eq "manjaro") {
+	} elseif ($OSin -eq "mint" -or $OSin -eq "droidian" -or $OSin -eq "postmarket" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint" -or $OSin -eq "manjaro") {
 		return $($color.mint)
 	} elseif ($OSin -eq "pop") {
 		return $($color.pop)
@@ -1835,7 +1917,9 @@ $validOSes = @(
 "cachy",
 "unix",
 "endeavour",
-"postmarket"
+"postmarket",
+"droidian",
+"nix"
 )
 
 $annoyingOEM = @{
@@ -2351,7 +2435,15 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			write-output "$($resolvedosc)OS:            Winmeows"
 		} elseif ($larp -eq "cachy") {
 			write-output "$($resolvedosc)OS:            CachyOS"
-		} else { 
+		} elseif ($larp -eq "endeavour") {
+			write-output "$($resolvedosc)OS:            EndeavourOS"
+		} elseif ($larp -eq "postmarket") {
+			write-output "$($resolvedosc)OS:            PostmarketOS"
+		} elseif ($larp -eq "droidian") {
+			write-output "$($resolvedosc)OS:            Droidian"
+		} elseif ($larp -eq "nix") {
+			write-output "$($resolvedosc)OS:            NixOS"
+		}  else { 
 			write-output "$($resolvedosc)OS:            $larp"
 		}
 	} else {
@@ -2367,100 +2459,114 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			if ($logo -notin $validOSes) {
 				render "fetch_unknown_os"
 			} else {
-				render $logo
+				if (!$script:bedrock) {
+					render $logo
+				} else {
+					render bedrock
+				}
 			}
 			} else {
 				write-output "OSKey:         $logo"
-		}
+			}
 		$winedition = $script:osInfo.Caption -replace "Microsoft Windows \d+ ", ""
 		$winversion = $script:osInfo.Caption -replace "Microsoft Windows ", ""
 		if ($logo -eq "win_fetch") {
-			write-output "$($resolvedosc)OS:            Windows $winversion"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Windows $winversion$script:suffstr"
 		} elseif ($logo -eq "win10_fetch") {
-			write-output "$($resolvedosc)OS:            Windows 10 $winedition"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Windows 10 $winedition$script:suffstr"
 		} elseif ($logo -eq "win11_fetch") {
-			write-output "$($resolvedosc)OS:            Windows 11 $winedition"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Windows 11 $winedition$script:suffstr"
 		} elseif ($logo -eq "arch") {
-			write-output "$($resolvedosc)OS:            Arch" # btw
+			write-output "$($resolvedosc)OS:            $script:prefstr`Arch$script:suffstr" # btw
 		} elseif ($logo -eq "mint") {
-			write-output "$($resolvedosc)OS:            Linux Mint"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Linux Mint$script:suffstr"
 		} elseif ($logo -eq "debian") {
-			write-output "$($resolvedosc)OS:            Debian"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Debian$script:suffstr"
 		} elseif ($logo -eq "pop") {
-			write-output "$($resolvedosc)OS:            Pop!_OS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Pop!_OS$script:suffstr"
 		} elseif ($logo -eq "tux") {
-			write-output "$($resolvedosc)OS:            Linux"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Linux$script:suffstr"
 		} elseif ($logo -eq "ubuntu") {
-			write-output "$($resolvedosc)OS:            Ubuntu"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Ubuntu$script:suffstr"
 		} elseif ($logo -eq "mac") {
-			write-output "$($resolvedosc)OS:            MacOS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`MacOS$script:suffstr"
 		} elseif ($logo -eq "artix") {
-			write-output "$($resolvedosc)OS:            Artix"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Artix$script:suffstr"
 		} elseif ($logo -eq "fedora") {
-			write-output "$($resolvedosc)OS:            Fedora"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Fedora$script:suffstr"
 		} elseif ($logo -eq "android") {
-			write-output "$($resolvedosc)OS:            Android"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Android$script:suffstr"
 		} elseif ($logo -eq "amogos") {
-			write-output "$($resolvedosc)OS:            AmogOS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`AmogOS$script:suffstr"
 		} elseif ($logo -eq "alpine") {
-			write-output "$($resolvedosc)OS:            Alpine"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Alpine$script:suffstr"
 		} elseif ($logo -eq "nyarch") {
-			write-output "$($resolvedosc)OS:            Nyarch"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Nyarch$script:suffstr"
 		} elseif ($logo -eq "gentoo") {
-			write-output "$($resolvedosc)OS:            Gentoo"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Gentoo$script:suffstr"
 		} elseif ($logo -eq "opensuse") {
-			write-output "$($resolvedosc)OS:            openSUSE"
+			write-output "$($resolvedosc)OS:            $script:prefstr`openSUSE$script:suffstr"
 		} elseif ($logo -eq "opensuse_butter") {
-			write-output "$($resolvedosc)OS:            openSUSE"
+			write-output "$($resolvedosc)OS:            $script:prefstr`openSUSE$script:suffstr"
 		} elseif ($logo -eq "lesbian") {
-			write-output "$($resolvedosc)OS:            Lesbian"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Lesbian$script:suffstr"
 		} elseif ($logo -eq "cerealos") {
-			write-output "$($resolvedosc)OS:            CerealOS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`CerealOS$script:suffstr"
 		} elseif ($logo -eq "kde_neon" -or $logo -eq "neon") {
-			write-output "$($resolvedosc)OS:            KDE Neon"
+			write-output "$($resolvedosc)OS:            $script:prefstr`KDE Neon$script:suffstr"
 		} elseif ($logo -eq "elementary") {
-			write-output "$($resolvedosc)OS:            ElementaryOS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`ElementaryOS$script:suffstr"
 		} elseif ($logo -eq "zorin") {
-			write-output "$($resolvedosc)OS:            Zorin OS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Zorin OS$script:suffstr"
 		} elseif ($logo -eq "uwuntu") {
-			write-output "$($resolvedosc)OS:            UwUntu"
+			write-output "$($resolvedosc)OS:            $script:prefstr`UwUntu$script:suffstr"
 		} elseif ($logo -eq "discord") {
-			write-output "$($resolvedosc)OS:            Discord"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Discord$script:suffstr"
 		} elseif ($logo -eq "manjaro") {
-			write-output "$($resolvedosc)OS:            Manjaro"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Manjaro$script:suffstr"
 		} elseif ($logo -eq "kali") {
-			write-output "$($resolvedosc)OS:            Kali"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Kali$script:suffstr"
 		} elseif ($logo -eq "raspbian") {
-			write-output "$($resolvedosc)OS:            Raspbian"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Raspbian$script:suffstr"
 		} elseif ($logo -eq "raspberry" -or $logo -eq "pi") {
-			write-output "$($resolvedosc)OS:            Raspberry Pi OS"
-		} elseif ($logo -eq "discord") {
-			write-output "$($resolvedosc)OS:            Discord"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Raspberry Pi OS$script:suffstr"
 		} elseif ($logo -eq "winmeows") {
-			write-output "$($resolvedosc)OS:            Winmeows $winversion"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Winmeows $winversion$script:suffstr"
 		} elseif ($logo -eq "cachy") {
-			write-output "$($resolvedosc)OS:            CachyOS"
+			write-output "$($resolvedosc)OS:            $script:prefstr`CachyOS$script:suffstr"
+		} elseif ($logo -eq "endeavour") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`EndeavourOS$script:suffstr"
+		} elseif ($logo -eq "postmarket") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`PostmarketOS$script:suffstr"
+		} elseif ($logo -eq "droidian") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`Droidian$script:suffstr"
+		} elseif ($logo -eq "nix") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`NixOS$script:suffstr"
 		} else {
 			if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!($IsLinux) -and !($IsMacOS))) {
 				if (!$backend) {
 					render win_fetch
 				}
 				$winfallback = $script:osInfo.Caption -replace "Microsoft ", ""
-				write-host "$($resolvedosc)OS:            $winfallback"
+				write-host "$($resolvedosc)OS:            $script:prefstr$winfallback$script:suffstr"
 			} elseif ($IsMac) {
 				if (!$backend) {
 					render mac
 				}
 				resolveOSC("mac")
-				write-output "$($resolvedosc)OS:            MacOS"
+				write-output "$($resolvedosc)OS:            $script:prefstr`MacOS$script:suffstr"
 			} elseif ($IsLinux) {
 				if (!$backend) {
 					render tux
 				}
 				resolveOSC("tux")
-				write-output "$($resolvedosc)OS:            Linux"
+				if (!$script:bedrock) {
+					write-output "$($resolvedosc)OS:            Linux"
+				} else {
+					write-output "$($resolvedosc)OS:            Bedrock Linux"
+				}
 			} else {
-				write-output "$($resolvedosc)OS:            Unknown" # ...? TempleOS is that you??
+				write-output "$($resolvedosc)OS:            $script:prefstr`Unknown$script:suffstr" # ...? TempleOS is that you??
 			}
 		}
 	}
@@ -3456,10 +3562,21 @@ function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch
     $infoLines = $data -split "`n"
 
     $osKey = ($infoLines | Where-Object { $_ -match "^OSKey:" }) -replace "OSKey:\s+", ""
+	if ($script:bedrock) {
+		$bedrockify = 1
+	} else {
+		$bedrockify = 0
+	}
     $infoLines = $infoLines | Where-Object { $_ -notmatch "^OSKey:" }
-
+	if ($bedrockify) {
+		$resolvedosc = $color.white
+	}
     $resolvedosc = resolveOSC $osKey
-    $logoName = if ($osKey -notin $validOSes) { "fetch_unknown_os" } else { $osKey }
+	if ($bedrockify) {
+		$logoName = "bedrock"
+	} else {
+		$logoName = if ($osKey -notin $validOSes) { "fetch_unknown_os" } else { $osKey }
+	}
     $logoRaw = render $logoName
     $logoLines = $logoRaw -split "`n"
     $maxLogoWidth = ($logoLines | ForEach-Object { ($_ -replace '\x1b\[[0-9;]*[mGKHF]', '').Length } | Measure-Object -Maximum).Maximum
