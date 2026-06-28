@@ -26,7 +26,7 @@ function confirm($content, $y, $n, $default) {
 
 if ($IsMacOS) {
 	write-host "This Installer is Intended for Linux.`nIt May run on MacOS, but it is untested."
-	$cont = "Continue anyways?" y N 0
+	$cont = confirm "Continue anyways?" "y" "N" 0
 	if (!$cont) {
 		return
 	}
@@ -237,7 +237,7 @@ if ($detectedTerminal) {
 }
 
 $launcherPath = Join-Path $root "emberShell.sh"
-$shContent    = "#!/usr/bin/env sh`npwsh -NoExit -ExecutionPolicy Bypass -Command `"$innerCmd`""
+$shContent    = "sh`npwsh -NoExit -ExecutionPolicy Bypass -Command `"$innerCmd`""
 
 [System.IO.File]::WriteAllText($launcherPath, $shContent, [System.Text.Encoding]::UTF8)
 & chmod +x $launcherPath

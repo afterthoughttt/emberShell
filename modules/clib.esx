@@ -1952,6 +1952,9 @@ function lspkg([switch]$winget, [switch]$langpkgs) {
         if (Test-Path C:\msys64\usr\bin\bash.exe) {
             $jobs['pacman'] = Start-Job { (& C:\msys64\usr\bin\bash.exe --login -c "pacman -Q" | Measure-Object -Line).Lines }
         }
+		if (test-path C:\nix\store) {
+			$script:nix_count = (Get-ChildItem C:\nix\store).Count
+		}
         if ($langpkgs) {
             if (gcm npm -ea silentlycontinue)    { $jobs['npm']    = Start-Job { npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
             if (gcm pip -ea silentlycontinue)    { $jobs['pip']    = Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
@@ -2014,7 +2017,9 @@ function lspkg([switch]$winget, [switch]$langpkgs) {
     $script:flatpak_count = [int]$results['flatpak']
     $script:snap_count    = [int]$results['snap']
     $script:brew_count    = [int]$results['brew']
-    $script:nix_count     = [int]$results['nix']
+	if ($IsLinux -or $IsMacOS){
+		$script:nix_count     = [int]$results['nix']
+	}
     $script:xbps_count    = [int]$results['xbps']
     $script:apk_count     = [int]$results['apk']
     $script:emerge_count  = [int]$results['emerge']
@@ -2769,6 +2774,7 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			if ($script:choco_count)   { $pkglines += "choco    - $script:choco_count" }
 			if ($script:cpkg_count)    { $pkglines += "cpkg     - $script:cpkg_count" }
 			if ($script:pacman_count)  { $pkglines += "pacman   - $script:pacman_count" }
+			if ($script:nix_count)     { $pkglines += "nix      - $script:nix_count" }
 			if ($langpkgs) {
 			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
 			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
