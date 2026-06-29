@@ -46,7 +46,9 @@ if(get-command apt -ErrorAction SilentlyContinue) {
 	$pmngr = "zypper"
 } elseif (get-command yay -ErrorAction SilentlyContinue) {
 	$pmngr = "yay"
-} else {
+} elseif (gcm xbps-install -ea si) {
+	$pmngr = "xbps"
+}else {
 	write-host "Couldn't find a supported Package Manager." -ForegroundColor Red # this will probably bork it for mac
 	write-host "Press Enter to Exit"
 	read-host
@@ -89,6 +91,12 @@ function cpkg($package) { # this is a MINIMAL cpkg wrapper. do not rely on this 
 			sudo yay -S --noconfirm $package
 		} else {
 			yay -S --noconfirm $package
+		}
+	} elseif ($pmngr -eq "xbps") {
+		if ($useSudo) {
+			sudo xbps-install -S $package
+		} else {
+			xbps-install -S $package
 		}
 	}
 }
