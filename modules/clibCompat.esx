@@ -14,6 +14,8 @@ $CLVersionTable = [ordered]@{
 	fork      = $false
 	dev       = "cereal"
 }
+write-host "CLIB COMPAT IS BEING DEPRECATED." -fo r
+write-host "PLEASE UPDATE YOUR POWERSHELL." -fo r
 sv -n CLVersionTable -o r  # make cl ver table immutable // this may cause issues if undone
 
 # 0.1 - 0.9 -> flake

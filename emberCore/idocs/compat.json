@@ -55,6 +55,22 @@
 		"_Status": "Untested",
 		"_extDesc": "Likely to work"
 	},
+	"Void": {
+		"Order": 7,
+		"Name": "Void Linux",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Nix": {
+		"Order": 7,
+		"Name": "NixOS",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
 	"Alpine": {
 		"Order": 8,
 		"Name": "Alpine",
@@ -207,6 +223,14 @@
 		"_Status": "Tested",
 		"_extDesc": "Works Perfectly"
 	},
+	"Droidian": {
+		"Order": 23,
+		"Name": "Droidian",
+		"Compatibility": "Unknown",
+		"_Fix": "Unlikely",
+		"_Status": "Untested",
+		"_extDesc": "Uncertain Compatibility, needs testing."
+	},
 	"Raspbian": {
 		"Order": 24,
 		"Name": "Raspbian",
@@ -226,10 +250,18 @@
 	"Fedora": {
 		"Order": 26,
 		"Name": "Fedora",
-		"Compatibility": "Likely to work",
-		"_Fix": "Very Likely",
-		"_Status": "Untested",
-		"_extDesc": "Likely to work"
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
+	},
+	"Azure": {
+		"Order": 26,
+		"Name": "Azure Linux",
+		"Compatibility": "Compatible",
+		"_Fix": "Works Fine",
+		"_Status": "Tested",
+		"_extDesc": "Works Perfectly"
 	},
 	"RHEL_Based": {
 		"Order": 27,

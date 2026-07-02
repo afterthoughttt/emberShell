@@ -2720,9 +2720,9 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 		} elseif ($logo -eq "nix") {
 			write-output "$($resolvedosc)OS:            $script:prefstr`NixOS$script:suffstr"
 		} elseif ($logo -eq "void") {
-			write-output "$($resolvedosc)OS:            $script:prefstr`Void Linux"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Void Linux$script:suffstr"
 		} elseif ($logo -eq "azure") {
-			write-output "$($resolvedosc)OS:            $script:prefstr`Azure Linux"
+			write-output "$($resolvedosc)OS:            $script:prefstr`Azure Linux$script:suffstr"
 		} elseif ($logo -eq "msdos") {
 			write-output "$($resolvedosc)OS:            $script:prefstr`MS DOS$script:suffstr"
 		} else {
