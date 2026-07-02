@@ -21,7 +21,13 @@ function initlog {
 		write-host "  ] {$message}`n" -n
 	}
 }
-
+# check if on BSD
+if (!$IsMacOS -and !$IsWindows -and ($PSVersionTable.PSEdition -ne "Desktop") -and (gcm uname)) { # no IsLinux because i assume linux builds are being run on bsd
+	$bsdname = uname -s
+	if ($bsdname -match "BSD") {
+		$IsBSD = $true
+	}
+}
 $clibManifest = @{
 	esx = $true
     fork = $false
@@ -322,6 +328,7 @@ if (!$clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 		cachy = "${esc}[38;2;0;172;137m"
 		rose = "${esc}[38;2;220;117;189m"
 		mulberry = "${esc}[38;2;175;65;130m"
+		void = "${esc}[38;2;171;194;171m"
 	}
 } elseif ($clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 	$color = @{
@@ -360,6 +367,9 @@ if (!$clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 		lesbian4     = "${esc}[35m"
 		gold         = "${esc}[33m"
 		cachy        = "${esc}[32m"
+		rose         = "${esc}[35m"
+		mulberry     = "${esc}[35m"
+		void         = "${esc}[32m"
 	}
 } else { # geez
 	$color = @{
@@ -398,6 +408,9 @@ if (!$clibConfig.DisableTrueColor -and !$clibConfig.DisableANSI) {
 		lesbian4 = ""
 		gold = ""
 		cachy = ""
+		rose = ""
+		mulberry = ""
+		void = ""
 	}
 }
 
@@ -1482,6 +1495,60 @@ $($color.win11)▜██████████▛                  $($color.wi
             ▀█▄               ▄█▀
              ▀█████████████████▀
 		"
+	} elseif($type -eq "void") {
+		write-output "$($color.void)
+              ▄████████████▄
+          ▄████████████████████▄
+        ▄█████████████████████████▄
+          ▀█████████████████████████▄
+            ▀██▀          ▀███████████▄
+ $($color.mint) ▄██▄  $($color.void)                     ▀█████████▄
+ $($color.mint)▄█████▄      $($color.void)                 ▀████████▄
+ $($color.mint)████████▀    $($color.void)                  ▀████████
+$($color.mint)▄███████▀   $($color.void)    ▄████████▄       ▀███████▄
+$($color.mint)███████▀  $($color.void)     ████████████       ▀███████
+$($color.mint)███████    $($color.void)   ▄████████████▄       ███████
+$($color.mint)███████   $($color.void)    ██████████████       ███████
+$($color.mint)███████    $($color.void)   ▀████████████▀       ███████
+$($color.mint)███████▄    $($color.void)   ████████████       ▄███████
+$($color.mint)▀███████▄   $($color.void)    ▀████████▀       ▄███████▀
+$($color.mint) ████████▄             $($color.void)          ████████
+ $($color.mint)▀████████▄                   $($color.void)    ▀█████▀
+ $($color.mint) ▀█████████▄                     $($color.void)  ▀██▀
+ $($color.mint)  ▀███████████▄          ▄██▄
+   $($color.mint)  ▀█████████████████████████▄
+   $($color.mint)    ▀█████████████████████████
+      $($color.mint)    ▀████████████████████▀
+      $($color.mint)        ▀████████████▀
+			   "
+	} elseif ($type -eq "azure") { # made with NO love at all <3
+		write-output "$($color.win11)
+            ████████          
+          █████████$($color.win10)███████    
+     $($color.win11)    ███████$($color.win10)████████      
+    $($color.win11)    ██████$($color.win10)██████████      
+   $($color.win11)    ███████$($color.win10)█████████       
+  $($color.win11)     ██████████$($color.win10)███████      
+ $($color.win11)     █████████$($color.win10)█████████      
+ $($color.win11)    █████████$($color.win10)████████████    
+ $($color.win11)    ███████  $($color.win10)      ███████   
+$($color.win11)    ██████    $($color.win10)         █████  
+ $($color.win11)   █████      $($color.win10)         █████ 
+$($color.win11)   █████        $($color.win10)        ██████
+$($color.win11)  ██████       $($color.win10)          ███████
+$($color.win11)  █████         $($color.win10)          ███████
+$($color.win11) █████          $($color.win10)           ██████ 
+$($color.win11)█████           $($color.win10)            ███   
+			   "
+	} elseif ($type -eq "msdos") {
+		write-output "$($color.gray)
+        █▄ ▄█  ▄▀▀
+       $($color.gray) █ ▀ █   ▀▄
+       $($color.gray) ▀   ▀  ▀▀
+     $($color.red) ▄▄▄▄  $($color.pink) ▄▄  $($color.yellow) ▄▄
+     $($color.red) █   █ $($color.pink)█  █ $($color.yellow)▀▄
+     $($color.red) █▄▄▄▀ $($color.pink)▀▄▄▀ $($color.yellow)▄▄▀
+	 "
 	} else {
 		if(-not $fwd) {
 			watermark $type -fwd
@@ -1730,12 +1797,19 @@ function Get-OSKey([switch]$skipOSR) {
 			"postmarketos" {"postmarket"}
 			"droidian" {"droidian"}
 			"nixos" {"nix"}
+			"void" {"void"}
+			"azurelinux" {"azure"}
+			"msdos" {"msdos"}
             default      { "tux" }
         }
 		if ($ResolvedOSK -ne "tux") {
 			return $ResolvedOSK
 		} else {
-			$pretty_name = $osInfo.PRETTY_NAME.ToLower()
+			if ($osInfo.PRETTY_NAME) {
+				$pretty_name = $osInfo.PRETTY_NAME.ToLower()
+			} else {
+				$pretty_name = "Generic Linux"
+			}
 			$ResolvedOSK = switch ($true) {
 				($pretty_name -match "fedora")     {"fedora"}
 				($pretty_name -match "arch")       { "arch" } # btw
@@ -1766,13 +1840,19 @@ function Get-OSKey([switch]$skipOSR) {
 				($pretty_name -match "postmarket") {"postmarket"}
 				($pretty_name -match "droidian") {"droidian"}
 				($pretty_name -match "nixos") {"nix"}
+				($pretty_name -match "void") {"void"}
+				($pretty_name -match "azure linux") {"azure"}
 				default      { "tux" }
 			}
 		}
 		if ($ResolvedOSK -ne "tux") {
 			return $ResolvedOSK
 		} else {
-			$PSOS = $PSVersionTable.os
+			if ($PSVersionTable.os) {
+				$PSOS = $PSVersionTable.os
+			} else {
+				$PSOS = "Generic Linux"
+			}
 			$ResolvedOSK = switch ($true) {
 				($PSOS -match "fedora")     {"fedora"}
 				($PSOS -match "arch")       { "arch" } # btw
@@ -1803,29 +1883,56 @@ function Get-OSKey([switch]$skipOSR) {
 				($PSOS -match "postmarket") {"postmarket"}
 				($PSOS -match "droidian") {"droidian"}
 				($PSOS -match "nixos") {"nix"}
+				($PSOS -match "void") {"void"}
+				($PSOS -match "azure linux") {"azure"}
 				default      { "tux" }
 			}
 		}
 		if ($ResolvedOSK -ne "tux") {
 			return $ResolvedOSK
 		} else {
-			$id_like = $osInfo.ID_LIKE.ToLower()
+			if ($osInfo.ID_LIKE) {
+				$id_like = $osInfo.ID_LIKE.ToLower()
+			} else {
+				$id_like = "Generic Linux"
+			}
 			$ResolvedOSK = switch ($id_like) {
 				"fedora"    {"fedora"}
-				"ubuntu" {"ubuntu"}
 				"arch"        { "arch" } # btw
+				"nyarch"    { "nyarch" } # ntw
+				"artix"      { "artix" } # btw
+				"linuxmint" { "mint" }
 				"debian"    { "debian" }
+				"lesbian"    { "lesbian" }
 				"cerealos"    { "cerealos" } # **my** operating system??
 				"ubuntu"    { "ubuntu" }
+				"uwuntu"    { "uwuntu" }
+				"pop"       { "pop" }
 				"android" { "android" }
+				"amogos" { "amogos" }
 				"alpine" { "alpine" }
-				"suse" { "opensuse" }
+				"opensuse-leap" { "opensuse" }
+				"opensuse-tumbleweed" { "opensuse_butter" }
 				"gentoo" { "gentoo" }
+				"neon" { "kde_neon" }
+				"zorin" {"zorin"}
+				"elementary" {"elementary"}
+				"manjaro" {"manjaro"}
 				"kali" {"kali"}
+				"raspbian" {"raspbian"}
 				"windows" {"win11_fetch"}
+				"winmeows" {"winmeows"}
+				"macos" {"mac"}
+				"cachyos" {"cachy"}	
+				"endeavouros" {"endeavour"}	
+				"postmarketos" {"postmarket"}
+				"droidian" {"droidian"}
 				"nixos" {"nix"}
+				"void" {"void"}
+				"azurelinux" {"azure"}
+				"msdos" {"msdos"}
 				default      { "tux" }
-			}
+			} # added all the regular IDs to ID_LIKE just incase someones running a distro based on another distro
 		}
 		return $ResolvedOSK
     }
@@ -1846,9 +1953,9 @@ function lesbian{
 }
 
 function resolveOSC($OSin) {
-	if($OSin -eq "arch" -or $OSin -eq "winmeows" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
+	if($OSin -eq "arch" -or $OSin -eq "winmeows" -or $OSin -eq "azure" -or $OSin -eq "win11_fetch" -or $OSin -eq "windows_11" -or $OSin -eq "artix" -or $OSin -eq "fedora" -or $OSin -eq "alpine" -or $OSin -eq "nyarch" -or $OSin -eq "zorin" -or $OSin -eq "kali") {
 		return $($color.win11)
-	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord" -or $OSin -eq "endeavour" -or $OSin -eq "nix") {
+	} elseif ($OSin -eq "win10_fetch" -or $OSin -eq "win_fetch" -or $OSin -eq "msdos" -or $OSin -eq "windows" -or $OSin -eq "windows_10" -or $OSin -eq "discord" -or $OSin -eq "endeavour" -or $OSin -eq "nix") {
 		return $($color.win10)
 	} elseif ($OSin -eq "mint" -or $OSin -eq "droidian" -or $OSin -eq "postmarket" -or $OSin -eq "android" -or $OSin -eq "opensuse" -or $OSin -eq "opensuse_leap" -or $OSin -eq "kde_neon" -or $OSin -eq "neon" -or $OSin -eq "linux_mint" -or $OSin -eq "manjaro") {
 		return $($color.mint)
@@ -1919,7 +2026,10 @@ $validOSes = @(
 "endeavour",
 "postmarket",
 "droidian",
-"nix"
+"nix",
+"void",
+"azure",
+"msdos"
 )
 
 $annoyingOEM = @{
@@ -1927,16 +2037,20 @@ $annoyingOEM = @{
 	"Acebook 12" = "TU140" # 556B REVO3"
 } # pls lmk if theres more
 $script:psget_count = 0
-function lspkg([switch]$winget, [switch]$langpkgs) {
+function lspkg([switch]$langpkgs) {
     $jobs = @{}
 
     if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!$IsLinux -and !$IsMacOS)) {
-        if ($winget -and (gcm winget -ea silentlycontinue)) {
-            $jobs['winget'] = Start-Job {
-                $raw = winget list --disable-interactivity --accept-source-agreements 2>$null
-                ($raw | Where-Object { $_ -match '\S' }).Count - 2
-            }
-        }
+		$jobs['winget'] = Start-Job {
+			$paths = @(
+				"HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+				"HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
+				"HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
+			)
+			($paths | ForEach-Object { 
+				if (Test-Path $_) { Get-ItemProperty $_ } 
+			} | Where-Object DisplayName).Count
+		}
         if (gcm scoop -ea silentlycontinue) {
             $jobs['scoop'] = Start-Job { (ls "$env:USERPROFILE\scoop\apps" -di 2>$null).Count - 1 }
         }
@@ -1956,13 +2070,17 @@ function lspkg([switch]$winget, [switch]$langpkgs) {
 			$script:nix_count = (Get-ChildItem C:\nix\store).Count
 		}
         if ($langpkgs) {
-            if (gcm npm -ea silentlycontinue)    { $jobs['npm']    = Start-Job { npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
-            if (gcm pip -ea silentlycontinue)    { $jobs['pip']    = Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
-            if (gcm cargo -ea silentlycontinue)  { $jobs['cargo']  = Start-Job { (cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines) / 2 } }
-            if (gcm gem -ea silentlycontinue)    { $jobs['gem']    = Start-Job { gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
-            if (gcm luarocks -ea silentlycontinue) { $jobs['luarocks'] = Start-Job { luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm npm -ea silentlycontinue)                     { $jobs['npm']    = Start-Job { npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm pip -ea silentlycontinue)                     { $jobs['pip']    = Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+			if (gcm pip3 -ea silentlycontinue)                    { $jobs['pip3']    += Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm cargo -ea silentlycontinue)                   { $jobs['cargo']  = Start-Job { (cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines) / 2 } }
+            if (gcm gem -ea silentlycontinue)                     { $jobs['gem']    = Start-Job { gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm luarocks -ea silentlycontinue)                { $jobs['luarocks'] = Start-Job { luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
             if (gcm Get-InstalledPSResource -ea silentlycontinue) { $jobs['psget_resource'] = Start-Job { Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
             if (gcm Get-InstalledModule -ea silentlycontinue)     { $jobs['psget_module']   = Start-Job { Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
+			if (gcm dotnet -ea si)                                {$jobs['dotnet'] = start-job {dotnet tool list 2>$null | Select-Object -skip 2 | Measure-object -line | Select-object -expandproperty lines}}
+			if (gcm dotnet -ea si)                                {$jobs['dotnet_global'] = start-job {dotnet tool list -g 2>$null | Select-Object -skip 2 | Measure-object -line | Select-object -expandproperty lines}}
+			if (test-path "~/.nuget/packages") {$script:nuget_count = (ls "~/.nuget/packages" -Directory).Count}
         }
     }
 
@@ -1991,14 +2109,27 @@ function lspkg([switch]$winget, [switch]$langpkgs) {
         if ($langpkgs) {
             if (gcm npm -ea silentlycontinue)      { $jobs['npm']       = Start-Job { npm list -g 2>$null | Select-Object -Skip 1 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
             if (gcm pip -ea silentlycontinue)      { $jobs['pip']       = Start-Job { pip list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
-            elseif (gcm pip3 -ea silentlycontinue) { $jobs['pip']       = Start-Job { pip3 list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
+            if (gcm pip3 -ea silentlycontinue)     { $jobs['pip3']      += Start-Job { pip3 list 2>$null | Select-Object -Skip 2 | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
             if (gcm cargo -ea silentlycontinue)    { $jobs['cargo']     = Start-Job { (cargo install --list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines) / 2 } }
             if (gcm gem -ea silentlycontinue)      { $jobs['gem']       = Start-Job { gem list 2>$null | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
             if (gcm luarocks -ea silentlycontinue) { $jobs['luarocks']  = Start-Job { luarocks list 2>$null | Where-Object { $_ -match "^\w" -and $_ -notmatch "^Rocks" -and $_ -notmatch "^---" } | Measure-Object -Line | Select-Object -ExpandProperty Lines } }
             if (gcm Get-InstalledPSResource -ea silentlycontinue) { $jobs['psget_resource'] = Start-Job { Get-InstalledPSResource 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
             if (gcm Get-InstalledModule -ea silentlycontinue)     { $jobs['psget_module']   = Start-Job { Get-InstalledModule 2>$null | Measure-Object | Select-Object -ExpandProperty Count } }
+			if (gcm dotnet -ea si)          	                  {$jobs['dotnet'] = start-job {dotnet tool list 2>$null | Select-Object -skip 2 | Measure-object -line | Select-object -expandproperty lines}}
+			if (gcm dotnet -ea si)                                {$jobs['dotnet_global'] = start-job {dotnet tool list -g 2>$null | Select-Object -skip 2 | Measure-object -line | Select-object -expandproperty lines}}
+			if (test-path "~/.nuget/packages") {$script:nuget_count = (ls "~/.nuget/packages" -Directory).Count}
         }
     }
+	
+	<#if ($IsBSD) {
+		if (!($bsdname -match "SunOS")) {
+			if (gcm pkg -ea si) {$jobs['pkg'] = start-job {pkg info 2>$null | wc -l}}
+		} else {
+			if (gcm pkg -ea si) {$jobs['pkg'] = start-job {pkg list -H 2>$null | wc -l}}
+		}
+		if (gcm pkg_info -ea si) {$jobs['pkg_info'] = start-job {pkg_info 2>$null | wc -l}}
+		if (gcm pkgin -ea si) {$jobs['pkgin'] = start-job {pkgin 2>$null | wc -l}}
+	}#> # cfetch is not at all ready for BSD.
 
     # collect
     $results = @{}
@@ -2033,15 +2164,16 @@ function lspkg([switch]$winget, [switch]$langpkgs) {
     $script:slackpkg_count= [int]$results['slackpkg']
     $script:cave_count    = [int]$results['cave']
     $script:npm_count     = [int]$results['npm']
-    $script:pip_count     = [int]$results['pip']
+    $script:pip_count     = ([int]$results['pip']) + ([int]$results['pip3'])
     $script:cargo_count   = [int]$results['cargo']
     $script:gem_count     = [int]$results['gem']
     $script:luarocks_count= [int]$results['luarocks']
     $script:psget_count   = ([int]$results['psget_resource']) + ([int]$results['psget_module'])
+	$script:dotnet_count  = ([int]$results['dotnet']) + ([int]$results['dotnet_global'])
 }
 lspkg
 
-function legacfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$winget, [switch]$langpkgs, [switch]$backend) { # now thats a LOT of flags.. i know....
+function legacfetch($larp, [switch]$nobrl, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$langpkgs, [switch]$backend) { # now thats a LOT of flags.. i know....
 if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and !($IsMacOS))) {
 	$script:osInfo = Get-CimInstance Win32_OperatingSystem -ea si
 	$swap = Get-CimInstance Win32_PageFileUsage -ea si
@@ -2049,8 +2181,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and
 	$batteryValueFallback = Get-CimInstance -Namespace ROOT\WMI BatteryStatus -ea si
 	$logicalDisks = Get-CIMInstance Win32_LogicalDisk -ea si | Where-Object { $_.DriveType -ne 5 } | Sort-Object DeviceID
 }
-	if ($winget -or $langpkgs) {
-		lspkg -winget:$winget -langpkgs:$langpkgs
+	if ($langpkgs) {
+		lspkg -langpkgs
 	}
 	if ($clean) {
 		clear
@@ -2146,11 +2278,11 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and
 		# DE version
 		if ($de) {
 			$de_version = switch ($de) {
-				"KDE"      { (& plasmashell --version 2>$null) -replace "plasmashell ", "" }
-				"GNOME"    { (& gnome-shell --version 2>$null) -replace "GNOME Shell ", "" }
-				"XFCE"     { (& xfce4-session --version 2>$null | Select-Object -First 1) -replace "xfce4-session ", "" }
-				"Cinnamon" { (& cinnamon --version 2>$null) -replace "Cinnamon ", "" }
-				"MATE"     { (& mate-session --version 2>$null | Select-Object -First 1) -replace "mate-session ", "" }
+				"KDE"      { if(gcm plasmashell -ea si){(& plasmashell --version 2>$null) -replace "plasmashell ", "" }}
+				"GNOME"    { if(gcm gnome-shell -ea si){(& gnome-shell --version 2>$null) -replace "GNOME Shell ", "" }}
+				"XFCE"     { if(gcm xfce4-session -ea si){(& xfce4-session --version 2>$null | Select-Object -First 1) -replace "xfce4-session ", "" }}
+				"Cinnamon" { if(gcm cinnamon -ea si){(& cinnamon --version 2>$null) -replace "Cinnamon ", "" }}
+				"MATE"     { if(gcm mate-session -ea si){(& mate-session --version 2>$null | Select-Object -First 1) -replace "mate-session ", "" }}
 				default    { "" }
 			}
 		}
@@ -2159,10 +2291,16 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and
 		if ($env:GTK_THEME) {
 			$theme = $env:GTK_THEME
 		} elseif ($de -eq "KDE") {
-			$theme = (& kreadconfig5 --group "General" --key "Name" --file kdeglobals 2>$null)
-			if (-not $theme) { $theme = (& kreadconfig6 --group "General" --key "Name" --file kdeglobals 2>$null) }
+		if (Get-Command kreadconfig5 -ErrorAction SilentlyContinue) {
+			$theme = & kreadconfig5 --group "General" --key "Name" --file kdeglobals 2>$null
+		}
+		if (-not $theme -and (Get-Command kreadconfig6 -ErrorAction SilentlyContinue)) {
+			$theme = & kreadconfig6 --group "General" --key "Name" --file kdeglobals 2>$null
+		}
 		} elseif ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
-			$theme = (& gsettings get org.gnome.desktop.interface gtk-theme 2>$null) -replace "'", ""
+			if (gcm gsettings -ea si) {
+				$theme = (& gsettings get org.gnome.desktop.interface gtk-theme 2>$null) -replace "'", ""
+			}
 		}
 	}
 	if ($host.Name -eq "Windows PowerShell ISE Host" -or $psise) {
@@ -2229,11 +2367,22 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop" -or (!($IsLinux) -and
 		if ($env:XCURSOR_THEME) {
 			$cursor = $env:XCURSOR_THEME
 		} elseif ($de -eq "KDE") {
-			$cursor = (& kreadconfig5 --group "Icons" --key "Cursor" --file kdeglobals 2>$null)
-			if (-not $cursor) { $cursor = (& kreadconfig6 --group "Icons" --key "Cursor" --file kdeglobals 2>$null) }
-		} elseif ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
-			$cursor = (& gsettings get org.gnome.desktop.interface cursor-theme 2>$null) -replace "'", ""
-		}
+
+    if (Get-Command kreadconfig5 -ErrorAction SilentlyContinue) {
+        $cursor = (& kreadconfig5 --group "Icons" --key "Cursor" --file kdeglobals 2>$null)
+    }
+
+    if (-not $cursor -and (Get-Command kreadconfig6 -ErrorAction SilentlyContinue)) {
+        $cursor = (& kreadconfig6 --group "Icons" --key "Cursor" --file kdeglobals 2>$null)
+    }
+
+} elseif ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
+
+    if (Get-Command gsettings -ErrorAction SilentlyContinue) {
+        $cursor = (& gsettings get org.gnome.desktop.interface cursor-theme 2>$null)
+        $cursor = $cursor -replace "'", ""
+    }
+}
 		if (-not $cursor) {
 			if (Test-Path "$HOME/.config/gtk-3.0/settings.ini") {
 				$cursor = (Get-Content "$HOME/.config/gtk-3.0/settings.ini" | Select-String "gtk-cursor-theme-name") -replace "gtk-cursor-theme-name\s*=\s*", ""
@@ -2260,11 +2409,23 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 	}
 } else {
     if ($de -eq "GNOME" -or $de -eq "Cinnamon" -or $de -eq "MATE") {
-        $sys_font = (& gsettings get org.gnome.desktop.interface font-name 2>$null) -replace "'", ""
-    } elseif ($de -eq "KDE") {
-        $sys_font = (& kreadconfig5 --group "General" --key "font" --file kdeglobals 2>$null)
-        if (-not $sys_font) { $sys_font = (& kreadconfig6 --group "General" --key "font" --file kdeglobals 2>$null) }
+
+    if (Get-Command gsettings -ErrorAction SilentlyContinue) {
+        $sys_font = (& gsettings get org.gnome.desktop.interface font-name 2>$null)
+        $sys_font = $sys_font -replace "'", ""
     }
+
+} elseif ($de -eq "KDE") {
+
+    if (Get-Command kreadconfig5 -ErrorAction SilentlyContinue) {
+        $sys_font = (& kreadconfig5 --group "General" --key "font" --file kdeglobals 2>$null)
+    }
+
+    if (-not $sys_font -and (Get-Command kreadconfig6 -ErrorAction SilentlyContinue)) {
+        $sys_font = (& kreadconfig6 --group "General" --key "font" --file kdeglobals 2>$null)
+    }
+
+}
     if (-not $sys_font) {
         if (Test-Path "$HOME/.config/gtk-3.0/settings.ini") {
             $sys_font = (Get-Content "$HOME/.config/gtk-3.0/settings.ini" | Select-String "gtk-font-name") -replace "gtk-font-name\s*=\s*", ""
@@ -2448,7 +2609,13 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			write-output "$($resolvedosc)OS:            Droidian"
 		} elseif ($larp -eq "nix") {
 			write-output "$($resolvedosc)OS:            NixOS"
-		}  else { 
+		} elseif ($larp -eq "void") {
+			write-output "$($resolvedosc)OS:            Void Linux"
+		} elseif ($larp -eq "azure") {
+			write-output "$($resolvedosc)OS:            Azure Linux"
+		} elseif ($larp -eq "msdos") {
+			write-output "$($resolvedosc)OS:            MS DOS"
+		} else { 
 			write-output "$($resolvedosc)OS:            $larp"
 		}
 	} else {
@@ -2460,6 +2627,11 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			$logo = lesbian
 		}
 		$resolvedosc = resolveOSC($logo)
+		if ($nobrl) {
+			$script:bedrock = 0
+			$script:prefstr = ""
+			$script:suffstr = ""
+		}
 		if (-not $backend) {
 			if ($logo -notin $validOSes) {
 				render "fetch_unknown_os"
@@ -2547,6 +2719,12 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 			write-output "$($resolvedosc)OS:            $script:prefstr`Droidian$script:suffstr"
 		} elseif ($logo -eq "nix") {
 			write-output "$($resolvedosc)OS:            $script:prefstr`NixOS$script:suffstr"
+		} elseif ($logo -eq "void") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`Void Linux"
+		} elseif ($logo -eq "azure") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`Azure Linux"
+		} elseif ($logo -eq "msdos") {
+			write-output "$($resolvedosc)OS:            $script:prefstr`MS DOS$script:suffstr"
 		} else {
 			if ($IsWindows -or ($PSVersionTable.PSEdition -eq "Desktop") -or (!($IsLinux) -and !($IsMacOS))) {
 				if (!$backend) {
@@ -2663,6 +2841,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 						write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(CMD $script:cmdver)"
 					}
 				}
+			} elseif ($script:sh -eq "tidalshell.exe") {
+				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(TidalShell $(tidalshell -v))"
 			} elseif ($script:sh -eq "node.exe") {
 				write-output "$($resolvedosc)Shell:         emberShell $($ESVersionTable.ESEdition) $($ESVersionTable.ESVersion) `(Node $((node --version) -replace '^v', ''))"
 			} elseif ($script:sh -eq "python.exe") {
@@ -2703,6 +2883,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 				write-output "$($resolvedosc)Shell:         $zshver `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
 			} elseif ($script:sh -eq "node.exe") {
 				write-output "$($resolvedosc)Shell:         Node $((node --version) -replace '^v', '') `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
+			} elseif ($script:sh -eq "tidalshell.exe") {
+				write-output "$($resolvedosc)Shell:         TidalShell $(tidalshell -v) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
 			} elseif ($script:sh -eq "python.exe") {
 				write-output "$($resolvedosc)Shell:         $(python --version) `($($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion))"
 			} elseif ($script:sh -eq "cmd.exe") {
@@ -2761,6 +2943,8 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 				}
 			} elseif ($script:sh -eq "node.exe") {
 				write-output "$($resolvedosc)Shell:         Node $((node --version) -replace '^v', '')"
+			} elseif ($script:sh -eq "tidalshell.exe") {
+				write-output "$($resolvedosc)Shell:         TidalShell $(tidalshell -v)"
 			} elseif ($script:sh -eq "python.exe") {
 				write-output "$($resolvedosc)Shell:         $(python --version)"
 			} else {
@@ -2769,18 +2953,38 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 		}
 		if ($pkgs) {
 			$pkglines = @()
-			if ($script:wget_count)    { $pkglines += "winget   - $script:wget_count" }
-			if ($script:scoop_count)   { $pkglines += "scoop    - $script:scoop_count" }
-			if ($script:choco_count)   { $pkglines += "choco    - $script:choco_count" }
-			if ($script:cpkg_count)    { $pkglines += "cpkg     - $script:cpkg_count" }
-			if ($script:pacman_count)  { $pkglines += "pacman   - $script:pacman_count" }
-			if ($script:nix_count)     { $pkglines += "nix      - $script:nix_count" }
+			if ($script:apk_count)      { $pkglines += "apk      - $script:apk_count" }
+			if ($script:brew_count)     { $pkglines += "brew     - $script:brew_count" }
+			if ($script:cave_count)     { $pkglines += "cave     - $script:cave_count" }
+			if ($script:choco_count)    { $pkglines += "choco    - $script:choco_count" } # <-- windows native, expected
+			if ($script:cpkg_count)     { $pkglines += "cpkg     - $script:cpkg_count" } # <-- windows native, expected
+			if ($script:apt_count)      { $pkglines += "dpkg     - $script:apt_count" }
+			if ($script:emerge_count)   { $pkglines += "emerge   - $script:emerge_count" }
+			if ($script:equo_count)     { $pkglines += "equo     - $script:equo_count" }
+			if ($script:flatpak_count)  { $pkglines += "flatpak  - $script:flatpak_count" }
+			if ($script:guix_count)     { $pkglines += "guix     - $script:guix_count" }
+			if ($script:nix_count)      { $pkglines += "nix      - $script:nix_count" } # <-- windows native port TECHNICALLY available, just in case
+			if ($script:opkg_count)     { $pkglines += "opkg     - $script:opkg_count" }
+			if ($script:pacman_count)   { $pkglines += "pacman   - $script:pacman_count" } # <-- available through msys, expected
+			if ($script:pacstall_count) { $pkglines += "pacstall - $script:pacstall_count" }
+			if ($script:pkg_count)      { $pkglines += "pkg      - $script:pkg_count" }
+			if ($script:port_count)     { $pkglines += "port     - $script:port_count" }
+			if ($script:rpm_count)      { $pkglines += "rpm      - $script:rpm_count" }
+			if ($script:scoop_count)    { $pkglines += "scoop    - $script:scoop_count" } # <-- windows native, expected
+			if ($script:slackpkg_count) { $pkglines += "slackpkg - $script:slackpkg_count" }
+			if ($script:snap_count)     { $pkglines += "snap     - $script:snap_count" }
+			if ($script:tazpkg_count)   { $pkglines += "tazpkg   - $script:tazpkg_count" }
+			if ($script:wget_count)     { $pkglines += "winget   - $script:wget_count" }  # <-- windows native, expected
+			if ($script:xbps_count)     { $pkglines += "xbps     - $script:xbps_count" }
+			if ($script:zypper_count)   { $pkglines += "zypper   - $script:zypper_count" }
 			if ($langpkgs) {
-			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
-			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
 			if ($script:cargo_count)   { $pkglines += "cargo    - $script:cargo_count" }
+			if ($script:dotnet_count)  { $pkglines += "dotnet   - $script:Dotnet_count" }
 			if ($script:gem_count)     { $pkglines += "gem      - $script:gem_count" }
 			if ($script:luarocks_count){ $pkglines += "luarocks - $script:luarocks_count" }
+			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
+			if ($script:nuget_count)   { $pkglines += "nuget    - $script:nuget_count" }
+			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
 			if ($script:psget_count)   { $pkglines += "psget    - $script:PSGet_count" }
 			}
 			if ($pkglines.Count -gt 0) {
@@ -3171,33 +3375,38 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 		}
 		if ($pkgs) {
 			$pkglines = @()
-			if ($script:apt_count)      { $pkglines += "apt      - $script:apt_count" }
-			if ($script:pacman_count)   { $pkglines += "pacman   - $script:pacman_count" }
-			if ($script:rpm_count)      { $pkglines += "rpm      - $script:rpm_count" }
-			if ($script:zypper_count)   { $pkglines += "zypper   - $script:zypper_count" }
-			if ($script:flatpak_count)  { $pkglines += "flatpak  - $script:flatpak_count" }
-			if ($script:snap_count)     { $pkglines += "snap     - $script:snap_count" }
-			if ($script:brew_count)     { $pkglines += "brew     - $script:brew_count" }
-			if ($script:nix_count)      { $pkglines += "nix      - $script:nix_count" }
-			if ($script:xbps_count)     { $pkglines += "xbps     - $script:xbps_count" }
 			if ($script:apk_count)      { $pkglines += "apk      - $script:apk_count" }
-			if ($script:emerge_count)   { $pkglines += "emerge   - $script:emerge_count" }
-			if ($script:opkg_count)     { $pkglines += "opkg     - $script:opkg_count" }
-			if ($script:pacstall_count) { $pkglines += "pacstall - $script:pacstall_count" }
-			if ($script:port_count)     { $pkglines += "port     - $script:port_count" }
-			if ($script:pkg_count)      { $pkglines += "pkg      - $script:pkg_count" }
-			if ($script:tazpkg_count)   { $pkglines += "tazpkg   - $script:tazpkg_count" }
-			if ($script:equo_count)     { $pkglines += "equo     - $script:equo_count" }
-			if ($script:guix_count)     { $pkglines += "guix     - $script:guix_count" }
-			if ($script:slackpkg_count) { $pkglines += "slackpkg - $script:slackpkg_count" }
+			if ($script:brew_count)     { $pkglines += "brew     - $script:brew_count" }
 			if ($script:cave_count)     { $pkglines += "cave     - $script:cave_count" }
+			if ($script:choco_count)    { $pkglines += "choco    - $script:choco_count" } # ...how?
 			if ($script:cpkg_count)     { $pkglines += "cpkg     - $script:cpkg_count" }
+			if ($script:apt_count)      { $pkglines += "dpkg     - $script:apt_count" } # change apt to dpkg for accuracy
+			if ($script:emerge_count)   { $pkglines += "emerge   - $script:emerge_count" }
+			if ($script:equo_count)     { $pkglines += "equo     - $script:equo_count" }
+			if ($script:flatpak_count)  { $pkglines += "flatpak  - $script:flatpak_count" }
+			if ($script:guix_count)     { $pkglines += "guix     - $script:guix_count" }
+			if ($script:nix_count)      { $pkglines += "nix      - $script:nix_count" }
+			if ($script:opkg_count)     { $pkglines += "opkg     - $script:opkg_count" }
+			if ($script:pacman_count)   { $pkglines += "pacman   - $script:pacman_count" }
+			if ($script:pacstall_count) { $pkglines += "pacstall - $script:pacstall_count" }
+			if ($script:pkg_count)      { $pkglines += "pkg      - $script:pkg_count" }
+			if ($script:port_count)     { $pkglines += "port     - $script:port_count" }
+			if ($script:rpm_count)      { $pkglines += "rpm      - $script:rpm_count" }
+			if ($script:scoop_count)    { $pkglines += "scoop    - $script:scoop_count" } #...... suuuure
+			if ($script:slackpkg_count) { $pkglines += "slackpkg - $script:slackpkg_count" }
+			if ($script:snap_count)     { $pkglines += "snap     - $script:snap_count" }
+			if ($script:tazpkg_count)   { $pkglines += "tazpkg   - $script:tazpkg_count" }
+			if ($script:wget_count)     { $pkglines += "winget   - $script:wget_count" } # just incase youre doing... whatever this is
+			if ($script:xbps_count)     { $pkglines += "xbps     - $script:xbps_count" }
+			if ($script:zypper_count)   { $pkglines += "zypper   - $script:zypper_count" }
 			if ($langpkgs) {
-			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
-			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
 			if ($script:cargo_count)   { $pkglines += "cargo    - $script:cargo_count" }
+			if ($script:dotnet_count)  { $pkglines += "dotnet   - $script:Dotnet_count" }
 			if ($script:gem_count)     { $pkglines += "gem      - $script:gem_count" }
 			if ($script:luarocks_count){ $pkglines += "luarocks - $script:luarocks_count" }
+			if ($script:npm_count)     { $pkglines += "npm      - $script:npm_count" }
+			if ($script:nuget_count)   { $pkglines += "nuget    - $script:nuget_count" }
+			if ($script:pip_count)     { $pkglines += "pip      - $script:pip_count" }
 			if ($script:psget_count)   { $pkglines += "psget    - $script:PSGet_count" }
 			}
 			if ($pkglines.Count -gt 0) {
@@ -3546,6 +3755,9 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 		}#>
 		invoke-panic "cfetch does not support MacOS."
 	}
+	if ($IsBSD -and !$IsWindows -and !$IsMacOS -and !$IsLinux) {
+		invoke-panic "cfetch does not support BSDs."
+	}
 	if ($locale) {
 			if ($PSCulture -and $PSUICulture) {
 				write-output "$($resolvedosc)Locale:        $PSCulture$($color.reset)"
@@ -3561,10 +3773,10 @@ if ($IsWindows -or $PSVersionTable.PSEdition -eq 'Desktop' -or (!($IsLinux) -and
 # legacfetch -> legacy/backend of cfetch
 # cfetch's new frontend is internally called neocfetch
 
-function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$winget, [switch]$langpkgs) {
+function cfetch($larp, [switch]$nobrl, [switch]$precise, [switch]$bloat, [switch]$clean, [switch]$extra, [switch]$locale, [switch]$diskusage, [switch]$pkgs, [switch]$langpkgs) {
     if ($clean) { Clear-Host }
 
-    $data = legacfetch $larp -precise:$precise -bloat:$bloat -extra:$extra -locale:$locale -diskusage:$diskusage -pkgs:$pkgs -winget:$winget -langpkgs:$langpkgs -backend
+    $data = legacfetch $larp -precise:$precise -bloat:$bloat -extra:$extra -locale:$locale -diskusage:$diskusage -pkgs:$pkgs -winget:$winget -langpkgs:$langpkgs -nobrl:$nobrl -backend
     $infoLines = $data -split "`n"
 
     $osKey = ($infoLines | Where-Object { $_ -match "^OSKey:" }) -replace "OSKey:\s+", ""
@@ -3611,18 +3823,18 @@ function cfetch($larp, [switch]$precise, [switch]$bloat, [switch]$clean, [switch
     Write-Host $color.reset
 }
 
-function hyperc($larp, [switch]$clean, [switch]$winget, [switch]$langpkgs) {
+function hyperc($larp, [switch]$clean, [switch]$langpkgs, [switch]$nobrl) {
 	if ($larp) {
 		if (-not $clean) {
-			cfetch $larp -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs
+			cfetch $larp -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -nobrl:$nobrl
 		} else {
-			cfetch $larp -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -clean
+			cfetch $larp -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -nobrl:$nobrl -clean
 		}
 	} else {
 		if (-not $clean) {
-			cfetch -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs
+			cfetch -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -nobrl:$nobrl
 		} else {
-			cfetch -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -clean
+			cfetch -precise -bloat -extra -locale -diskusage -pkgs -winget:$winget -langpkgs:$langpkgs -nobrl:$nobrl -clean
 		}
 	}
 }

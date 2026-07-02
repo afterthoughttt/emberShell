@@ -6,14 +6,14 @@ $psver = "7.7.0-preview.2"
 $psver = $psver.Split('-')[0]  # returns "7.7.0"
 if (test-path /etc/os-release) {
 	$name = (cat /etc/os-release | ? { $_ -match "^NAME=" }).Split('=')[1].Trim('"')
-	$ver  = (cat /etc/os-release | ? { $_ -match "^VERSION=" }).Split('=')[1].Trim('"')
+	#$ver  = (cat /etc/os-release | ? { $_ -match "^VERSION=" }).Split('=')[1].Trim('"')
 	if ($name -and $ver) {
-		$osdat = "$name $ver"
+		$osdat = "$name" #$ver "
 	} elseif ($name) {
 		$osdat = $name
-	} elseif ($ver) {
+	} <#elseif ($ver) {
 		$osdat = $ver
-	}
+	}#>
 }
 
 if ($shell.shell_version -match "-Nightly") {
